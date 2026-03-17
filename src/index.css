@@ -6,32 +6,32 @@
 
 @layer base {
   :root {
-    --background: 220 20% 7%;
-    --foreground: 220 15% 85%;
+    --background: 228 18% 10%;
+    --foreground: 220 15% 82%;
 
-    --card: 220 18% 10%;
-    --card-foreground: 220 15% 85%;
+    --card: 228 16% 13%;
+    --card-foreground: 220 15% 82%;
 
-    --popover: 220 18% 10%;
-    --popover-foreground: 220 15% 85%;
+    --popover: 228 16% 13%;
+    --popover-foreground: 220 15% 82%;
 
     --primary: 262 70% 58%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 16% 14%;
-    --secondary-foreground: 220 15% 85%;
+    --secondary: 228 14% 17%;
+    --secondary-foreground: 220 15% 82%;
 
-    --muted: 220 16% 14%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 228 14% 17%;
+    --muted-foreground: 225 10% 45%;
 
-    --accent: 220 18% 12%;
-    --accent-foreground: 220 15% 85%;
+    --accent: 228 15% 15%;
+    --accent-foreground: 220 15% 82%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 14% 16%;
-    --input: 220 14% 16%;
+    --border: 228 12% 20%;
+    --input: 228 12% 20%;
     --ring: 262 70% 58%;
 
     --radius: 0.25rem;
@@ -43,21 +43,21 @@
     --node-glow: 262 70% 58%;
 
     /* Surfaces */
-    --surface: 220 18% 10%;
-    --surface-elevated: 220 16% 13%;
-    --surface-overlay: 220 18% 10% / 0.9;
+    --surface: 228 16% 13%;
+    --surface-elevated: 228 14% 16%;
+    --surface-overlay: 228 16% 13% / 0.9;
 
     /* Graph */
-    --grid-dot: 220 14% 16%;
+    --grid-dot: 228 12% 18%;
 
     /* Sidebar */
-    --sidebar-background: 220 20% 8%;
-    --sidebar-foreground: 220 15% 85%;
+    --sidebar-background: 228 18% 11%;
+    --sidebar-foreground: 220 15% 82%;
     --sidebar-primary: 262 70% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 18% 12%;
-    --sidebar-accent-foreground: 220 15% 85%;
-    --sidebar-border: 220 14% 16%;
+    --sidebar-accent: 228 15% 15%;
+    --sidebar-accent-foreground: 220 15% 82%;
+    --sidebar-border: 228 12% 20%;
     --sidebar-ring: 262 70% 58%;
 
     /* Font families */
