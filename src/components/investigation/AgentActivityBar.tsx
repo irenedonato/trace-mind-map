@@ -56,7 +56,7 @@ export function AgentActivityBar({ isRunning }: AgentActivityBarProps) {
     <div className="h-9 border-t border-border bg-card flex items-center px-3 gap-3 overflow-hidden">
       <div className="flex items-center gap-1.5 flex-shrink-0">
         <Terminal className="w-3 h-3 text-muted-foreground" />
-        <span className="text-data text-muted-foreground uppercase tracking-wider">Agent Log</span>
+        <span className="font-display text-[10px] text-muted-foreground uppercase tracking-widest">Agent Log</span>
         {isRunning && (
           <motion.div
             className="w-1.5 h-1.5 rounded-full bg-emerald"

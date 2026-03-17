@@ -22,31 +22,31 @@ export function LeftPanel({ onLaunch, isRunning }: LeftPanelProps) {
     <div className="w-72 border-r border-border bg-card flex flex-col h-full">
       {/* Header */}
       <div className="p-4 border-b border-border">
-        <div className="flex items-center gap-2 mb-1">
-          <div className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
-          <h2 className="text-sm font-semibold tracking-wide uppercase text-foreground">
+        <div className="flex items-center gap-0 mb-1">
+          <h2 className="font-display text-sm font-semibold tracking-wide text-foreground">
             Investigation Seed
           </h2>
+          <span className="font-display text-sm text-primary">/</span>
         </div>
         <p className="text-xs text-muted-foreground">Select input type and provide initial data</p>
       </div>
 
       {/* Seed Type Selection */}
       <div className="p-4 space-y-2">
-        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Input Type</label>
+        <label className="font-display text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Input Type</label>
         <div className="grid grid-cols-2 gap-2">
           {seedTypes.map(({ icon: Icon, label, id }) => (
             <button
               key={id}
               onClick={() => setSelectedSeed(id)}
-              className={`flex items-center gap-2 p-2.5 rounded text-xs font-medium transition-all ${
+              className={`flex items-center gap-2 p-2.5 rounded text-xs transition-all ${
                 selectedSeed === id
-                  ? "bg-primary/15 text-primary border border-primary/30"
-                  : "bg-secondary border border-border text-muted-foreground hover:text-foreground hover:border-border"
+                  ? "bg-primary/10 text-primary border border-primary/40 font-medium"
+                  : "bg-secondary border border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
               }`}
             >
               <Icon className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="truncate">{label}</span>
+              <span className="truncate font-mono text-[11px]">{label}</span>
             </button>
           ))}
         </div>
@@ -55,18 +55,18 @@ export function LeftPanel({ onLaunch, isRunning }: LeftPanelProps) {
       {/* Seed Input */}
       <div className="px-4 space-y-3">
         <div>
-          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Seed Data</label>
+          <label className="font-display text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Seed Data</label>
           <input
             value={seedValue}
             onChange={(e) => setSeedValue(e.target.value)}
-            className="w-full mt-1.5 px-3 py-2 bg-secondary border border-border rounded text-data text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20"
+            className="w-full mt-1.5 px-3 py-2 bg-secondary border-dashed-primary rounded text-data text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/20"
             placeholder="Enter seed value..."
           />
         </div>
 
         {/* Filters */}
         <div className="space-y-2.5">
-          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Filters</label>
+          <label className="font-display text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Filters</label>
           
           <div className="flex items-center gap-2 p-2.5 bg-secondary border border-border rounded">
             <Clock className="w-3.5 h-3.5 text-muted-foreground" />
@@ -89,12 +89,12 @@ export function LeftPanel({ onLaunch, isRunning }: LeftPanelProps) {
 
         {/* Data Sources */}
         <div className="space-y-2">
-          <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Data Sources</label>
+          <label className="font-display text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Data Sources</label>
           <div className="space-y-1.5">
             {["CCTV Network (847 feeds)", "CDR / Call Logs", "Financial Records", "Vehicle Registry"].map((src) => (
               <div key={src} className="flex items-center gap-2 text-xs">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald" />
-                <span className="text-muted-foreground">{src}</span>
+                <span className="text-muted-foreground font-mono text-[11px]">{src}</span>
               </div>
             ))}
           </div>
@@ -108,7 +108,7 @@ export function LeftPanel({ onLaunch, isRunning }: LeftPanelProps) {
           disabled={isRunning}
           whileHover={!isRunning ? { scale: 1.02 } : {}}
           whileTap={!isRunning ? { scale: 0.98 } : {}}
-          className={`w-full flex items-center justify-center gap-2 py-3 rounded font-semibold text-sm transition-all ${
+          className={`w-full flex items-center justify-center gap-2 py-3 rounded font-display font-semibold text-sm tracking-wide transition-all ${
             isRunning
               ? "bg-primary/20 text-primary/60 cursor-not-allowed"
               : "bg-primary text-primary-foreground glow-primary hover:brightness-110"
