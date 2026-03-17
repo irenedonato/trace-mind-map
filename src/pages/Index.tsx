@@ -3,7 +3,6 @@ import { LeftPanel } from "@/components/investigation/LeftPanel";
 import { InvestigationGraph } from "@/components/investigation/InvestigationGraph";
 import { RightPanel } from "@/components/investigation/RightPanel";
 import { AgentActivityBar } from "@/components/investigation/AgentActivityBar";
-import { Shield } from "lucide-react";
 
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
@@ -22,14 +21,14 @@ const Index = () => {
 
   return (
     <div className="h-screen flex flex-col bg-background overflow-hidden">
-      {/* Top bar */}
-      <header className="h-10 border-b border-border bg-card flex items-center px-4 justify-between flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <Shield className="w-4 h-4 text-primary" />
-          <span className="text-sm font-semibold tracking-wide text-foreground">NOESIS</span>
-          <span className="text-data text-muted-foreground ml-1">Cognitive Investigation Platform</span>
+      {/* Top bar — Deckard style */}
+      <header className="h-11 border-b border-border bg-card flex items-center px-5 justify-between flex-shrink-0">
+        <div className="flex items-center gap-0">
+          <span className="font-display text-base font-bold tracking-wider text-foreground">NOESIS</span>
+          <span className="font-display text-base font-light text-primary mx-0.5">/</span>
+          <span className="font-display text-sm font-normal text-muted-foreground">Cognitive Investigation Platform</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <span className="text-data text-muted-foreground">v2.4.1</span>
           <div className="flex items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald" />
