@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   User, Video, Banknote, Smartphone, MapPin, AtSign,
   Briefcase, Calendar, UserSearch, ScanFace, Crop, FileText, Tag, Mic, Volume2, MessageSquare,
+  Car, ClipboardList, IdCard,
 } from "lucide-react";
 import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus, type NodeType } from "@/data/demoScenario";
 import { StepIndicator } from "./StepIndicator";
