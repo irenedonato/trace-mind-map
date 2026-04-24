@@ -5,6 +5,7 @@ import {
   Briefcase, Calendar, UserSearch, ScanFace, Crop, FileText, Tag, Mic, Volume2, MessageSquare,
 } from "lucide-react";
 import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus, type NodeType } from "@/data/demoScenario";
+import { StepIndicator } from "./StepIndicator";
 
 interface InvestigationGraphProps {
   isRunning: boolean;
@@ -120,6 +121,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
 
   return (
     <div className="flex-1 relative overflow-hidden dot-grid">
+      <StepIndicator isRunning={isRunning} />
       {/* Empty state */}
       {!isRunning && visibleNodes.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center">
