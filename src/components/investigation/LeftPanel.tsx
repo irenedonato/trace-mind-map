@@ -15,8 +15,8 @@ const seedTypes = [
 ];
 
 export function LeftPanel({ onLaunch, isRunning }: LeftPanelProps) {
-  const [selectedSeed, setSelectedSeed] = useState("image");
-  const [seedValue, setSeedValue] = useState("CCTV_Feed_12_frame_8847.png");
+  const [selectedSeed, setSelectedSeed] = useState("text");
+  const [seedValue, setSeedValue] = useState('"man wearing a red sweatshirt"');
 
   return (
     <div className="w-72 border-r border-border bg-card flex flex-col h-full">
