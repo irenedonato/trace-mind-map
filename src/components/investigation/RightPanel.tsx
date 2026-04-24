@@ -142,6 +142,74 @@ export function RightPanel({ selectedNode, onHighlightPath }: RightPanelProps) {
             </motion.div>
           )}
 
+          {activeTab === "source" && (
+            <motion.div key="source" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}>
+              {node ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-0 mb-1">
+                    <h3 className="font-display text-sm font-semibold text-foreground">Source Trace</h3>
+                    <span className="font-display text-sm text-primary mx-1">/</span>
+                    <span className="text-data text-muted-foreground">{node.label}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 mb-3 text-data text-muted-foreground/70">
+                    <ShieldCheck className="w-3 h-3 text-primary" />
+                    <span>Provenance · auditable · explainable</span>
+                  </div>
+
+                  {node.sourceTrace?.length ? (
+                    <div className="relative space-y-2">
+                      {node.sourceTrace.map((src, i) => {
+                        const Icon = sourceIcons[src.type] || Database;
+                        return (
+                          <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.08 }}
+                            className="relative pl-6"
+                          >
+                            {i < (node.sourceTrace!.length - 1) && (
+                              <div className="absolute left-[9px] top-6 bottom-0 w-px bg-border" />
+                            )}
+                            <div className="absolute left-0 top-2 w-[18px] h-[18px] rounded-full bg-secondary border border-primary/60 flex items-center justify-center">
+                              <Icon className="w-2.5 h-2.5 text-primary" />
+                            </div>
+                            <div className="p-3 bg-secondary rounded border border-border">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-xs font-medium text-foreground font-mono truncate">{src.source}</span>
+                                <span className="text-data text-muted-foreground/70 uppercase tracking-wider ml-2">{src.type}</span>
+                              </div>
+                              <div className="text-data text-primary font-mono mb-1">{src.reference}</div>
+                              {src.detail && (
+                                <p className="text-data text-muted-foreground leading-relaxed">{src.detail}</p>
+                              )}
+                              <div className="flex items-center justify-between mt-1.5 gap-2">
+                                {src.hash && (
+                                  <span className="text-data text-muted-foreground/60 font-mono truncate">{src.hash}</span>
+                                )}
+                                {src.timestamp && (
+                                  <span className="text-data text-muted-foreground/60 ml-auto">{src.timestamp}</span>
+                                )}
+                              </div>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-data text-muted-foreground/70">No source trace recorded for this node.</p>
+                  )}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <GitBranch className="w-8 h-8 text-muted-foreground/30 mb-3" />
+                  <p className="text-sm text-muted-foreground font-mono">Select a node to trace its sources</p>
+                  <p className="text-xs text-muted-foreground/50 mt-1 font-mono">Video, audio, logs, transactions</p>
+                </div>
+              )}
+            </motion.div>
+          )}
+
           {activeTab === "timeline" && (
             <motion.div key="timeline" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="space-y-1">
               <div className="flex items-center gap-0 mb-4">
