@@ -10,6 +10,7 @@ export interface GraphNode {
   y: number;
   confidence: number;
   evidence?: Evidence[];
+  sourceTrace?: SourceTraceItem[];
   delay: number; // ms delay before appearing
 }
 
