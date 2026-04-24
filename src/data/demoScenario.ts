@@ -134,19 +134,20 @@ export const demoEdges: GraphEdge[] = [
 ];
 
 export const agentLogs: { message: string; delay: number; level: "info" | "warning" | "success" }[] = [
-  { message: "Initializing investigation from video seed...", delay: 0, level: "info" },
-  { message: "Running facial recognition on CCTV Feed #12", delay: 400, level: "info" },
-  { message: "MATCH: Subject identified as Marcus Chen (PER-4821) — Confidence: 97%", delay: 800, level: "success" },
+  { message: "Initializing investigation from semantic seed...", delay: 0, level: "info" },
+  { message: "Deckard query: \"man wearing a red sweatshirt\" → searching 847 feeds", delay: 400, level: "info" },
+  { message: "MATCH: top-1 crop in CCTV Feed #12 — visual score 0.93", delay: 800, level: "success" },
   { message: "Geolocating source feed → Aurora, Torino (45.0921°N, 7.6700°E)", delay: 1200, level: "info" },
-  { message: "Scanning CDR records for associated devices...", delay: 1600, level: "info" },
-  { message: "Burner phone +39 011 555 0147 linked — 14 calls in 72h window", delay: 2000, level: "warning" },
-  { message: "Cross-referencing subject across 847 video feeds...", delay: 2400, level: "info" },
-  { message: "MATCH: Subject detected in CCTV Feed #47 (Centro, Torino) — Confidence: 89%", delay: 2800, level: "success" },
-  { message: "Correlating transaction 0x4f8a...c3d1 with account ***4821", delay: 3200, level: "info" },
-  { message: "ALERT: $47,200 wire transfer flagged — structuring pattern detected", delay: 3600, level: "warning" },
-  { message: "Recipient identified: Elena Vasquez (PER-7293) — Inferred link", delay: 4000, level: "success" },
-  { message: "ALERT: Elena Vasquez detected in Centro Torino at 09:47 UTC — co-location confirmed", delay: 4600, level: "warning" },
-  { message: "Investigation graph complete — 7 entities, 7 relationships identified", delay: 5200, level: "success" },
+  { message: "Embedding NN-search → candidate identity Mario Rossi (PER-4821) sim 0.86 — HYPOTHESIS", delay: 1500, level: "warning" },
+  { message: "Scanning CDR records for devices co-located with crop timestamp...", delay: 1900, level: "info" },
+  { message: "Burner phone +39 011 555 0147 linked — 14 calls in 72h window", delay: 2200, level: "warning" },
+  { message: "Cross-referencing crop embedding across 847 video feeds...", delay: 2600, level: "info" },
+  { message: "MATCH: same subject re-identified in CCTV Feed #47 (Centro, Torino) — sim 0.89", delay: 3000, level: "success" },
+  { message: "Correlating transaction 0x4f8a...c3d1 with account ***4821", delay: 3400, level: "info" },
+  { message: "ALERT: $47,200 wire transfer flagged — structuring pattern detected", delay: 3800, level: "warning" },
+  { message: "Recipient identified: Elena Vasquez (PER-7293) — Inferred link", delay: 4200, level: "success" },
+  { message: "ALERT: Elena Vasquez detected in Centro Torino at 09:47 UTC — co-location confirmed", delay: 4800, level: "warning" },
+  { message: "Investigation graph complete — 7 entities, 7 relationships identified", delay: 5400, level: "success" },
 ];
 
 export const timelineEvents = [
