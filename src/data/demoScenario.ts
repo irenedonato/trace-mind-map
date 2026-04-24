@@ -1,5 +1,5 @@
-export type NodeType = "person" | "video" | "transaction" | "device" | "location";
-export type EdgeType = "appearsInVideo" | "called" | "sentMoneyTo" | "locatedAt" | "connectedTo";
+export type NodeType = "person" | "video" | "transaction" | "device" | "location" | "social";
+export type EdgeType = "appearsInVideo" | "called" | "sentMoneyTo" | "locatedAt" | "connectedTo" | "linkedToProfile";
 export type EdgeStatus = "observed" | "inferred" | "hypothesis" | "validated";
 
 export interface GraphNode {
@@ -25,6 +25,10 @@ export interface GraphEdge {
   /** @deprecated use `status` instead. Kept for backwards compatibility. */
   inferred?: boolean;
   status: EdgeStatus;
+  /** Short human-readable summary shown in the link inspector. */
+  rationaleSummary?: string;
+  /** Bullet-list reasons why this link exists (for explainability). */
+  rationale?: string[];
   delay: number;
 }
 
