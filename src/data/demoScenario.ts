@@ -152,7 +152,7 @@ export const agentLogs: { message: string; delay: number; level: "info" | "warni
 
 export const timelineEvents = [
   { time: "2024-03-13 18:22", event: "First burner phone call detected", entity: "d1" },
-  { time: "2024-03-14 02:14", event: "Marcus Chen detected in CCTV Feed #12", entity: "p1" },
+  { time: "2024-03-14 02:14", event: "Deckard match — \"man with red sweatshirt\" in CCTV Feed #12", entity: "p1" },
   { time: "2024-03-14 06:33", event: "$47,200 wire transfer initiated", entity: "t1" },
   { time: "2024-03-14 08:00", event: "CCTV Feed #47 recording begins", entity: "v2" },
   { time: "2024-03-14 09:47", event: "Elena Vasquez detected in Centro Torino", entity: "p2" },
