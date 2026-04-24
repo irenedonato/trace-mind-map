@@ -12,7 +12,11 @@ export type NodeType =
   | "speaker"
   | "communications_log"
   | "transaction"
+  | "transaction_record"
   | "location"
+  | "vehicle"
+  | "vehicle_registration"
+  | "owner"
   // legacy aliases — kept for backwards compatibility with existing demo data
   | "person"
   | "device"
