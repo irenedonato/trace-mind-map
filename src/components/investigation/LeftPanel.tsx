@@ -121,11 +121,7 @@ export function LeftPanel({ onLaunch, isRunning }: LeftPanelProps) {
               <div
                 key={src.name}
                 className="flex items-center gap-2 text-xs"
-                title={
-                  src.primary
-                    ? "Bimodal embedding search: query by image or text (e.g. 'man with red shirt'). Returns crops + video source, timestamp, frame id, crop id, embedding id, bbox, confidence, visual reasoning, matches across cameras."
-                    : undefined
-                }
+                title={src.tooltip}
               >
                 <div
                   className={`w-1.5 h-1.5 rounded-full ${
