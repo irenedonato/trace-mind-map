@@ -5,6 +5,7 @@ import {
   Briefcase, Calendar, UserSearch, ScanFace, Crop, FileText, Tag, Mic, Volume2, MessageSquare,
 } from "lucide-react";
 import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus, type NodeType } from "@/data/demoScenario";
+import { StepIndicator } from "./StepIndicator";
 
 interface InvestigationGraphProps {
   isRunning: boolean;
