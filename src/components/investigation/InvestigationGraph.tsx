@@ -195,6 +195,21 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
           );
         })}
       </AnimatePresence>
+
+      {/* Edge status legend */}
+      {visibleEdges.length > 0 && (
+        <div className="absolute bottom-3 right-3 surface-glass border border-border rounded px-3 py-2 text-[9px] font-mono space-y-1 z-10">
+          <div className="text-muted-foreground uppercase tracking-wider mb-1">Edge status</div>
+          {(Object.entries(edgeStatusStyle) as [EdgeStatus, typeof edgeStatusStyle[EdgeStatus]][]).map(([key, s]) => (
+            <div key={key} className="flex items-center gap-2">
+              <svg width="22" height="6">
+                <line x1="0" y1="3" x2="22" y2="3" stroke={s.stroke} strokeWidth="2" strokeDasharray={s.dash} />
+              </svg>
+              <span className="text-foreground/80">{key}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
