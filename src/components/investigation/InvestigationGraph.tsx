@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Video, Banknote, Smartphone, MapPin, AtSign } from "lucide-react";
-import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus } from "@/data/demoScenario";
+import {
+  User, Video, Banknote, Smartphone, MapPin, AtSign,
+  Briefcase, Calendar, UserSearch, ScanFace, Crop, FileText, Tag, Mic, Volume2, MessageSquare,
+} from "lucide-react";
+import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus, type NodeType } from "@/data/demoScenario";
 
 interface InvestigationGraphProps {
   isRunning: boolean;
@@ -12,30 +15,66 @@ interface InvestigationGraphProps {
   selectedEdge: string | null;
 }
 
-const nodeIcons: Record<string, typeof User> = {
-  person: User,
+const nodeIcons: Record<NodeType, typeof User> = {
+  case: Briefcase,
+  event: Calendar,
+  person_candidate: UserSearch,
   video: Video,
+  video_detection: ScanFace,
+  crop: Crop,
+  social_profile: AtSign,
+  document: FileText,
+  entity: Tag,
+  voice_sample: Mic,
+  speaker: Volume2,
+  communications_log: MessageSquare,
   transaction: Banknote,
-  device: Smartphone,
   location: MapPin,
+  // legacy aliases
+  person: User,
+  device: Smartphone,
   social: AtSign,
 };
 
-const nodeColors: Record<string, string> = {
-  person: "hsl(262, 70%, 58%)",
+const nodeColors: Record<NodeType, string> = {
+  case: "hsl(262, 70%, 58%)",
+  event: "hsl(45, 95%, 60%)",
+  person_candidate: "hsl(262, 70%, 58%)",
   video: "hsl(160, 84%, 39%)",
+  video_detection: "hsl(160, 70%, 50%)",
+  crop: "hsl(160, 60%, 45%)",
+  social_profile: "hsl(200, 80%, 55%)",
+  document: "hsl(220, 15%, 65%)",
+  entity: "hsl(280, 60%, 60%)",
+  voice_sample: "hsl(180, 70%, 50%)",
+  speaker: "hsl(180, 80%, 55%)",
+  communications_log: "hsl(220, 10%, 55%)",
   transaction: "hsl(38, 92%, 50%)",
-  device: "hsl(220, 10%, 50%)",
   location: "hsl(0, 84%, 60%)",
+  // legacy aliases
+  person: "hsl(262, 70%, 58%)",
+  device: "hsl(220, 10%, 50%)",
   social: "hsl(200, 80%, 55%)",
 };
 
-const nodeBgClass: Record<string, string> = {
-  person: "bg-primary/20 border-primary/50",
+const nodeBgClass: Record<NodeType, string> = {
+  case: "bg-primary/20 border-primary/60",
+  event: "bg-amber/20 border-amber/50",
+  person_candidate: "bg-primary/20 border-primary/50",
   video: "bg-emerald/20 border-emerald/50",
+  video_detection: "bg-emerald/15 border-emerald/40",
+  crop: "bg-emerald/10 border-emerald/30",
+  social_profile: "bg-sky-500/20 border-sky-500/50",
+  document: "bg-muted border-muted-foreground/40",
+  entity: "bg-primary/15 border-primary/40",
+  voice_sample: "bg-cyan-500/20 border-cyan-500/50",
+  speaker: "bg-cyan-500/20 border-cyan-500/50",
+  communications_log: "bg-muted border-muted-foreground/30",
   transaction: "bg-amber/20 border-amber/50",
-  device: "bg-muted border-muted-foreground/30",
   location: "bg-crimson/20 border-crimson/50",
+  // legacy aliases
+  person: "bg-primary/20 border-primary/50",
+  device: "bg-muted border-muted-foreground/30",
   social: "bg-sky-500/20 border-sky-500/50",
 };
 
