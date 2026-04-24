@@ -1,17 +1,29 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { LeftPanel } from "@/components/investigation/LeftPanel";
 import { InvestigationGraph } from "@/components/investigation/InvestigationGraph";
 import { RightPanel } from "@/components/investigation/RightPanel";
 import { AgentActivityBar } from "@/components/investigation/AgentActivityBar";
+import { getScenario, type SeedMode } from "@/data/demoScenario";
 
 const Index = () => {
+  const [seedMode, setSeedMode] = useState<SeedMode>("vehicle");
   const [isRunning, setIsRunning] = useState(false);
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<string | null>(null);
   const [highlightPath, setHighlightPath] = useState<string[]>([]);
 
+  const scenario = useMemo(() => getScenario(seedMode), [seedMode]);
+
   const handleLaunch = useCallback(() => {
     setIsRunning(true);
+    setSelectedNode(null);
+    setSelectedEdge(null);
+    setHighlightPath([]);
+  }, []);
+
+  const handleSeedModeChange = useCallback((mode: SeedMode) => {
+    setSeedMode(mode);
+    setIsRunning(false);
     setSelectedNode(null);
     setSelectedEdge(null);
     setHighlightPath([]);
@@ -47,7 +59,13 @@ const Index = () => {
 
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
-        <LeftPanel onLaunch={handleLaunch} isRunning={isRunning} />
+        <LeftPanel
+          onLaunch={handleLaunch}
+          isRunning={isRunning}
+          seedMode={seedMode}
+          onSeedModeChange={handleSeedModeChange}
+          totalMs={scenario.totalMs}
+        />
         <InvestigationGraph
           isRunning={isRunning}
           onNodeClick={handleNodeClick}
@@ -55,16 +73,18 @@ const Index = () => {
           highlightPath={highlightPath}
           onEdgeClick={handleEdgeClick}
           selectedEdge={selectedEdge}
+          scenario={scenario}
         />
         <RightPanel
           selectedNode={selectedNode}
           selectedEdge={selectedEdge}
           onHighlightPath={setHighlightPath}
+          scenario={scenario}
         />
       </div>
 
       {/* Agent activity */}
-      <AgentActivityBar isRunning={isRunning} />
+      <AgentActivityBar isRunning={isRunning} scenario={scenario} />
     </div>
   );
 };
