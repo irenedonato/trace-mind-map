@@ -159,9 +159,10 @@ export const timelineEvents = [
 ];
 
 export const reasoningSteps = [
-  { step: 1, title: "Seed Entity Identified", detail: "Facial recognition matched subject in CCTV Feed #12 with 97% confidence. Subject identified as Marcus Chen (PER-4821) from national database.", confidence: 0.97 },
-  { step: 2, title: "Device Association", detail: "CDR analysis reveals burner phone +39 011 555 0147 associated with subject. 14 outgoing calls to a single number within 72-hour window suggests operational communication pattern.", confidence: 0.82 },
-  { step: 3, title: "Cross-Feed Detection", detail: "Subject re-identified in CCTV Feed #47 (Centro Torino) 7 hours after initial detection. Movement pattern suggests deliberate transit between locations.", confidence: 0.89 },
-  { step: 4, title: "Financial Link Discovered", detail: "Wire transfer of $47,200 from account linked to PER-4821 to account ***7293. Transaction exhibits structuring characteristics — split amounts below reporting threshold.", confidence: 0.91 },
-  { step: 5, title: "Second Subject Inferred", detail: "Recipient account ***7293 linked to Elena Vasquez (PER-7293). Subject subsequently detected in CCTV Feed #47 at 09:47 UTC — 3 hours after Marcus Chen's presence at same location. INFERRED: Coordination between subjects.", confidence: 0.74 },
+  { step: 1, title: "Semantic Seed Query", detail: "Analyst submitted Deckard query \"man wearing a red sweatshirt\". Bimodal text→image search returned top crop in CCTV Feed #12 with visual match score 0.93.", confidence: 0.93 },
+  { step: 2, title: "Identity Hypothesis", detail: "Crop embedding nearest-neighbor against reference DB suggests candidate Mario Rossi (PER-4821), similarity 0.86. Marked as HYPOTHESIS — pending analyst validation.", confidence: 0.86 },
+  { step: 3, title: "Device Association", detail: "CDR analysis surfaces burner phone +39 011 555 0147 active near the crop timestamp and location. 14 outgoing calls to a single number in 72h suggests operational comms.", confidence: 0.82 },
+  { step: 4, title: "Cross-Feed Re-identification", detail: "Same crop embedding re-identified in CCTV Feed #47 (Centro Torino) 7 hours later, sim 0.89. Movement pattern suggests deliberate transit.", confidence: 0.89 },
+  { step: 5, title: "Financial Link Discovered", detail: "Wire transfer of $47,200 from account linked to PER-4821 → ***7293. Structuring characteristics — split amounts below reporting threshold.", confidence: 0.91 },
+  { step: 6, title: "Second Subject Inferred", detail: "Recipient ***7293 resolves to Elena Vasquez (PER-7293), subsequently detected in CCTV Feed #47 at 09:47 UTC — 3h after the candidate's presence at the same location. INFERRED: coordination.", confidence: 0.74 },
 ];
