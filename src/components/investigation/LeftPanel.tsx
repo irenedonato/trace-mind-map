@@ -91,10 +91,39 @@ export function LeftPanel({ onLaunch, isRunning }: LeftPanelProps) {
         <div className="space-y-2">
           <label className="font-display text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Data Sources</label>
           <div className="space-y-1.5">
-            {["CCTV Network (847 feeds)", "CDR / Call Logs", "Financial Records", "Vehicle Registry"].map((src) => (
-              <div key={src} className="flex items-center gap-2 text-xs">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald" />
-                <span className="text-muted-foreground font-mono text-[11px]">{src}</span>
+            {([
+              { name: "Video Intelligence — Deckard", primary: true, badge: "Vector DB" },
+              { name: "CCTV Network (847 feeds)" },
+              { name: "CDR / Call Logs" },
+              { name: "Financial Records" },
+              { name: "Vehicle Registry" },
+            ] as { name: string; primary?: boolean; badge?: string }[]).map((src) => (
+              <div
+                key={src.name}
+                className="flex items-center gap-2 text-xs"
+                title={
+                  src.primary
+                    ? "Bimodal embedding search: query by image or text (e.g. 'man with red shirt'). Returns crops + video source, timestamp, frame id, crop id, embedding id, bbox, confidence, visual reasoning, matches across cameras."
+                    : undefined
+                }
+              >
+                <div
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    src.primary ? "bg-primary shadow-[0_0_6px_hsl(var(--primary))]" : "bg-emerald"
+                  }`}
+                />
+                <span
+                  className={`font-mono text-[11px] ${
+                    src.primary ? "text-foreground font-medium" : "text-muted-foreground"
+                  }`}
+                >
+                  {src.name}
+                </span>
+                {src.badge && (
+                  <span className="ml-auto px-1.5 py-0.5 text-[9px] font-mono text-primary border border-primary/30 bg-primary/5 rounded uppercase tracking-wider">
+                    {src.badge}
+                  </span>
+                )}
               </div>
             ))}
           </div>
