@@ -160,7 +160,7 @@ export const timelineEvents = [
 
 export const reasoningSteps = [
   { step: 1, title: "Semantic Seed Query", detail: "Analyst submitted Deckard query \"man wearing a red sweatshirt\". Bimodal text→image search returned top crop in CCTV Feed #12 with visual match score 0.93.", confidence: 0.93 },
-  { step: 2, title: "Identity Hypothesis", detail: "Crop embedding nearest-neighbor against reference DB suggests candidate Mario Rossi (PER-4821), similarity 0.86. Marked as HYPOTHESIS — pending analyst validation.", confidence: 0.86 },
+  { step: 2, title: "Visual Semantic Match", detail: "Visual semantic match: subject wearing red sweatshirt detected across multiple cameras. Identity not confirmed.", confidence: 0.86 },
   { step: 3, title: "Device Association", detail: "CDR analysis surfaces burner phone +39 011 555 0147 active near the crop timestamp and location. 14 outgoing calls to a single number in 72h suggests operational comms.", confidence: 0.82 },
   { step: 4, title: "Cross-Feed Re-identification", detail: "Same crop embedding re-identified in CCTV Feed #47 (Centro Torino) 7 hours later, sim 0.89. Movement pattern suggests deliberate transit.", confidence: 0.89 },
   { step: 5, title: "Financial Link Discovered", detail: "Wire transfer of $47,200 from account linked to PER-4821 → ***7293. Structuring characteristics — split amounts below reporting threshold.", confidence: 0.91 },
