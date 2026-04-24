@@ -46,16 +46,17 @@ export interface SourceTraceItem {
 
 export const demoNodes: GraphNode[] = [
   {
-    id: "p1", type: "person", label: "Marcus Chen", sublabel: "ID: PER-4821",
-    x: 400, y: 300, confidence: 0.97, delay: 0,
+    id: "p1", type: "person", label: "Mario Rossi", sublabel: "candidate · PER-4821",
+    x: 400, y: 300, confidence: 0.86, delay: 0,
     evidence: [
-      { type: "video", title: "CCTV Feed #12 — Aurora (Torino)", detail: "Subject detected at 02:14:33 UTC, confidence 97%", timestamp: "2024-03-14T02:14:33Z" },
-      { type: "metadata", title: "Facial Recognition Match", detail: "Matched against national database, score 0.97", timestamp: "2024-03-14T02:14:35Z" },
+      { type: "metadata", title: "Semantic Query (Deckard)", detail: "Query: \"man wearing a red sweatshirt\" — bimodal text→image search across 847 feeds", timestamp: "2024-03-14T02:14:30Z" },
+      { type: "video", title: "CCTV Feed #12 — Aurora (Torino)", detail: "Top-1 crop returned by Deckard at 02:14:33 UTC, visual match score 0.93", timestamp: "2024-03-14T02:14:33Z" },
+      { type: "metadata", title: "Identity Hypothesis", detail: "Crop embedding nearest-neighbor against reference DB → candidate 'Mario Rossi' (PER-4821), similarity 0.86 — pending analyst validation", timestamp: "2024-03-14T02:14:35Z" },
     ],
     sourceTrace: [
-      { source: "Deckard — CCTV Feed #12", type: "video", reference: "frame 4123 @ 02:14:33", detail: "crop_id CR-88421 / vector_id VEC-22a91 / bbox [412,188,540,402]", hash: "sha256:9f2a…b71c", timestamp: "2024-03-14T02:14:33Z" },
-      { source: "Deckard VectorDB", type: "vector", reference: "embedding match score 0.97", detail: "bimodal embedding nearest-neighbor against PER-4821 reference crop", hash: "sha256:1c44…f902" },
-      { source: "National Face DB", type: "image", reference: "PER-4821 / ref_img R-118", detail: "ground-truth identity reference", hash: "sha256:7b10…9e3d" },
+      { source: "Deckard — Semantic Query", type: "nlp", reference: "query_id Q-55812 · \"man wearing a red sweatshirt\"", detail: "bimodal text→image search, 847 feeds, top-K=20, visual reasoning: red upper garment + male presenting", hash: "sha256:3d12…a90f", timestamp: "2024-03-14T02:14:30Z" },
+      { source: "Deckard — CCTV Feed #12", type: "video", reference: "frame 4123 @ 02:14:33", detail: "crop_id CR-88421 / vector_id VEC-22a91 / bbox [412,188,540,402] · query match 0.93", hash: "sha256:9f2a…b71c", timestamp: "2024-03-14T02:14:33Z" },
+      { source: "Deckard VectorDB", type: "vector", reference: "embedding NN-search vs reference crops", detail: "candidate identity PER-4821 (Mario Rossi), similarity 0.86 — HYPOTHESIS, awaiting analyst validation", hash: "sha256:1c44…f902" },
     ],
   },
   {
