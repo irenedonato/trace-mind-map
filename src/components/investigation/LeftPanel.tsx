@@ -81,7 +81,7 @@ export function LeftPanel({ onLaunch, isRunning }: LeftPanelProps) {
             <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
             <div className="flex-1">
               <span className="text-data text-muted-foreground">Location</span>
-              <div className="text-data text-foreground">Torino Metro</div>
+              <div className="text-data text-foreground">Torino Stazione Porta Susa</div>
             </div>
             <ChevronDown className="w-3 h-3 text-muted-foreground" />
           </div>
