@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Video, Banknote, Smartphone, MapPin } from "lucide-react";
+import { User, Video, Banknote, Smartphone, MapPin, AtSign } from "lucide-react";
 import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus } from "@/data/demoScenario";
 
 interface InvestigationGraphProps {
@@ -8,6 +8,8 @@ interface InvestigationGraphProps {
   onNodeClick: (nodeId: string) => void;
   selectedNode: string | null;
   highlightPath: string[];
+  onEdgeClick: (edgeId: string) => void;
+  selectedEdge: string | null;
 }
 
 const nodeIcons: Record<string, typeof User> = {
@@ -16,6 +18,7 @@ const nodeIcons: Record<string, typeof User> = {
   transaction: Banknote,
   device: Smartphone,
   location: MapPin,
+  social: AtSign,
 };
 
 const nodeColors: Record<string, string> = {
@@ -24,6 +27,7 @@ const nodeColors: Record<string, string> = {
   transaction: "hsl(38, 92%, 50%)",
   device: "hsl(220, 10%, 50%)",
   location: "hsl(0, 84%, 60%)",
+  social: "hsl(200, 80%, 55%)",
 };
 
 const nodeBgClass: Record<string, string> = {
@@ -32,6 +36,7 @@ const nodeBgClass: Record<string, string> = {
   transaction: "bg-amber/20 border-amber/50",
   device: "bg-muted border-muted-foreground/30",
   location: "bg-crimson/20 border-crimson/50",
+  social: "bg-sky-500/20 border-sky-500/50",
 };
 
 const edgeStatusStyle: Record<EdgeStatus, { stroke: string; dash: string; label: string }> = {
@@ -41,7 +46,7 @@ const edgeStatusStyle: Record<EdgeStatus, { stroke: string; dash: string; label:
   hypothesis: { stroke: "hsl(280, 70%, 65%)", dash: "2 4",   label: "HYPOTHESIS" },
 };
 
-export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath }: InvestigationGraphProps) {
+export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath, onEdgeClick, selectedEdge }: InvestigationGraphProps) {
   const [visibleNodes, setVisibleNodes] = useState<GraphNode[]>([]);
   const [visibleEdges, setVisibleEdges] = useState<GraphEdge[]>([]);
 
