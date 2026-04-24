@@ -176,7 +176,7 @@ export function LeftPanel({ onLaunch, isRunning }: LeftPanelProps) {
                   className="h-full bg-primary rounded-full"
                   initial={{ width: "0%" }}
                   animate={{ width: "100%" }}
-                  transition={{ duration: 6, ease: "easeOut" }}
+                  transition={{ duration: 14.4, ease: "linear" }}
                 />
               </div>
               <p className="text-data text-muted-foreground mt-1.5 text-center">
