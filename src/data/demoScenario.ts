@@ -31,6 +31,15 @@ export interface Evidence {
   timestamp: string;
 }
 
+export interface SourceTraceItem {
+  source: string; // e.g. "Deckard — CCTV Feed #12"
+  type: "video" | "audio" | "log" | "transaction" | "image" | "vector" | "nlp";
+  reference: string; // e.g. "frame 4123 @ 02:34", "audio_id A-882", "log line 14"
+  detail?: string;
+  hash?: string; // integrity hash for auditability
+  timestamp?: string;
+}
+
 export const demoNodes: GraphNode[] = [
   {
     id: "p1", type: "person", label: "Marcus Chen", sublabel: "ID: PER-4821",
