@@ -113,7 +113,7 @@ export const demoNodes: GraphNode[] = [
   // ---- STEP 1 — Seed received ----
   {
     id: "c1", type: "case", label: "CASE-2024-0314", sublabel: "Torino · Porta Susa",
-    x: 120, y: 80, confidence: 1.0, delay: 0, step: 1,
+    x: 120, y: 150, confidence: 1.0, delay: 0, step: 1,
     evidence: [
       { type: "metadata", title: "Case Opened", detail: "Investigation case opened by analyst on duty. Scope: 72h lookback, area Torino Porta Susa.", timestamp: "2024-03-14T02:14:00Z" },
     ],
@@ -123,7 +123,7 @@ export const demoNodes: GraphNode[] = [
   },
   {
     id: "ev1", type: "event", label: "Semantic Seed", sublabel: "\"man in red sweatshirt\"",
-    x: 280, y: 80, confidence: 1.0, delay: 400, step: 1,
+    x: 280, y: 150, confidence: 1.0, delay: 400, step: 1,
     evidence: [
       { type: "metadata", title: "Seed Query", detail: "Bimodal text→image query submitted to Deckard with 72h time range and Porta Susa geofence.", timestamp: "2024-03-14T02:14:30Z" },
     ],
