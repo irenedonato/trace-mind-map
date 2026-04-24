@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
-import { demoSteps, demoTotalMs } from "@/data/demoScenario";
+import type { DemoStep } from "@/data/demoScenario";
 
 interface StepIndicatorProps {
   isRunning: boolean;
+  steps: DemoStep[];
+  totalMs: number;
 }
 
-export function StepIndicator({ isRunning }: StepIndicatorProps) {
+export function StepIndicator({ isRunning, steps, totalMs }: StepIndicatorProps) {
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
@@ -20,23 +22,21 @@ export function StepIndicator({ isRunning }: StepIndicatorProps) {
     const tick = (now: number) => {
       const e = now - start;
       setElapsed(e);
-      if (e < demoTotalMs + 1500) raf = requestAnimationFrame(tick);
+      if (e < totalMs + 1500) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [isRunning]);
+  }, [isRunning, totalMs]);
 
-  // Determine current step
   const currentStep =
-    [...demoSteps].reverse().find((s) => elapsed >= s.startMs)?.step ?? 0;
+    [...steps].reverse().find((s) => elapsed >= s.startMs)?.step ?? 0;
   const active = isRunning ? currentStep : 0;
-  const progress = Math.min(elapsed / demoTotalMs, 1);
+  const progress = Math.min(elapsed / totalMs, 1);
 
   return (
     <div className="absolute top-3 left-3 right-3 z-10 surface-glass border border-border rounded-md p-2.5">
-      {/* Step pills */}
       <div className="flex items-stretch gap-1">
-        {demoSteps.map((s) => {
+        {steps.map((s) => {
           const done = isRunning && active > s.step;
           const isActive = isRunning && active === s.step;
           return (
@@ -86,13 +86,12 @@ export function StepIndicator({ isRunning }: StepIndicatorProps) {
         })}
       </div>
 
-      {/* Active step subtitle + global progress bar */}
       {isRunning && active > 0 && (
         <div className="mt-2 flex items-center gap-3">
           <div className="text-data text-muted-foreground font-mono flex-1 truncate">
             <span className="text-primary">Step {active}</span>
             <span className="mx-1.5 text-muted-foreground/50">·</span>
-            {demoSteps[active - 1].subtitle}
+            {steps[active - 1].subtitle}
           </div>
           <div className="w-32 h-1 bg-secondary rounded-full overflow-hidden flex-shrink-0">
             <div
