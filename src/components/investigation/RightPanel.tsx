@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Brain, Clock, Video, Database, CreditCard, Info, ChevronRight, GitBranch, Mic, Image as ImageIcon, Network, ShieldCheck } from "lucide-react";
-import { demoNodes, reasoningSteps, timelineEvents } from "@/data/demoScenario";
+import { FileText, Brain, Clock, Video, Database, CreditCard, Info, ChevronRight, GitBranch, Mic, Image as ImageIcon, Network, ShieldCheck, Link2, CheckCircle2 } from "lucide-react";
+import { demoNodes, demoEdges, reasoningSteps, timelineEvents, type EdgeStatus } from "@/data/demoScenario";
 
 interface RightPanelProps {
   selectedNode: string | null;
+  selectedEdge: string | null;
   onHighlightPath: (path: string[]) => void;
 }
 
-type TabId = "evidence" | "reasoning" | "source" | "timeline";
+type TabId = "evidence" | "reasoning" | "source" | "link" | "timeline";
 
 const tabs: { id: TabId; label: string; icon: typeof FileText }[] = [
   { id: "evidence", label: "Evidence", icon: FileText },
   { id: "reasoning", label: "Reasoning", icon: Brain },
   { id: "source", label: "Source", icon: GitBranch },
+  { id: "link", label: "Link", icon: Link2 },
   { id: "timeline", label: "Timeline", icon: Clock },
 ];
+
+const edgeStatusBadge: Record<EdgeStatus, { bg: string; label: string }> = {
+  observed:   { bg: "hsl(220, 14%, 45%)", label: "OBSERVED" },
+  validated:  { bg: "hsl(160, 84%, 39%)", label: "VALIDATED" },
+  inferred:   { bg: "hsl(38, 92%, 50%)",  label: "INFERRED" },
+  hypothesis: { bg: "hsl(280, 70%, 65%)", label: "HYPOTHESIS" },
+};
 
 const evidenceIcons: Record<string, typeof Video> = {
   video: Video,
@@ -34,9 +43,22 @@ const sourceIcons: Record<string, typeof Video> = {
   nlp: Brain,
 };
 
-export function RightPanel({ selectedNode, onHighlightPath }: RightPanelProps) {
+export function RightPanel({ selectedNode, selectedEdge, onHighlightPath }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<TabId>("evidence");
   const node = demoNodes.find((n) => n.id === selectedNode);
+  const edge = demoEdges.find((e) => e.id === selectedEdge);
+  const edgeSource = edge ? demoNodes.find((n) => n.id === edge.source) : undefined;
+  const edgeTarget = edge ? demoNodes.find((n) => n.id === edge.target) : undefined;
+
+  // Auto-switch to Link tab when an edge is selected
+  useEffect(() => {
+    if (selectedEdge) setActiveTab("link");
+  }, [selectedEdge]);
+
+  // Auto-switch back to Evidence when a node is selected
+  useEffect(() => {
+    if (selectedNode) setActiveTab("evidence");
+  }, [selectedNode]);
 
   return (
     <div className="w-80 border-l border-border surface-glass flex flex-col h-full">
@@ -205,6 +227,114 @@ export function RightPanel({ selectedNode, onHighlightPath }: RightPanelProps) {
                   <GitBranch className="w-8 h-8 text-muted-foreground/30 mb-3" />
                   <p className="text-sm text-muted-foreground font-mono">Select a node to trace its sources</p>
                   <p className="text-xs text-muted-foreground/50 mt-1 font-mono">Video, audio, logs, transactions</p>
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {activeTab === "link" && (
+            <motion.div key="link" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}>
+              {edge && edgeSource && edgeTarget ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-0 mb-1">
+                    <h3 className="font-display text-sm font-semibold text-foreground">Link Inspector</h3>
+                    <span className="font-display text-sm text-primary mx-1">/</span>
+                    <span className="text-data text-muted-foreground">{edge.label}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 mb-3 text-data text-muted-foreground/70">
+                    <Link2 className="w-3 h-3 text-primary" />
+                    <span>Why is this link in the graph?</span>
+                  </div>
+
+                  <div className="p-3 bg-secondary rounded border border-border">
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-data text-muted-foreground/60 uppercase tracking-wider">From</div>
+                        <div className="text-xs font-medium text-foreground font-mono truncate">{edgeSource.label}</div>
+                        {edgeSource.sublabel && <div className="text-data text-muted-foreground truncate">{edgeSource.sublabel}</div>}
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
+                      <div className="flex-1 min-w-0 text-right">
+                        <div className="text-data text-muted-foreground/60 uppercase tracking-wider">To</div>
+                        <div className="text-xs font-medium text-foreground font-mono truncate">{edgeTarget.label}</div>
+                        {edgeTarget.sublabel && <div className="text-data text-muted-foreground truncate">{edgeTarget.sublabel}</div>}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="text-data px-2 py-1 rounded font-mono uppercase tracking-wider"
+                      style={{
+                        background: edgeStatusBadge[edge.status].bg,
+                        color: "hsl(220, 20%, 7%)",
+                        fontSize: "9px",
+                      }}
+                    >
+                      {edgeStatusBadge[edge.status].label}
+                    </span>
+                    <span
+                      className="text-data px-2 py-1 rounded font-mono"
+                      style={{
+                        background: edge.confidence >= 0.9 ? "hsl(160, 84%, 39%)" : edge.confidence >= 0.8 ? "hsl(38, 92%, 50%)" : "hsl(0, 84%, 60%)",
+                        color: "hsl(220, 20%, 7%)",
+                        fontSize: "9px",
+                      }}
+                    >
+                      {Math.round(edge.confidence * 100)}% confidence
+                    </span>
+                  </div>
+
+                  {edge.rationaleSummary && (
+                    <div className="p-3 bg-secondary rounded border-dashed-primary">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <Brain className="w-3.5 h-3.5 text-primary" />
+                        <span className="text-xs font-medium text-foreground font-mono">AI Rationale</span>
+                      </div>
+                      <p className="text-data text-muted-foreground leading-relaxed">{edge.rationaleSummary}</p>
+                    </div>
+                  )}
+
+                  {edge.rationale && edge.rationale.length > 0 && (
+                    <div className="p-3 bg-secondary rounded border border-border">
+                      <div className="text-data text-muted-foreground/70 uppercase tracking-wider mb-2">Supporting signals</div>
+                      <ul className="space-y-2">
+                        {edge.rationale.map((r, i) => (
+                          <li key={i} className="flex items-start gap-2 text-data text-foreground/90 leading-relaxed">
+                            <CheckCircle2 className="w-3 h-3 mt-0.5 text-primary flex-shrink-0" />
+                            <span>{r}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {edge.status === "hypothesis" && (
+                    <div className="p-3 rounded border border-primary/30 bg-primary/5">
+                      <div className="flex items-center gap-2 mb-1">
+                        <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+                        <span className="text-xs font-medium text-foreground font-mono">Analyst validation pending</span>
+                      </div>
+                      <p className="text-data text-muted-foreground leading-relaxed">
+                        Promote to <span className="text-primary font-mono">VALIDATED</span> after manual review of supporting signals.
+                      </p>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => onHighlightPath([edge.source, edge.target])}
+                    className="w-full flex items-center gap-2 p-2.5 rounded bg-primary/10 border border-primary/20 text-primary text-xs font-display font-medium hover:bg-primary/15 transition-colors"
+                  >
+                    <Network className="w-3.5 h-3.5" />
+                    Highlight this link in graph
+                    <ChevronRight className="w-3 h-3 ml-auto" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <Link2 className="w-8 h-8 text-muted-foreground/30 mb-3" />
+                  <p className="text-sm text-muted-foreground font-mono">Select an edge to inspect the link</p>
+                  <p className="text-xs text-muted-foreground/50 mt-1 font-mono">Click any line connecting two nodes</p>
                 </div>
               )}
             </motion.div>

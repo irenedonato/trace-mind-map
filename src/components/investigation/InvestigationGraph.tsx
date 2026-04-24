@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Video, Banknote, Smartphone, MapPin } from "lucide-react";
+import { User, Video, Banknote, Smartphone, MapPin, AtSign } from "lucide-react";
 import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus } from "@/data/demoScenario";
 
 interface InvestigationGraphProps {
@@ -8,6 +8,8 @@ interface InvestigationGraphProps {
   onNodeClick: (nodeId: string) => void;
   selectedNode: string | null;
   highlightPath: string[];
+  onEdgeClick: (edgeId: string) => void;
+  selectedEdge: string | null;
 }
 
 const nodeIcons: Record<string, typeof User> = {
@@ -16,6 +18,7 @@ const nodeIcons: Record<string, typeof User> = {
   transaction: Banknote,
   device: Smartphone,
   location: MapPin,
+  social: AtSign,
 };
 
 const nodeColors: Record<string, string> = {
@@ -24,6 +27,7 @@ const nodeColors: Record<string, string> = {
   transaction: "hsl(38, 92%, 50%)",
   device: "hsl(220, 10%, 50%)",
   location: "hsl(0, 84%, 60%)",
+  social: "hsl(200, 80%, 55%)",
 };
 
 const nodeBgClass: Record<string, string> = {
@@ -32,6 +36,7 @@ const nodeBgClass: Record<string, string> = {
   transaction: "bg-amber/20 border-amber/50",
   device: "bg-muted border-muted-foreground/30",
   location: "bg-crimson/20 border-crimson/50",
+  social: "bg-sky-500/20 border-sky-500/50",
 };
 
 const edgeStatusStyle: Record<EdgeStatus, { stroke: string; dash: string; label: string }> = {
@@ -41,7 +46,7 @@ const edgeStatusStyle: Record<EdgeStatus, { stroke: string; dash: string; label:
   hypothesis: { stroke: "hsl(280, 70%, 65%)", dash: "2 4",   label: "HYPOTHESIS" },
 };
 
-export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath }: InvestigationGraphProps) {
+export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath, onEdgeClick, selectedEdge }: InvestigationGraphProps) {
   const [visibleNodes, setVisibleNodes] = useState<GraphNode[]>([]);
   const [visibleEdges, setVisibleEdges] = useState<GraphEdge[]>([]);
 
@@ -89,7 +94,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
         </div>
       )}
 
-      <svg className="absolute inset-0 w-full h-full" style={{ pointerEvents: "none" }}>
+      <svg className="absolute inset-0 w-full h-full">
         <defs>
           <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
             <polygon points="0 0, 8 3, 0 6" fill="hsl(220, 10%, 50%)" opacity="0.5" />
@@ -106,28 +111,64 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
             if (!source || !target) return null;
 
             const inPath = isInPath(edge.source) && isInPath(edge.target);
+            const isEdgeSelected = selectedEdge === edge.id;
             const midX = (source.x + target.x) / 2;
             const midY = (source.y + target.y) / 2;
 
             const style = edgeStatusStyle[edge.status] ?? edgeStatusStyle.observed;
+            const strokeColor = isEdgeSelected
+              ? "hsl(262, 70%, 70%)"
+              : inPath
+              ? "hsl(262, 70%, 58%)"
+              : style.stroke;
             return (
-              <motion.g key={edge.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
+              <motion.g
+                key={edge.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdgeClick(edge.id);
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                {/* Invisible thick hit area for easier clicking */}
                 <line
                   x1={source.x}
                   y1={source.y}
                   x2={target.x}
                   y2={target.y}
-                  stroke={inPath ? "hsl(262, 70%, 58%)" : style.stroke}
-                  strokeWidth={inPath ? 2 : 1.5}
-                  strokeDasharray={inPath ? "none" : style.dash}
-                  opacity={inPath ? 1 : 0.7}
-                  markerEnd={inPath ? "url(#arrowhead-highlight)" : "url(#arrowhead)"}
+                  stroke="transparent"
+                  strokeWidth={16}
                 />
-                <rect x={midX - 38} y={midY - 18} width="76" height="32" rx="3" fill="hsl(220, 18%, 10%)" opacity="0.9" />
-                <text x={midX} y={midY - 5} textAnchor="middle" fill="hsl(220, 10%, 65%)" fontSize="9" fontFamily="'JetBrains Mono', monospace">
+                <line
+                  x1={source.x}
+                  y1={source.y}
+                  x2={target.x}
+                  y2={target.y}
+                  stroke={strokeColor}
+                  strokeWidth={isEdgeSelected ? 3 : inPath ? 2 : 1.5}
+                  strokeDasharray={inPath || isEdgeSelected ? "none" : style.dash}
+                  opacity={isEdgeSelected ? 1 : inPath ? 1 : 0.7}
+                  markerEnd={inPath || isEdgeSelected ? "url(#arrowhead-highlight)" : "url(#arrowhead)"}
+                  style={{ pointerEvents: "none" }}
+                />
+                <rect
+                  x={midX - 38}
+                  y={midY - 18}
+                  width="76"
+                  height="32"
+                  rx="3"
+                  fill="hsl(220, 18%, 10%)"
+                  opacity="0.9"
+                  stroke={isEdgeSelected ? strokeColor : "transparent"}
+                  strokeWidth={isEdgeSelected ? 1 : 0}
+                />
+                <text x={midX} y={midY - 5} textAnchor="middle" fill="hsl(220, 10%, 65%)" fontSize="9" fontFamily="'JetBrains Mono', monospace" style={{ pointerEvents: "none" }}>
                   {edge.label}
                 </text>
-                <text x={midX} y={midY + 8} textAnchor="middle" fill={style.stroke} fontSize="8" fontFamily="'JetBrains Mono', monospace" style={{ letterSpacing: "0.05em" }}>
+                <text x={midX} y={midY + 8} textAnchor="middle" fill={style.stroke} fontSize="8" fontFamily="'JetBrains Mono', monospace" style={{ letterSpacing: "0.05em", pointerEvents: "none" }}>
                   {style.label}
                 </text>
               </motion.g>
