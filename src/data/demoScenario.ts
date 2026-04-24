@@ -1,5 +1,6 @@
 export type NodeType = "person" | "video" | "transaction" | "device" | "location";
 export type EdgeType = "appearsInVideo" | "called" | "sentMoneyTo" | "locatedAt" | "connectedTo";
+export type EdgeStatus = "observed" | "inferred" | "hypothesis" | "validated";
 
 export interface GraphNode {
   id: string;
