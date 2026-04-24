@@ -49,12 +49,20 @@ export const demoNodes: GraphNode[] = [
       { type: "video", title: "CCTV Feed #12 — Warehouse District", detail: "Subject detected at 02:14:33 UTC, confidence 97%", timestamp: "2024-03-14T02:14:33Z" },
       { type: "metadata", title: "Facial Recognition Match", detail: "Matched against national database, score 0.97", timestamp: "2024-03-14T02:14:35Z" },
     ],
+    sourceTrace: [
+      { source: "Deckard — CCTV Feed #12", type: "video", reference: "frame 4123 @ 02:14:33", detail: "crop_id CR-88421 / vector_id VEC-22a91 / bbox [412,188,540,402]", hash: "sha256:9f2a…b71c", timestamp: "2024-03-14T02:14:33Z" },
+      { source: "Deckard VectorDB", type: "vector", reference: "embedding match score 0.97", detail: "bimodal embedding nearest-neighbor against PER-4821 reference crop", hash: "sha256:1c44…f902" },
+      { source: "National Face DB", type: "image", reference: "PER-4821 / ref_img R-118", detail: "ground-truth identity reference", hash: "sha256:7b10…9e3d" },
+    ],
   },
   {
     id: "v1", type: "video", label: "CCTV Feed #12", sublabel: "Warehouse District",
     x: 200, y: 180, confidence: 0.95, delay: 800,
     evidence: [
       { type: "video", title: "Video Source", detail: "Duration: 4h 22m, Resolution: 4K, Location: 41.8781°N, 87.6298°W", timestamp: "2024-03-14T00:00:00Z" },
+    ],
+    sourceTrace: [
+      { source: "Deckard — Camera CCTV-12", type: "video", reference: "video_id V-00012 / 4h22m @ 4K", detail: "ingested 2024-03-14T00:02:11Z, chain-of-custody verified", hash: "sha256:aa31…77bd", timestamp: "2024-03-14T00:00:00Z" },
     ],
   },
   {
@@ -63,6 +71,9 @@ export const demoNodes: GraphNode[] = [
     evidence: [
       { type: "video", title: "Video Source", detail: "Duration: 8h 15m, Resolution: 1080p, Location: 41.8827°N, 87.6233°W", timestamp: "2024-03-14T08:00:00Z" },
     ],
+    sourceTrace: [
+      { source: "Deckard — Camera CCTV-47", type: "video", reference: "video_id V-00047 / 8h15m @ 1080p", detail: "ingested 2024-03-14T08:01:44Z", hash: "sha256:42c0…91ee", timestamp: "2024-03-14T08:00:00Z" },
+    ],
   },
   {
     id: "d1", type: "device", label: "+1 (312) 555-0147", sublabel: "Burner Phone",
@@ -70,12 +81,20 @@ export const demoNodes: GraphNode[] = [
     evidence: [
       { type: "log", title: "Call Log Intercept", detail: "14 calls to +1 (312) 555-0283 in 72h window. Average duration: 47s", timestamp: "2024-03-13T18:22:00Z" },
     ],
+    sourceTrace: [
+      { source: "CDR / IPDR Logs", type: "log", reference: "cdr_batch CDR-2024-03-13 / lines 14882–14895", detail: "carrier export, 14 outgoing calls, avg 47s", hash: "sha256:08f1…44a2", timestamp: "2024-03-13T18:22:00Z" },
+      { source: "AudioRAG", type: "audio", reference: "audio_id A-00882 @ 00:00:12", detail: "voiceprint match to PER-4821, similarity 0.88", hash: "sha256:55de…1c09" },
+    ],
   },
   {
     id: "t1", type: "transaction", label: "$47,200 Transfer", sublabel: "TX: 0x4f8a...c3d1",
     x: 450, y: 520, confidence: 0.91, delay: 3200,
     evidence: [
       { type: "transaction", title: "Wire Transfer Record", detail: "From: Acct ***4821 → Acct ***7293. Flagged: structuring pattern detected", timestamp: "2024-03-14T06:33:12Z" },
+    ],
+    sourceTrace: [
+      { source: "Financial Records", type: "transaction", reference: "tx_id 0x4f8a…c3d1 / ledger row 88213", detail: "wire transfer, amount $47,200, structuring flag raised by AML rule R-17", hash: "sha256:31bb…e4f7", timestamp: "2024-03-14T06:33:12Z" },
+      { source: "AML Engine", type: "nlp", reference: "rule R-17 / case AML-99021", detail: "pattern: 4 sub-threshold transfers in 18h window" },
     ],
   },
   {
@@ -85,10 +104,18 @@ export const demoNodes: GraphNode[] = [
       { type: "video", title: "CCTV Feed #47 — Financial District", detail: "Subject detected at 09:47:11 UTC, confidence 74%", timestamp: "2024-03-14T09:47:11Z" },
       { type: "metadata", title: "Inferred Association", detail: "Linked via financial transaction and overlapping location data", timestamp: "2024-03-14T09:50:00Z" },
     ],
+    sourceTrace: [
+      { source: "Deckard — CCTV Feed #47", type: "video", reference: "frame 14021 @ 09:47:11", detail: "crop_id CR-91188 / vector_id VEC-44f02 / bbox [188,210,322,468]", hash: "sha256:6a09…b218", timestamp: "2024-03-14T09:47:11Z" },
+      { source: "Financial Records", type: "transaction", reference: "tx_id 0x4f8a…c3d1 / recipient acct ***7293", detail: "account holder resolved → PER-7293", hash: "sha256:31bb…e4f7" },
+      { source: "Entity Extraction (Social)", type: "nlp", reference: "post_id SM-77123", detail: "alias 'E.V.' co-occurring with PER-4821 in 3 posts" },
+    ],
   },
   {
     id: "l1", type: "location", label: "41.878°N 87.629°W", sublabel: "Warehouse District",
     x: 100, y: 300, confidence: 0.99, delay: 1200,
+    sourceTrace: [
+      { source: "Camera Geo-registry", type: "log", reference: "cam_meta CCTV-12", detail: "fixed geolocation 41.8781°N, 87.6298°W (surveyed)", hash: "sha256:ce71…0042" },
+    ],
   },
 ];
 
