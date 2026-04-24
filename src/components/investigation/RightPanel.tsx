@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FileText, Brain, Clock, Video, Database, CreditCard, Info, ChevronRight, GitBranch, Mic, Image as ImageIcon, Network, ShieldCheck, Link2, CheckCircle2 } from "lucide-react";
-import { demoNodes, demoEdges, reasoningSteps, timelineEvents, type EdgeStatus } from "@/data/demoScenario";
+import { type EdgeStatus, type Scenario } from "@/data/demoScenario";
 
 interface RightPanelProps {
   selectedNode: string | null;
   selectedEdge: string | null;
   onHighlightPath: (path: string[]) => void;
+  scenario: Scenario;
 }
 
 type TabId = "evidence" | "reasoning" | "source" | "link" | "timeline";
@@ -43,12 +44,12 @@ const sourceIcons: Record<string, typeof Video> = {
   nlp: Brain,
 };
 
-export function RightPanel({ selectedNode, selectedEdge, onHighlightPath }: RightPanelProps) {
+export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenario }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<TabId>("evidence");
-  const node = demoNodes.find((n) => n.id === selectedNode);
-  const edge = demoEdges.find((e) => e.id === selectedEdge);
-  const edgeSource = edge ? demoNodes.find((n) => n.id === edge.source) : undefined;
-  const edgeTarget = edge ? demoNodes.find((n) => n.id === edge.target) : undefined;
+  const node = scenario.nodes.find((n) => n.id === selectedNode);
+  const edge = scenario.edges.find((e) => e.id === selectedEdge);
+  const edgeSource = edge ? scenario.nodes.find((n) => n.id === edge.source) : undefined;
+  const edgeTarget = edge ? scenario.nodes.find((n) => n.id === edge.target) : undefined;
 
   // Auto-switch to Link tab when an edge is selected
   useEffect(() => {
@@ -129,7 +130,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath }: Righ
                 <h3 className="font-display text-sm font-semibold text-foreground">Agent Reasoning Chain</h3>
                 <span className="font-display text-sm text-primary mx-1">/</span>
               </div>
-              {reasoningSteps.map((step, i) => (
+              {scenario.reasoningSteps.map((step, i) => (
                 <motion.div
                   key={step.step}
                   initial={{ opacity: 0, y: 8 }}
@@ -137,7 +138,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath }: Righ
                   transition={{ delay: i * 0.1 }}
                   className="relative pl-6"
                 >
-                  {i < reasoningSteps.length - 1 && (
+                  {i < scenario.reasoningSteps.length - 1 && (
                     <div className="absolute left-[9px] top-6 bottom-0 w-px bg-border" />
                   )}
                   <div className="absolute left-0 top-1 w-[18px] h-[18px] rounded-full bg-secondary border-2 border-primary flex items-center justify-center">
@@ -346,7 +347,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath }: Righ
                 <h3 className="font-display text-sm font-semibold text-foreground">Event Timeline</h3>
                 <span className="font-display text-sm text-primary mx-1">/</span>
               </div>
-              {timelineEvents.map((ev, i) => (
+              {scenario.timelineEvents.map((ev, i) => (
                 <motion.button
                   key={i}
                   initial={{ opacity: 0, y: 8 }}
@@ -364,7 +365,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath }: Righ
               {/* Path highlight button */}
               <div className="mt-6 pt-4 border-t border-border">
                 <button
-                  onClick={() => onHighlightPath(["p1", "t1", "p2", "v2"])}
+                  onClick={() => onHighlightPath(scenario.defaultHighlightChain)}
                   className="w-full flex items-center gap-2 p-3 rounded bg-primary/10 border border-primary/20 text-primary text-xs font-display font-medium hover:bg-primary/15 transition-colors"
                 >
                   <Brain className="w-3.5 h-3.5" />

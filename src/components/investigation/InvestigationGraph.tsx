@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   User, Video, Banknote, Smartphone, MapPin, AtSign,
   Briefcase, Calendar, UserSearch, ScanFace, Crop, FileText, Tag, Mic, Volume2, MessageSquare,
+  Car, ClipboardList, IdCard,
 } from "lucide-react";
-import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus, type NodeType } from "@/data/demoScenario";
+import { type GraphNode, type GraphEdge, type EdgeStatus, type NodeType, type Scenario } from "@/data/demoScenario";
 import { StepIndicator } from "./StepIndicator";
 
 interface InvestigationGraphProps {
@@ -14,6 +15,7 @@ interface InvestigationGraphProps {
   highlightPath: string[];
   onEdgeClick: (edgeId: string) => void;
   selectedEdge: string | null;
+  scenario: Scenario;
 }
 
 const nodeIcons: Record<NodeType, typeof User> = {
@@ -30,7 +32,11 @@ const nodeIcons: Record<NodeType, typeof User> = {
   speaker: Volume2,
   communications_log: MessageSquare,
   transaction: Banknote,
+  transaction_record: Banknote,
   location: MapPin,
+  vehicle: Car,
+  vehicle_registration: ClipboardList,
+  owner: IdCard,
   // legacy aliases
   person: User,
   device: Smartphone,
@@ -51,7 +57,11 @@ const nodeColors: Record<NodeType, string> = {
   speaker: "hsl(180, 80%, 55%)",
   communications_log: "hsl(220, 10%, 55%)",
   transaction: "hsl(38, 92%, 50%)",
+  transaction_record: "hsl(38, 92%, 50%)",
   location: "hsl(0, 84%, 60%)",
+  vehicle: "hsl(212, 90%, 60%)",
+  vehicle_registration: "hsl(212, 50%, 60%)",
+  owner: "hsl(262, 70%, 65%)",
   // legacy aliases
   person: "hsl(262, 70%, 58%)",
   device: "hsl(220, 10%, 50%)",
@@ -72,7 +82,11 @@ const nodeBgClass: Record<NodeType, string> = {
   speaker: "bg-cyan-500/20 border-cyan-500/50",
   communications_log: "bg-muted border-muted-foreground/30",
   transaction: "bg-amber/20 border-amber/50",
+  transaction_record: "bg-amber/20 border-amber/50",
   location: "bg-crimson/20 border-crimson/50",
+  vehicle: "bg-sky-500/20 border-sky-500/60",
+  vehicle_registration: "bg-sky-500/10 border-sky-500/30",
+  owner: "bg-primary/20 border-primary/50",
   // legacy aliases
   person: "bg-primary/20 border-primary/50",
   device: "bg-muted border-muted-foreground/30",
@@ -86,24 +100,22 @@ const edgeStatusStyle: Record<EdgeStatus, { stroke: string; dash: string; label:
   hypothesis: { stroke: "hsl(280, 70%, 65%)", dash: "2 4",   label: "HYPOTHESIS" },
 };
 
-export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath, onEdgeClick, selectedEdge }: InvestigationGraphProps) {
+export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath, onEdgeClick, selectedEdge, scenario }: InvestigationGraphProps) {
   const [visibleNodes, setVisibleNodes] = useState<GraphNode[]>([]);
   const [visibleEdges, setVisibleEdges] = useState<GraphEdge[]>([]);
 
   useEffect(() => {
-    if (!isRunning) {
-      setVisibleNodes([]);
-      setVisibleEdges([]);
-      return;
-    }
+    setVisibleNodes([]);
+    setVisibleEdges([]);
+    if (!isRunning) return;
 
-    const nodeTimers = demoNodes.map((node) =>
+    const nodeTimers = scenario.nodes.map((node) =>
       setTimeout(() => {
         setVisibleNodes((prev) => [...prev, node]);
       }, node.delay)
     );
 
-    const edgeTimers = demoEdges.map((edge) =>
+    const edgeTimers = scenario.edges.map((edge) =>
       setTimeout(() => {
         setVisibleEdges((prev) => [...prev, edge]);
       }, edge.delay)
@@ -113,7 +125,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
       nodeTimers.forEach(clearTimeout);
       edgeTimers.forEach(clearTimeout);
     };
-  }, [isRunning]);
+  }, [isRunning, scenario]);
 
   const getNode = useCallback((id: string) => visibleNodes.find((n) => n.id === id), [visibleNodes]);
 
@@ -121,7 +133,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
 
   return (
     <div className="flex-1 relative overflow-hidden dot-grid">
-      <StepIndicator isRunning={isRunning} />
+      <StepIndicator isRunning={isRunning} steps={scenario.steps} totalMs={scenario.totalMs} />
       {/* Empty state */}
       {!isRunning && visibleNodes.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center">
