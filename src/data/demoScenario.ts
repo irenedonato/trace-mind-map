@@ -1,4 +1,23 @@
-export type NodeType = "person" | "video" | "transaction" | "device" | "location" | "social";
+export type NodeType =
+  | "case"
+  | "event"
+  | "person_candidate"
+  | "video"
+  | "video_detection"
+  | "crop"
+  | "social_profile"
+  | "document"
+  | "entity"
+  | "voice_sample"
+  | "speaker"
+  | "communications_log"
+  | "transaction"
+  | "location"
+  // legacy aliases — kept for backwards compatibility with existing demo data
+  | "person"
+  | "device"
+  | "social";
+
 export type EdgeType = "appearsInVideo" | "called" | "sentMoneyTo" | "locatedAt" | "connectedTo" | "linkedToProfile";
 export type EdgeStatus = "observed" | "inferred" | "hypothesis" | "validated";
 
