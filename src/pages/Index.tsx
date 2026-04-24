@@ -7,16 +7,24 @@ import { AgentActivityBar } from "@/components/investigation/AgentActivityBar";
 const Index = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [selectedEdge, setSelectedEdge] = useState<string | null>(null);
   const [highlightPath, setHighlightPath] = useState<string[]>([]);
 
   const handleLaunch = useCallback(() => {
     setIsRunning(true);
     setSelectedNode(null);
+    setSelectedEdge(null);
     setHighlightPath([]);
   }, []);
 
   const handleNodeClick = useCallback((nodeId: string) => {
+    setSelectedEdge(null);
     setSelectedNode((prev) => (prev === nodeId ? null : nodeId));
+  }, []);
+
+  const handleEdgeClick = useCallback((edgeId: string) => {
+    setSelectedNode(null);
+    setSelectedEdge((prev) => (prev === edgeId ? null : edgeId));
   }, []);
 
   return (
@@ -45,8 +53,14 @@ const Index = () => {
           onNodeClick={handleNodeClick}
           selectedNode={selectedNode}
           highlightPath={highlightPath}
+          onEdgeClick={handleEdgeClick}
+          selectedEdge={selectedEdge}
         />
-        <RightPanel selectedNode={selectedNode} onHighlightPath={setHighlightPath} />
+        <RightPanel
+          selectedNode={selectedNode}
+          selectedEdge={selectedEdge}
+          onHighlightPath={setHighlightPath}
+        />
       </div>
 
       {/* Agent activity */}
