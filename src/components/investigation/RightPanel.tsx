@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FileText, Brain, Clock, Video, Database, CreditCard, Info, ChevronRight, GitBranch, Mic, Image as ImageIcon, Network, ShieldCheck, Link2, CheckCircle2 } from "lucide-react";
-import { demoNodes, demoEdges, reasoningSteps, timelineEvents, type EdgeStatus } from "@/data/demoScenario";
+import { type EdgeStatus, type Scenario } from "@/data/demoScenario";
 
 interface RightPanelProps {
   selectedNode: string | null;
   selectedEdge: string | null;
   onHighlightPath: (path: string[]) => void;
+  scenario: Scenario;
 }
 
 type TabId = "evidence" | "reasoning" | "source" | "link" | "timeline";
@@ -43,12 +44,12 @@ const sourceIcons: Record<string, typeof Video> = {
   nlp: Brain,
 };
 
-export function RightPanel({ selectedNode, selectedEdge, onHighlightPath }: RightPanelProps) {
+export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenario }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<TabId>("evidence");
-  const node = demoNodes.find((n) => n.id === selectedNode);
-  const edge = demoEdges.find((e) => e.id === selectedEdge);
-  const edgeSource = edge ? demoNodes.find((n) => n.id === edge.source) : undefined;
-  const edgeTarget = edge ? demoNodes.find((n) => n.id === edge.target) : undefined;
+  const node = scenario.nodes.find((n) => n.id === selectedNode);
+  const edge = scenario.edges.find((e) => e.id === selectedEdge);
+  const edgeSource = edge ? scenario.nodes.find((n) => n.id === edge.source) : undefined;
+  const edgeTarget = edge ? scenario.nodes.find((n) => n.id === edge.target) : undefined;
 
   // Auto-switch to Link tab when an edge is selected
   useEffect(() => {
