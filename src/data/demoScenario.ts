@@ -22,7 +22,9 @@ export interface GraphEdge {
   type: EdgeType;
   label: string;
   confidence: number;
-  inferred: boolean;
+  /** @deprecated use `status` instead. Kept for backwards compatibility. */
+  inferred?: boolean;
+  status: EdgeStatus;
   delay: number;
 }
 
