@@ -121,6 +121,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
 
   return (
     <div className="flex-1 relative overflow-hidden dot-grid">
+      <StepIndicator isRunning={isRunning} />
       {/* Empty state */}
       {!isRunning && visibleNodes.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center">
