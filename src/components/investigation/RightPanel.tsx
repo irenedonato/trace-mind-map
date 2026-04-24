@@ -365,7 +365,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
               {/* Path highlight button */}
               <div className="mt-6 pt-4 border-t border-border">
                 <button
-                  onClick={() => onHighlightPath(["p1", "t1", "p2", "v2"])}
+                  onClick={() => onHighlightPath(scenario.defaultHighlightChain)}
                   className="w-full flex items-center gap-2 p-3 rounded bg-primary/10 border border-primary/20 text-primary text-xs font-display font-medium hover:bg-primary/15 transition-colors"
                 >
                   <Brain className="w-3.5 h-3.5" />
