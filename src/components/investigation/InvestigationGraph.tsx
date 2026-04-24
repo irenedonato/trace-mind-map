@@ -5,7 +5,7 @@ import {
   Briefcase, Calendar, UserSearch, ScanFace, Crop, FileText, Tag, Mic, Volume2, MessageSquare,
   Car, ClipboardList, IdCard,
 } from "lucide-react";
-import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus, type NodeType } from "@/data/demoScenario";
+import { type GraphNode, type GraphEdge, type EdgeStatus, type NodeType, type Scenario } from "@/data/demoScenario";
 import { StepIndicator } from "./StepIndicator";
 
 interface InvestigationGraphProps {
@@ -15,6 +15,7 @@ interface InvestigationGraphProps {
   highlightPath: string[];
   onEdgeClick: (edgeId: string) => void;
   selectedEdge: string | null;
+  scenario: Scenario;
 }
 
 const nodeIcons: Record<NodeType, typeof User> = {
@@ -99,24 +100,22 @@ const edgeStatusStyle: Record<EdgeStatus, { stroke: string; dash: string; label:
   hypothesis: { stroke: "hsl(280, 70%, 65%)", dash: "2 4",   label: "HYPOTHESIS" },
 };
 
-export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath, onEdgeClick, selectedEdge }: InvestigationGraphProps) {
+export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath, onEdgeClick, selectedEdge, scenario }: InvestigationGraphProps) {
   const [visibleNodes, setVisibleNodes] = useState<GraphNode[]>([]);
   const [visibleEdges, setVisibleEdges] = useState<GraphEdge[]>([]);
 
   useEffect(() => {
-    if (!isRunning) {
-      setVisibleNodes([]);
-      setVisibleEdges([]);
-      return;
-    }
+    setVisibleNodes([]);
+    setVisibleEdges([]);
+    if (!isRunning) return;
 
-    const nodeTimers = demoNodes.map((node) =>
+    const nodeTimers = scenario.nodes.map((node) =>
       setTimeout(() => {
         setVisibleNodes((prev) => [...prev, node]);
       }, node.delay)
     );
 
-    const edgeTimers = demoEdges.map((edge) =>
+    const edgeTimers = scenario.edges.map((edge) =>
       setTimeout(() => {
         setVisibleEdges((prev) => [...prev, edge]);
       }, edge.delay)
@@ -126,7 +125,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
       nodeTimers.forEach(clearTimeout);
       edgeTimers.forEach(clearTimeout);
     };
-  }, [isRunning]);
+  }, [isRunning, scenario]);
 
   const getNode = useCallback((id: string) => visibleNodes.find((n) => n.id === id), [visibleNodes]);
 
