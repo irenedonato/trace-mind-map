@@ -123,13 +123,13 @@ export const demoNodes: GraphNode[] = [
 ];
 
 export const demoEdges: GraphEdge[] = [
-  { id: "e1", source: "p1", target: "v1", type: "appearsInVideo", label: "detected in", confidence: 0.97, inferred: false, delay: 1000 },
-  { id: "e2", source: "p1", target: "l1", type: "locatedAt", label: "located at", confidence: 0.99, inferred: false, delay: 1400 },
-  { id: "e3", source: "p1", target: "d1", type: "connectedTo", label: "uses device", confidence: 0.82, inferred: false, delay: 2000 },
-  { id: "e4", source: "p1", target: "v2", type: "appearsInVideo", label: "detected in", confidence: 0.89, inferred: true, delay: 2800 },
-  { id: "e5", source: "p1", target: "t1", type: "sentMoneyTo", label: "sent $47.2K", confidence: 0.91, inferred: false, delay: 3600 },
-  { id: "e6", source: "t1", target: "p2", type: "sentMoneyTo", label: "received by", confidence: 0.91, inferred: false, delay: 4200 },
-  { id: "e7", source: "p2", target: "v2", type: "appearsInVideo", label: "detected in", confidence: 0.74, inferred: true, delay: 4600 },
+  { id: "e1", source: "p1", target: "v1", type: "appearsInVideo", label: "detected in", confidence: 0.97, status: "observed", inferred: false, delay: 1000 },
+  { id: "e2", source: "p1", target: "l1", type: "locatedAt", label: "located at", confidence: 0.99, status: "validated", inferred: false, delay: 1400 },
+  { id: "e3", source: "p1", target: "d1", type: "connectedTo", label: "uses device", confidence: 0.82, status: "hypothesis", inferred: false, delay: 2000 },
+  { id: "e4", source: "p1", target: "v2", type: "appearsInVideo", label: "detected in", confidence: 0.89, status: "inferred", inferred: true, delay: 2800 },
+  { id: "e5", source: "p1", target: "t1", type: "sentMoneyTo", label: "sent $47.2K", confidence: 0.91, status: "observed", inferred: false, delay: 3600 },
+  { id: "e6", source: "t1", target: "p2", type: "sentMoneyTo", label: "received by", confidence: 0.91, status: "observed", inferred: false, delay: 4200 },
+  { id: "e7", source: "p2", target: "v2", type: "appearsInVideo", label: "detected in", confidence: 0.74, status: "hypothesis", inferred: true, delay: 4600 },
 ];
 
 export const agentLogs: { message: string; delay: number; level: "info" | "warning" | "success" }[] = [
