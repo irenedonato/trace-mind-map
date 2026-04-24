@@ -130,7 +130,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                 <h3 className="font-display text-sm font-semibold text-foreground">Agent Reasoning Chain</h3>
                 <span className="font-display text-sm text-primary mx-1">/</span>
               </div>
-              {reasoningSteps.map((step, i) => (
+              {scenario.reasoningSteps.map((step, i) => (
                 <motion.div
                   key={step.step}
                   initial={{ opacity: 0, y: 8 }}
@@ -138,7 +138,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                   transition={{ delay: i * 0.1 }}
                   className="relative pl-6"
                 >
-                  {i < reasoningSteps.length - 1 && (
+                  {i < scenario.reasoningSteps.length - 1 && (
                     <div className="absolute left-[9px] top-6 bottom-0 w-px bg-border" />
                   )}
                   <div className="absolute left-0 top-1 w-[18px] h-[18px] rounded-full bg-secondary border-2 border-primary flex items-center justify-center">
@@ -347,7 +347,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                 <h3 className="font-display text-sm font-semibold text-foreground">Event Timeline</h3>
                 <span className="font-display text-sm text-primary mx-1">/</span>
               </div>
-              {timelineEvents.map((ev, i) => (
+              {scenario.timelineEvents.map((ev, i) => (
                 <motion.button
                   key={i}
                   initial={{ opacity: 0, y: 8 }}
