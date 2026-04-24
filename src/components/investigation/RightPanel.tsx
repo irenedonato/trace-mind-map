@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Brain, Clock, Video, Database, CreditCard, Info, ChevronRight } from "lucide-react";
+import { FileText, Brain, Clock, Video, Database, CreditCard, Info, ChevronRight, GitBranch, Mic, Image as ImageIcon, Network, ShieldCheck } from "lucide-react";
 import { demoNodes, reasoningSteps, timelineEvents } from "@/data/demoScenario";
 
 interface RightPanelProps {
@@ -8,11 +8,12 @@ interface RightPanelProps {
   onHighlightPath: (path: string[]) => void;
 }
 
-type TabId = "evidence" | "reasoning" | "timeline";
+type TabId = "evidence" | "reasoning" | "source" | "timeline";
 
 const tabs: { id: TabId; label: string; icon: typeof FileText }[] = [
   { id: "evidence", label: "Evidence", icon: FileText },
   { id: "reasoning", label: "Reasoning", icon: Brain },
+  { id: "source", label: "Source", icon: GitBranch },
   { id: "timeline", label: "Timeline", icon: Clock },
 ];
 
@@ -21,6 +22,16 @@ const evidenceIcons: Record<string, typeof Video> = {
   log: Database,
   transaction: CreditCard,
   metadata: Info,
+};
+
+const sourceIcons: Record<string, typeof Video> = {
+  video: Video,
+  audio: Mic,
+  log: Database,
+  transaction: CreditCard,
+  image: ImageIcon,
+  vector: Network,
+  nlp: Brain,
 };
 
 export function RightPanel({ selectedNode, onHighlightPath }: RightPanelProps) {
