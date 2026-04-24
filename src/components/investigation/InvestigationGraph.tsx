@@ -109,6 +109,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
             const midX = (source.x + target.x) / 2;
             const midY = (source.y + target.y) / 2;
 
+            const style = edgeStatusStyle[edge.status] ?? edgeStatusStyle.observed;
             return (
               <motion.g key={edge.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
                 <line
@@ -116,15 +117,18 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
                   y1={source.y}
                   x2={target.x}
                   y2={target.y}
-                  stroke={inPath ? "hsl(262, 70%, 58%)" : edge.inferred ? "hsl(38, 92%, 50%)" : "hsl(220, 14%, 22%)"}
+                  stroke={inPath ? "hsl(262, 70%, 58%)" : style.stroke}
                   strokeWidth={inPath ? 2 : 1.5}
-                  strokeDasharray={edge.inferred ? "6 4" : "none"}
-                  opacity={inPath ? 1 : 0.6}
+                  strokeDasharray={inPath ? "none" : style.dash}
+                  opacity={inPath ? 1 : 0.7}
                   markerEnd={inPath ? "url(#arrowhead-highlight)" : "url(#arrowhead)"}
                 />
-                <rect x={midX - 30} y={midY - 10} width="60" height="20" rx="3" fill="hsl(220, 18%, 10%)" opacity="0.9" />
-                <text x={midX} y={midY + 4} textAnchor="middle" fill="hsl(220, 10%, 50%)" fontSize="9" fontFamily="'JetBrains Mono', monospace">
+                <rect x={midX - 38} y={midY - 18} width="76" height="32" rx="3" fill="hsl(220, 18%, 10%)" opacity="0.9" />
+                <text x={midX} y={midY - 5} textAnchor="middle" fill="hsl(220, 10%, 65%)" fontSize="9" fontFamily="'JetBrains Mono', monospace">
                   {edge.label}
+                </text>
+                <text x={midX} y={midY + 8} textAnchor="middle" fill={style.stroke} fontSize="8" fontFamily="'JetBrains Mono', monospace" style={{ letterSpacing: "0.05em" }}>
+                  {style.label}
                 </text>
               </motion.g>
             );
