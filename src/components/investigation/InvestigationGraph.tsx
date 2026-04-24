@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, Video, Banknote, Smartphone, MapPin } from "lucide-react";
-import { demoNodes, demoEdges, type GraphNode, type GraphEdge } from "@/data/demoScenario";
+import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus } from "@/data/demoScenario";
 
 interface InvestigationGraphProps {
   isRunning: boolean;
