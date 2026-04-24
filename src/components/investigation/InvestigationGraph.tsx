@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, Video, Banknote, Smartphone, MapPin } from "lucide-react";
-import { demoNodes, demoEdges, type GraphNode, type GraphEdge } from "@/data/demoScenario";
+import { demoNodes, demoEdges, type GraphNode, type GraphEdge, type EdgeStatus } from "@/data/demoScenario";
 
 interface InvestigationGraphProps {
   isRunning: boolean;
@@ -32,6 +32,13 @@ const nodeBgClass: Record<string, string> = {
   transaction: "bg-amber/20 border-amber/50",
   device: "bg-muted border-muted-foreground/30",
   location: "bg-crimson/20 border-crimson/50",
+};
+
+const edgeStatusStyle: Record<EdgeStatus, { stroke: string; dash: string; label: string }> = {
+  observed:   { stroke: "hsl(220, 14%, 45%)", dash: "none",  label: "OBSERVED" },
+  validated:  { stroke: "hsl(160, 84%, 39%)", dash: "none",  label: "VALIDATED" },
+  inferred:   { stroke: "hsl(38, 92%, 50%)",  dash: "6 4",   label: "INFERRED" },
+  hypothesis: { stroke: "hsl(280, 70%, 65%)", dash: "2 4",   label: "HYPOTHESIS" },
 };
 
 export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath }: InvestigationGraphProps) {
@@ -102,6 +109,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
             const midX = (source.x + target.x) / 2;
             const midY = (source.y + target.y) / 2;
 
+            const style = edgeStatusStyle[edge.status] ?? edgeStatusStyle.observed;
             return (
               <motion.g key={edge.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
                 <line
@@ -109,15 +117,18 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
                   y1={source.y}
                   x2={target.x}
                   y2={target.y}
-                  stroke={inPath ? "hsl(262, 70%, 58%)" : edge.inferred ? "hsl(38, 92%, 50%)" : "hsl(220, 14%, 22%)"}
+                  stroke={inPath ? "hsl(262, 70%, 58%)" : style.stroke}
                   strokeWidth={inPath ? 2 : 1.5}
-                  strokeDasharray={edge.inferred ? "6 4" : "none"}
-                  opacity={inPath ? 1 : 0.6}
+                  strokeDasharray={inPath ? "none" : style.dash}
+                  opacity={inPath ? 1 : 0.7}
                   markerEnd={inPath ? "url(#arrowhead-highlight)" : "url(#arrowhead)"}
                 />
-                <rect x={midX - 30} y={midY - 10} width="60" height="20" rx="3" fill="hsl(220, 18%, 10%)" opacity="0.9" />
-                <text x={midX} y={midY + 4} textAnchor="middle" fill="hsl(220, 10%, 50%)" fontSize="9" fontFamily="'JetBrains Mono', monospace">
+                <rect x={midX - 38} y={midY - 18} width="76" height="32" rx="3" fill="hsl(220, 18%, 10%)" opacity="0.9" />
+                <text x={midX} y={midY - 5} textAnchor="middle" fill="hsl(220, 10%, 65%)" fontSize="9" fontFamily="'JetBrains Mono', monospace">
                   {edge.label}
+                </text>
+                <text x={midX} y={midY + 8} textAnchor="middle" fill={style.stroke} fontSize="8" fontFamily="'JetBrains Mono', monospace" style={{ letterSpacing: "0.05em" }}>
+                  {style.label}
                 </text>
               </motion.g>
             );
@@ -184,6 +195,21 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
           );
         })}
       </AnimatePresence>
+
+      {/* Edge status legend */}
+      {visibleEdges.length > 0 && (
+        <div className="absolute bottom-3 right-3 surface-glass border border-border rounded px-3 py-2 text-[9px] font-mono space-y-1 z-10">
+          <div className="text-muted-foreground uppercase tracking-wider mb-1">Edge status</div>
+          {(Object.entries(edgeStatusStyle) as [EdgeStatus, typeof edgeStatusStyle[EdgeStatus]][]).map(([key, s]) => (
+            <div key={key} className="flex items-center gap-2">
+              <svg width="22" height="6">
+                <line x1="0" y1="3" x2="22" y2="3" stroke={s.stroke} strokeWidth="2" strokeDasharray={s.dash} />
+              </svg>
+              <span className="text-foreground/80">{key}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
