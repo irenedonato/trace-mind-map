@@ -124,7 +124,7 @@ export const demoNodes: GraphNode[] = [
 ];
 
 export const demoEdges: GraphEdge[] = [
-  { id: "e1", source: "p1", target: "v1", type: "appearsInVideo", label: "detected in", confidence: 0.97, status: "observed", inferred: false, delay: 1000 },
+  { id: "e1", source: "p1", target: "v1", type: "appearsInVideo", label: "matched in", confidence: 0.93, status: "observed", inferred: false, delay: 1000 },
   { id: "e2", source: "p1", target: "l1", type: "locatedAt", label: "located at", confidence: 0.99, status: "validated", inferred: false, delay: 1400 },
   { id: "e3", source: "p1", target: "d1", type: "connectedTo", label: "uses device", confidence: 0.82, status: "hypothesis", inferred: false, delay: 2000 },
   { id: "e4", source: "p1", target: "v2", type: "appearsInVideo", label: "detected in", confidence: 0.89, status: "inferred", inferred: true, delay: 2800 },
