@@ -125,16 +125,104 @@ export const demoNodes: GraphNode[] = [
       { source: "Camera Geo-registry", type: "log", reference: "cam_meta CCTV-12", detail: "fixed geolocation 45.0921°N, 7.6700°E — Aurora, Torino (surveyed)", hash: "sha256:ce71…0042" },
     ],
   },
+  {
+    id: "s1", type: "social", label: "@mario.r_88", sublabel: "Instagram · public",
+    x: 560, y: 470, confidence: 0.71, delay: 4400,
+    evidence: [
+      { type: "metadata", title: "Public Social Profile", detail: "Instagram handle @mario.r_88 — public account, 412 followers, 87 posts. Bio mentions Torino.", timestamp: "2024-03-14T10:02:00Z" },
+      { type: "video", title: "Image Match — Red Sweatshirt", detail: "Public post IG-77123 (2024-02-28) shows subject wearing same red sweatshirt as CCTV crop. CLIP visual similarity 0.84.", timestamp: "2024-02-28T15:11:00Z" },
+    ],
+    sourceTrace: [
+      { source: "OSINT — Instagram Scraper", type: "image", reference: "post_id IG-77123 / img_id IMG-9921", detail: "public post, garment match red hoodie, CLIP sim 0.84 vs CCTV crop CR-88421", hash: "sha256:b7e2…44a1", timestamp: "2024-02-28T15:11:00Z" },
+      { source: "Geo-tag Cluster", type: "log", reference: "geo_cluster GC-204 · Porta Susa ±300m", detail: "5 of 87 posts geo-tagged within 300m of Torino Porta Susa", hash: "sha256:11df…aa20" },
+      { source: "Hashtag Co-occurrence", type: "nlp", reference: "tag #aurora_torino_night", detail: "shared event hashtag with 2 other PER-4821-linked accounts" },
+    ],
+  },
 ];
 
 export const demoEdges: GraphEdge[] = [
-  { id: "e1", source: "p1", target: "v1", type: "appearsInVideo", label: "matched in", confidence: 0.93, status: "observed", inferred: false, delay: 1000 },
-  { id: "e2", source: "p1", target: "l1", type: "locatedAt", label: "located at", confidence: 0.99, status: "validated", inferred: false, delay: 1400 },
-  { id: "e3", source: "p1", target: "d1", type: "connectedTo", label: "uses device", confidence: 0.82, status: "hypothesis", inferred: false, delay: 2000 },
-  { id: "e4", source: "p1", target: "v2", type: "appearsInVideo", label: "detected in", confidence: 0.89, status: "inferred", inferred: true, delay: 2800 },
-  { id: "e5", source: "p1", target: "t1", type: "sentMoneyTo", label: "sent $47.2K", confidence: 0.91, status: "observed", inferred: false, delay: 3600 },
-  { id: "e6", source: "t1", target: "p2", type: "sentMoneyTo", label: "received by", confidence: 0.91, status: "observed", inferred: false, delay: 4200 },
-  { id: "e7", source: "p2", target: "v2", type: "appearsInVideo", label: "detected in", confidence: 0.74, status: "hypothesis", inferred: true, delay: 4600 },
+  {
+    id: "e1", source: "p1", target: "v1", type: "appearsInVideo", label: "matched in",
+    confidence: 0.93, status: "observed", inferred: false, delay: 1000,
+    rationaleSummary: "Direct visual match returned by Deckard semantic search.",
+    rationale: [
+      "Top-1 crop returned for query \"man wearing a red sweatshirt\"",
+      "Visual match score 0.93 against CCTV Feed #12 frame 4123",
+      "Bounding box [412,188,540,402] @ 02:14:33 UTC",
+      "Chain-of-custody verified on source video",
+    ],
+  },
+  {
+    id: "e2", source: "p1", target: "l1", type: "locatedAt", label: "located at",
+    confidence: 0.99, status: "validated", inferred: false, delay: 1400,
+    rationaleSummary: "Camera geo-registry resolves CCTV Feed #12 to a fixed surveyed location.",
+    rationale: [
+      "CCTV Feed #12 is anchored to a surveyed fixed camera",
+      "Geo-registry coordinates 45.0921°N, 7.6700°E (Aurora, Torino)",
+      "Validated by camera metadata cam_meta CCTV-12",
+    ],
+  },
+  {
+    id: "e3", source: "p1", target: "d1", type: "connectedTo", label: "uses device",
+    confidence: 0.82, status: "hypothesis", inferred: false, delay: 2000,
+    rationaleSummary: "Voiceprint similarity + co-located CDR activity. Identity not confirmed.",
+    rationale: [
+      "Burner phone active near Aurora at the crop timestamp window",
+      "AudioRAG voiceprint A-00882 matches PER-4821 with similarity 0.88",
+      "14 outgoing calls in 72h to a single counterpart — operational pattern",
+      "No subscriber record — attribution remains a hypothesis",
+    ],
+  },
+  {
+    id: "e4", source: "p1", target: "v2", type: "appearsInVideo", label: "detected in",
+    confidence: 0.89, status: "inferred", inferred: true, delay: 2800,
+    rationaleSummary: "Same crop embedding re-identified across feeds.",
+    rationale: [
+      "Embedding nearest-neighbor search across 847 feeds",
+      "Re-identification in CCTV Feed #47 (Centro Torino) — sim 0.89",
+      "Time delta consistent with on-foot transit Aurora → Centro",
+    ],
+  },
+  {
+    id: "e5", source: "p1", target: "t1", type: "sentMoneyTo", label: "sent $47.2K",
+    confidence: 0.91, status: "observed", inferred: false, delay: 3600,
+    rationaleSummary: "Wire transfer originated from account linked to PER-4821.",
+    rationale: [
+      "Source account ***4821 resolves to candidate PER-4821",
+      "Wire amount $47,200, ledger row 88213",
+      "AML rule R-17 raised structuring flag",
+    ],
+  },
+  {
+    id: "e6", source: "t1", target: "p2", type: "sentMoneyTo", label: "received by",
+    confidence: 0.91, status: "observed", inferred: false, delay: 4200,
+    rationaleSummary: "Recipient account holder resolved via financial records.",
+    rationale: [
+      "Recipient account ***7293 mapped to PER-7293 (Elena Vasquez)",
+      "Confirmed by ledger row 88213 / tx 0x4f8a…c3d1",
+    ],
+  },
+  {
+    id: "e7", source: "p2", target: "v2", type: "appearsInVideo", label: "detected in",
+    confidence: 0.74, status: "hypothesis", inferred: true, delay: 4600,
+    rationaleSummary: "Visual similarity to a reference crop — pending analyst validation.",
+    rationale: [
+      "Crop CR-91188 in CCTV Feed #47 @ 09:47:11 UTC",
+      "Embedding similarity 0.74 vs PER-7293 reference",
+      "Below 0.80 threshold — flagged as hypothesis",
+    ],
+  },
+  {
+    id: "e8", source: "p1", target: "s1", type: "linkedToProfile", label: "linked to profile",
+    confidence: 0.71, status: "hypothesis", inferred: true, delay: 5000,
+    rationaleSummary: "Multiple weak signals link PER-4821 to public Instagram @mario.r_88. Identity not confirmed.",
+    rationale: [
+      "Same red sweatshirt visible in public Instagram post IG-77123 (CLIP sim 0.84)",
+      "5 of 87 posts geo-tagged within 300m of Torino Porta Susa — same location pattern",
+      "Shared event hashtag #aurora_torino_night with 2 other PER-4821-linked accounts",
+      "Analyst validation pending",
+    ],
+  },
 ];
 
 export const agentLogs: { message: string; delay: number; level: "info" | "warning" | "success" }[] = [
