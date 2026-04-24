@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal, Circle } from "lucide-react";
-import { agentLogs } from "@/data/demoScenario";
+import type { Scenario } from "@/data/demoScenario";
 
 interface AgentActivityBarProps {
   isRunning: boolean;
+  scenario: Scenario;
 }
 
 interface LogEntry {
@@ -25,17 +26,15 @@ const dotColors: Record<string, string> = {
   success: "bg-emerald",
 };
 
-export function AgentActivityBar({ isRunning }: AgentActivityBarProps) {
+export function AgentActivityBar({ isRunning, scenario }: AgentActivityBarProps) {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isRunning) {
-      setLogs([]);
-      return;
-    }
+    setLogs([]);
+    if (!isRunning) return;
 
-    const timers = agentLogs.map((log) =>
+    const timers = scenario.agentLogs.map((log) =>
       setTimeout(() => {
         const now = new Date();
         const ts = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
@@ -44,7 +43,7 @@ export function AgentActivityBar({ isRunning }: AgentActivityBarProps) {
     );
 
     return () => timers.forEach(clearTimeout);
-  }, [isRunning]);
+  }, [isRunning, scenario]);
 
   useEffect(() => {
     if (scrollRef.current) {
