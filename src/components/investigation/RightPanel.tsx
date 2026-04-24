@@ -46,7 +46,7 @@ export function RightPanel({ selectedNode, onHighlightPath }: RightPanelProps) {
           <button
             key={id}
             onClick={() => setActiveTab(id)}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-display uppercase tracking-wider transition-all ${
+            className={`flex-1 flex items-center justify-center gap-1 py-3 text-[10px] font-display uppercase tracking-wider transition-all ${
               activeTab === id
                 ? "text-primary border-b-2 border-primary bg-primary/5"
                 : "text-muted-foreground hover:text-foreground"
