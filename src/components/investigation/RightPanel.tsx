@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileText, Brain, Clock, Video, Database, CreditCard, Info, ChevronRight, GitBranch, Mic, Image as ImageIcon, Network, ShieldCheck } from "lucide-react";
-import { demoNodes, reasoningSteps, timelineEvents } from "@/data/demoScenario";
+import { FileText, Brain, Clock, Video, Database, CreditCard, Info, ChevronRight, GitBranch, Mic, Image as ImageIcon, Network, ShieldCheck, Link2, CheckCircle2 } from "lucide-react";
+import { demoNodes, demoEdges, reasoningSteps, timelineEvents, type EdgeStatus } from "@/data/demoScenario";
 
 interface RightPanelProps {
   selectedNode: string | null;
+  selectedEdge: string | null;
   onHighlightPath: (path: string[]) => void;
 }
 
-type TabId = "evidence" | "reasoning" | "source" | "timeline";
+type TabId = "evidence" | "reasoning" | "source" | "link" | "timeline";
 
 const tabs: { id: TabId; label: string; icon: typeof FileText }[] = [
   { id: "evidence", label: "Evidence", icon: FileText },
   { id: "reasoning", label: "Reasoning", icon: Brain },
   { id: "source", label: "Source", icon: GitBranch },
+  { id: "link", label: "Link", icon: Link2 },
   { id: "timeline", label: "Timeline", icon: Clock },
 ];
+
+const edgeStatusBadge: Record<EdgeStatus, { bg: string; label: string }> = {
+  observed:   { bg: "hsl(220, 14%, 45%)", label: "OBSERVED" },
+  validated:  { bg: "hsl(160, 84%, 39%)", label: "VALIDATED" },
+  inferred:   { bg: "hsl(38, 92%, 50%)",  label: "INFERRED" },
+  hypothesis: { bg: "hsl(280, 70%, 65%)", label: "HYPOTHESIS" },
+};
 
 const evidenceIcons: Record<string, typeof Video> = {
   video: Video,
@@ -34,9 +43,22 @@ const sourceIcons: Record<string, typeof Video> = {
   nlp: Brain,
 };
 
-export function RightPanel({ selectedNode, onHighlightPath }: RightPanelProps) {
+export function RightPanel({ selectedNode, selectedEdge, onHighlightPath }: RightPanelProps) {
   const [activeTab, setActiveTab] = useState<TabId>("evidence");
   const node = demoNodes.find((n) => n.id === selectedNode);
+  const edge = demoEdges.find((e) => e.id === selectedEdge);
+  const edgeSource = edge ? demoNodes.find((n) => n.id === edge.source) : undefined;
+  const edgeTarget = edge ? demoNodes.find((n) => n.id === edge.target) : undefined;
+
+  // Auto-switch to Link tab when an edge is selected
+  useEffect(() => {
+    if (selectedEdge) setActiveTab("link");
+  }, [selectedEdge]);
+
+  // Auto-switch back to Evidence when a node is selected
+  useEffect(() => {
+    if (selectedNode) setActiveTab("evidence");
+  }, [selectedNode]);
 
   return (
     <div className="w-80 border-l border-border surface-glass flex flex-col h-full">
