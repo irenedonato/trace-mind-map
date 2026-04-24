@@ -34,6 +34,13 @@ const nodeBgClass: Record<string, string> = {
   location: "bg-crimson/20 border-crimson/50",
 };
 
+const edgeStatusStyle: Record<EdgeStatus, { stroke: string; dash: string; label: string }> = {
+  observed:   { stroke: "hsl(220, 14%, 45%)", dash: "none",  label: "OBSERVED" },
+  validated:  { stroke: "hsl(160, 84%, 39%)", dash: "none",  label: "VALIDATED" },
+  inferred:   { stroke: "hsl(38, 92%, 50%)",  dash: "6 4",   label: "INFERRED" },
+  hypothesis: { stroke: "hsl(280, 70%, 65%)", dash: "2 4",   label: "HYPOTHESIS" },
+};
+
 export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath }: InvestigationGraphProps) {
   const [visibleNodes, setVisibleNodes] = useState<GraphNode[]>([]);
   const [visibleEdges, setVisibleEdges] = useState<GraphEdge[]>([]);
