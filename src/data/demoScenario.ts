@@ -483,3 +483,392 @@ export const reasoningSteps = [
   { step: 7, title: "Second Subject Inferred", detail: "Recipient ***7293 resolves to Elena Vasquez (PER-7293), subsequently detected in CCTV-47 at 09:47 UTC. INFERRED: coordination.", confidence: 0.74 },
   { step: 8, title: "Analyst Validation", detail: "4 HYPOTHESIS links remain pending analyst validation before promotion to VALIDATED status.", confidence: 0.80 },
 ];
+
+// =====================================================================
+// =====================================================================
+// VEHICLE-DRIVEN SCENARIO
+// Seed: suspicious vehicle near Torino Porta Susa (partial plate AB123)
+// =====================================================================
+// =====================================================================
+
+export const vehicleDemoSteps: DemoStep[] = [
+  { step: 1, startMs:     0, title: "Seed received",                       subtitle: "Vehicle · partial plate AB123 · Porta Susa · 17:00–20:00" },
+  { step: 2, startMs:  1800, title: "Vehicle registry → owner",            subtitle: "Structured lookup resolves plate to registered owner" },
+  { step: 3, startMs:  3600, title: "ANPR + event logs",                   subtitle: "Vehicle pinged by traffic cameras near the station" },
+  { step: 4, startMs:  5400, title: "Deckard searches station video",      subtitle: "Vehicle + person exiting matched in CCTV feeds" },
+  { step: 5, startMs:  7200, title: "OSINT profile candidate",             subtitle: "Public social profile linked to the candidate" },
+  { step: 6, startMs:  9000, title: "AudioRAG speaker cluster",            subtitle: "Voice sample from social + intercepted calls clustered" },
+  { step: 7, startMs: 10800, title: "Comms + transactions add context",    subtitle: "CDR and financial activity correlated to subject" },
+  { step: 8, startMs: 12600, title: "Analyst validates / rejects",         subtitle: "Hypothesis links pending promotion to VALIDATED" },
+];
+
+export const vehicleDemoTotalMs = 14400;
+
+// ----- Nodes -----
+export const vehicleDemoNodes: GraphNode[] = [
+  // STEP 1 — seed
+  {
+    id: "vc1", type: "case", label: "CASE-2026-0412", sublabel: "Torino · Porta Susa",
+    x: 110, y: 150, confidence: 1.0, delay: 0, step: 1,
+    evidence: [
+      { type: "metadata", title: "Case Opened", detail: "Suspicious vehicle reported near Torino Porta Susa station.", timestamp: "2026-04-12T17:05:00Z" },
+    ],
+    sourceTrace: [
+      { source: "Case Management", type: "log", reference: "case_id CASE-2026-0412", detail: "manual case creation by analyst id ANL-021", hash: "sha256:aa11…ff02", timestamp: "2026-04-12T17:05:00Z" },
+    ],
+  },
+  {
+    id: "vev1", type: "event", label: "Vehicle Sighting Report", sublabel: "12 Apr 2026 · 17:00–20:00",
+    x: 280, y: 150, confidence: 1.0, delay: 400, step: 1,
+    evidence: [
+      { type: "metadata", title: "Seed Report", detail: "Witness report: dark FIAT Tipo, partial plate AB123, loitering near Porta Susa entrance between 17:00 and 20:00.", timestamp: "2026-04-12T17:05:30Z" },
+    ],
+    sourceTrace: [
+      { source: "Operator Intake", type: "log", reference: "report_id RPT-77129", detail: "phone tip, transcribed by operator OP-09, geofence Porta Susa ±1km", hash: "sha256:b2c1…aa31", timestamp: "2026-04-12T17:05:30Z" },
+    ],
+  },
+  {
+    id: "veh1", type: "vehicle", label: "FIAT Tipo · AB123**", sublabel: "partial plate",
+    x: 460, y: 150, confidence: 0.92, delay: 800, step: 1,
+    evidence: [
+      { type: "metadata", title: "Vehicle Descriptor", detail: "FIAT Tipo, dark color, plate begins with AB123, last two characters unknown.", timestamp: "2026-04-12T17:05:30Z" },
+    ],
+    sourceTrace: [
+      { source: "Operator Intake", type: "log", reference: "report_id RPT-77129 · field 'plate'", detail: "partial plate string \"AB123\" + descriptor 'FIAT Tipo'", hash: "sha256:b2c1…aa31" },
+    ],
+  },
+  {
+    id: "vloc", type: "location", label: "Porta Susa", sublabel: "45.0729°N · 7.6660°E",
+    x: 110, y: 280, confidence: 0.99, delay: 1100, step: 1,
+    sourceTrace: [
+      { source: "Geofence Service", type: "log", reference: "geofence_id GF-PS-001", detail: "Torino Porta Susa station perimeter, radius 1km", hash: "sha256:ce71…0042" },
+    ],
+  },
+
+  // STEP 2 — vehicle registry → owner
+  {
+    id: "vreg", type: "vehicle_registration", label: "Vehicle Registry", sublabel: "ITV-MIT · plate AB123XY",
+    x: 460, y: 280, confidence: 0.95, delay: 1900, step: 2,
+    evidence: [
+      { type: "log", title: "Registry Lookup", detail: "Plate prefix AB123 + descriptor FIAT Tipo → 1 unique match: AB123XY, registered to L. Bianchi.", timestamp: "2026-04-12T17:09:00Z" },
+    ],
+    sourceTrace: [
+      { source: "Vehicle Registry (MIT)", type: "log", reference: "record_id REG-AB123XY", detail: "plate AB123XY, FIAT Tipo, registered 2019-06-11 to owner OWN-3392", hash: "sha256:11aa…77ff", timestamp: "2026-04-12T17:09:00Z" },
+    ],
+  },
+  {
+    id: "vown", type: "owner", label: "Luca Bianchi", sublabel: "owner · OWN-3392",
+    x: 640, y: 280, confidence: 0.95, delay: 2300, step: 2,
+    evidence: [
+      { type: "metadata", title: "Registered Owner", detail: "Luca Bianchi (OWN-3392), born 1985, residence Torino. Holder of plate AB123XY since 2019.", timestamp: "2026-04-12T17:09:01Z" },
+    ],
+    sourceTrace: [
+      { source: "Vehicle Registry (MIT)", type: "log", reference: "owner_id OWN-3392", detail: "registered owner of plate AB123XY", hash: "sha256:11aa…77ff" },
+    ],
+  },
+
+  // STEP 3 — ANPR / event logs
+  {
+    id: "vanpr", type: "event", label: "ANPR Hit", sublabel: "Cam ANPR-07 · 17:42",
+    x: 280, y: 410, confidence: 0.96, delay: 3700, step: 3,
+    evidence: [
+      { type: "log", title: "ANPR Read", detail: "Plate AB123XY captured by ANPR camera ANPR-07 (Corso Inghilterra) at 17:42:11, direction inbound to Porta Susa.", timestamp: "2026-04-12T17:42:11Z" },
+    ],
+    sourceTrace: [
+      { source: "ANPR Network", type: "log", reference: "anpr_event AE-99812", detail: "plate AB123XY · cam ANPR-07 · confidence 0.96 · OCR raw 'AB123XY'", hash: "sha256:88ee…01ab", timestamp: "2026-04-12T17:42:11Z" },
+    ],
+  },
+
+  // STEP 4 — Deckard video
+  {
+    id: "vvid", type: "video", label: "CCTV Feed #18", sublabel: "Porta Susa entrance",
+    x: 110, y: 540, confidence: 0.94, delay: 5500, step: 4,
+    evidence: [
+      { type: "video", title: "Video Source", detail: "CCTV-18 station entrance, 4K, 6h continuous. Covers 17:00–23:00 window.", timestamp: "2026-04-12T17:00:00Z" },
+    ],
+    sourceTrace: [
+      { source: "Deckard — Camera CCTV-18", type: "video", reference: "video_id V-00018 / 6h @ 4K", detail: "ingested 2026-04-12T23:01:14Z, chain-of-custody verified", hash: "sha256:aa31…77bd" },
+    ],
+  },
+  {
+    id: "vvd", type: "video_detection", label: "Vehicle Detection", sublabel: "CCTV-18 · 17:44:02",
+    x: 280, y: 540, confidence: 0.91, delay: 5800, step: 4,
+    evidence: [
+      { type: "video", title: "Vehicle Match", detail: "Deckard query \"FIAT Tipo plate AB123XY\" returned bbox [602,310,820,488] @ 17:44:02 with visual match score 0.91.", timestamp: "2026-04-12T17:44:02Z" },
+      { type: "video", title: "Person Exiting Vehicle", detail: "0:04 after vehicle stop, an adult male exits driver side wearing a dark jacket.", timestamp: "2026-04-12T17:44:06Z" },
+    ],
+    sourceTrace: [
+      { source: "Deckard — CCTV Feed #18", type: "video", reference: "frame 31204 @ 17:44:02", detail: "crop_id CR-91188 / vector_id VEC-77c12 / bbox [602,310,820,488]", hash: "sha256:9f2a…b71c" },
+    ],
+  },
+  {
+    id: "vpc", type: "person_candidate", label: "Driver candidate", sublabel: "PER-9921 · hypothesis",
+    x: 460, y: 540, confidence: 0.78, delay: 6200, step: 4,
+    evidence: [
+      { type: "metadata", title: "Identity Hypothesis", detail: "Driver crop embedding NN against reference DB → top candidate matches owner Luca Bianchi at sim 0.78. Identity not confirmed.", timestamp: "2026-04-12T17:44:08Z" },
+    ],
+    sourceTrace: [
+      { source: "Deckard VectorDB", type: "vector", reference: "embedding NN-search", detail: "candidate PER-9921 (≈ owner OWN-3392), similarity 0.78 — HYPOTHESIS", hash: "sha256:1c44…f902" },
+    ],
+  },
+
+  // STEP 5 — OSINT
+  {
+    id: "vsoc", type: "social_profile", label: "@luca.b_torino", sublabel: "Instagram · public",
+    x: 700, y: 410, confidence: 0.74, delay: 7300, step: 5,
+    evidence: [
+      { type: "metadata", title: "Public Profile", detail: "Public Instagram @luca.b_torino — 1,204 followers, 312 posts. Bio: 'Torino · auto · viaggi'.", timestamp: "2026-04-12T18:02:00Z" },
+      { type: "video", title: "Vehicle Image Match", detail: "Post IG-44021 (2025-11-18) shows a FIAT Tipo with the same livery and a partially visible plate AB123. CLIP visual similarity 0.81.", timestamp: "2025-11-18T11:24:00Z" },
+    ],
+    sourceTrace: [
+      { source: "OSINT — Instagram Scraper", type: "image", reference: "post_id IG-44021 / img_id IMG-3389", detail: "vehicle match, CLIP sim 0.81 vs detection crop CR-91188", hash: "sha256:b7e2…44a1" },
+      { source: "Geo-tag Cluster", type: "log", reference: "geo_cluster GC-411 · Porta Susa ±400m", detail: "9 of 312 posts geo-tagged within 400m of Porta Susa", hash: "sha256:11df…aa20" },
+      { source: "Hashtag Co-occurrence", type: "nlp", reference: "tag #torinodrive", detail: "shared event hashtag with 3 other PER-9921-linked accounts" },
+    ],
+  },
+  {
+    id: "vent", type: "entity", label: "Recurring location", sublabel: "Bar Centrale · Porta Susa",
+    x: 880, y: 410, confidence: 0.7, delay: 7600, step: 5,
+    evidence: [
+      { type: "metadata", title: "Recurring Place", detail: "Entity 'Bar Centrale' extracted from 6 Instagram posts and 2 Facebook check-ins of the candidate.", timestamp: "2026-04-12T18:04:00Z" },
+    ],
+    sourceTrace: [
+      { source: "Entity Extraction (Social)", type: "nlp", reference: "entity_id ENT-2210 · type=place", detail: "NER over 312 posts, 8 hits → 'Bar Centrale, Porta Susa'", hash: "sha256:22cd…99aa" },
+    ],
+  },
+
+  // STEP 6 — Audio
+  {
+    id: "vvs", type: "voice_sample", label: "Voice Sample A-7714", sublabel: "from IG-44021 · 9s",
+    x: 700, y: 540, confidence: 0.83, delay: 9100, step: 6,
+    evidence: [
+      { type: "metadata", title: "Audio Extraction", detail: "9s audio segment extracted from public Instagram video IG-44021. Subject speaks Italian with Piedmontese accent.", timestamp: "2025-11-18T11:24:14Z" },
+    ],
+    sourceTrace: [
+      { source: "Audio Extractor", type: "audio", reference: "audio_id A-7714 @ 00:00:00–00:00:09", detail: "PCM 16kHz mono, SNR 16dB", hash: "sha256:cc92…aa15" },
+    ],
+  },
+  {
+    id: "vsp", type: "speaker", label: "Speaker SPK-211", sublabel: "AudioRAG cluster · 3 samples",
+    x: 880, y: 540, confidence: 0.86, delay: 9400, step: 6,
+    evidence: [
+      { type: "metadata", title: "Speaker Cluster", detail: "AudioRAG clustered the OSINT sample with 2 intercepted calls into Speaker SPK-211 — intra-cluster sim ≥ 0.84.", timestamp: "2026-04-12T19:02:00Z" },
+    ],
+    sourceTrace: [
+      { source: "AudioRAG", type: "audio", reference: "speaker_id SPK-211 / cluster size 3", detail: "voiceprint clustering, intra-cluster sim ≥ 0.84, source: A-7714 + A-00701 + A-00702", hash: "sha256:55de…1c09" },
+    ],
+  },
+
+  // STEP 7 — Comms + transactions
+  {
+    id: "vcl", type: "communications_log", label: "CDR Batch", sublabel: "9 calls · 6h",
+    x: 460, y: 410, confidence: 0.9, delay: 10900, step: 7,
+    evidence: [
+      { type: "log", title: "Call Detail Records", detail: "9 outgoing calls from +39 011 555 0418 in the 17:00–23:00 window, 4 of them within 500m of Porta Susa.", timestamp: "2026-04-12T17:18:00Z" },
+    ],
+    sourceTrace: [
+      { source: "CDR / IPDR Logs", type: "log", reference: "cdr_batch CDR-2026-04-12 / lines 22014–22022", detail: "carrier export, 9 outgoing calls, 4 within geofence", hash: "sha256:08f1…44a2" },
+    ],
+  },
+  {
+    id: "vdev", type: "device", label: "+39 011 555 0418", sublabel: "device · MSISDN",
+    x: 640, y: 150, confidence: 0.81, delay: 11200, step: 7,
+    evidence: [
+      { type: "log", title: "Device Attribution", detail: "Voiceprint of caller matches Speaker SPK-211 — sim 0.86. Subscriber: prepaid, no formal record.", timestamp: "2026-04-12T17:18:12Z" },
+    ],
+    sourceTrace: [
+      { source: "AudioRAG", type: "audio", reference: "audio_id A-00701 @ 00:00:08", detail: "voiceprint match to SPK-211, sim 0.86", hash: "sha256:55de…1c09" },
+    ],
+  },
+  {
+    id: "vtx", type: "transaction_record", label: "€2,400 cash withdrawal", sublabel: "TX: TR-44821",
+    x: 820, y: 150, confidence: 0.88, delay: 11600, step: 7,
+    evidence: [
+      { type: "transaction", title: "ATM Withdrawal", detail: "€2,400 withdrawn at ATM (Via Cernaia, 50m from Porta Susa) at 18:11 from card ending ***3392 — same owner as the vehicle.", timestamp: "2026-04-12T18:11:00Z" },
+    ],
+    sourceTrace: [
+      { source: "Financial Records", type: "transaction", reference: "tx_id TR-44821 / ledger row 99201", detail: "card ***3392 → cash €2,400 · ATM near Porta Susa", hash: "sha256:31bb…e4f7" },
+    ],
+  },
+];
+
+// ----- Edges -----
+export const vehicleDemoEdges: GraphEdge[] = [
+  // STEP 1 wiring
+  { id: "ve_c_ev",   source: "vc1",  target: "vev1", type: "partOfCase", label: "seed of",      confidence: 1.0,  status: "observed",  delay: 600,  step: 1,
+    rationaleSummary: "Sighting report registered as the initial seed of the case.",
+    rationale: ["Case CASE-2026-0412 opened by analyst ANL-021", "Report RPT-77129 attached as first artifact"] },
+  { id: "ve_ev_veh", source: "vev1", target: "veh1", type: "derivedFrom", label: "describes",   confidence: 0.92, status: "observed",  delay: 1000, step: 1,
+    rationaleSummary: "Vehicle descriptor extracted from the witness report.",
+    rationale: ["Free-text descriptor 'FIAT Tipo, dark, AB123…'", "Operator OP-09 transcription"] },
+  { id: "ve_veh_loc", source: "veh1", target: "vloc", type: "occurredAt", label: "spotted at",  confidence: 0.9,  status: "observed",  delay: 1300, step: 1,
+    rationaleSummary: "Sighting geofenced inside Porta Susa perimeter.",
+    rationale: ["Geofence GF-PS-001 (Porta Susa ±1km)", "Witness location matches station entrance"] },
+
+  // STEP 2 — registry → owner
+  { id: "ve_veh_reg", source: "veh1", target: "vreg", type: "derivedFrom", label: "registry lookup", confidence: 0.95, status: "observed", delay: 2100, step: 2,
+    rationaleSummary: "Plate prefix AB123 + descriptor uniquely matches one registry record.",
+    rationale: ["Single registry hit AB123XY for FIAT Tipo with prefix AB123", "MIT vehicle registry export"] },
+  { id: "ve_reg_own", source: "vreg", target: "vown", type: "linkedToProfile", label: "registered to", confidence: 0.95, status: "observed", delay: 2500, step: 2,
+    rationaleSummary: "Vehicle registry resolves owner identity.",
+    rationale: ["Owner OWN-3392 (Luca Bianchi) holds plate AB123XY since 2019", "Direct structured-source attribution"] },
+
+  // STEP 3 — ANPR
+  { id: "ve_veh_anpr", source: "veh1", target: "vanpr", type: "occurredAt", label: "ANPR hit",   confidence: 0.96, status: "observed", delay: 3900, step: 3,
+    rationaleSummary: "Plate captured by ANPR camera near Porta Susa during the seed window.",
+    rationale: ["Plate AB123XY read by ANPR-07 at 17:42:11", "Direction inbound to Porta Susa", "Confidence 0.96"] },
+  { id: "ve_anpr_loc", source: "vanpr", target: "vloc", type: "occurredAt", label: "near",       confidence: 0.99, status: "validated", delay: 4200, step: 3,
+    rationaleSummary: "ANPR-07 is anchored to the Porta Susa perimeter.",
+    rationale: ["ANPR-07 surveyed location", "Within geofence GF-PS-001"] },
+
+  // STEP 4 — Deckard
+  { id: "ve_vid_vd",  source: "vvid", target: "vvd",  type: "appearsInVideo", label: "produced detection", confidence: 0.91, status: "observed", delay: 5900, step: 4,
+    rationaleSummary: "Top match for Deckard vehicle query in CCTV-18.",
+    rationale: ["Frame 31204 @ 17:44:02", "Visual match score 0.91 vs query 'FIAT Tipo AB123XY'"] },
+  { id: "ve_veh_vd",  source: "veh1", target: "vvd",  type: "appearsInVideo", label: "matched in",        confidence: 0.91, status: "observed", delay: 6100, step: 4,
+    rationaleSummary: "Detected vehicle matches the seed vehicle by plate + appearance.",
+    rationale: ["Plate AB123XY readable in detection crop", "Body shape consistent with FIAT Tipo"] },
+  { id: "ve_vd_pc",   source: "vvd",  target: "vpc",  type: "linkedToProfile", label: "person exiting",   confidence: 0.78, status: "inferred", inferred: true, delay: 6400, step: 4,
+    rationaleSummary: "Person observed exiting driver side; tentative identity match to owner.",
+    rationale: ["Adult male exits driver side at 17:44:06", "Crop NN sim 0.78 vs reference of OWN-3392", "Not enough to validate identity"] },
+  { id: "ve_pc_own",  source: "vpc",  target: "vown", type: "linkedToProfile", label: "candidate ≈ owner", confidence: 0.78, status: "hypothesis", delay: 6700, step: 4,
+    rationaleSummary: "Driver candidate may be the registered owner — pending validation.",
+    rationale: ["Visual similarity 0.78 (below VALIDATED threshold)", "Driver of owner-registered vehicle is a prior", "Identity not confirmed"] },
+
+  // STEP 5 — OSINT
+  { id: "ve_pc_soc",  source: "vpc",  target: "vsoc", type: "linkedToProfile", label: "linked to profile", confidence: 0.74, status: "hypothesis", inferred: true, delay: 7500, step: 5,
+    rationaleSummary: "Multiple weak signals link the driver candidate to public Instagram @luca.b_torino. Identity not confirmed.",
+    rationale: [
+      "Same FIAT Tipo with partial plate AB123 visible in IG-44021 (CLIP sim 0.81)",
+      "9 of 312 posts geo-tagged within 400m of Porta Susa",
+      "Shared event hashtag #torinodrive with 3 other PER-9921-linked accounts",
+      "Analyst validation pending",
+    ] },
+  { id: "ve_soc_ent", source: "vsoc", target: "vent", type: "derivedFrom", label: "mentions place",       confidence: 0.7,  status: "inferred", inferred: true, delay: 7800, step: 5,
+    rationaleSummary: "Recurring location entity extracted via NER.",
+    rationale: ["8 NER hits for 'Bar Centrale' across posts/check-ins", "Located within Porta Susa perimeter"] },
+
+  // STEP 6 — Audio
+  { id: "ve_soc_vs",  source: "vsoc", target: "vvs",  type: "containsVoice", label: "contains voice",     confidence: 0.83, status: "observed", delay: 9200, step: 6,
+    rationaleSummary: "9s audio extracted from public Instagram video.",
+    rationale: ["Source post IG-44021 contains in-frame speech", "16kHz mono, SNR 16dB"] },
+  { id: "ve_vs_sp",   source: "vvs",  target: "vsp",  type: "matchesSpeaker", label: "matches speaker",   confidence: 0.86, status: "inferred", inferred: true, delay: 9500, step: 6,
+    rationaleSummary: "AudioRAG clusters voice sample with intercepted calls.",
+    rationale: ["Voiceprint A-7714 vs centroid SPK-211, sim 0.86", "Cluster size 3 (OSINT + 2 CDR)"] },
+  { id: "ve_sp_pc",   source: "vsp",  target: "vpc",  type: "linkedToProfile", label: "candidate speaker", confidence: 0.8,  status: "hypothesis", inferred: true, delay: 9800, step: 6,
+    rationaleSummary: "Speaker cluster tentatively attributed to driver candidate.",
+    rationale: [
+      "Voice sample originates from profile linked to PER-9921",
+      "Other cluster members are calls from device co-located with detection",
+      "Identity attribution remains a HYPOTHESIS",
+    ] },
+
+  // STEP 7 — Comms + transactions
+  { id: "ve_cl_dev",  source: "vcl",  target: "vdev", type: "called", label: "originates from",           confidence: 0.99, status: "observed", delay: 11000, step: 7,
+    rationaleSummary: "All CDR rows originate from this MSISDN.",
+    rationale: ["MSISDN +39 011 555 0418 present on all 9 CDRs"] },
+  { id: "ve_dev_sp",  source: "vdev", target: "vsp",  type: "matchesSpeaker", label: "voiceprint",        confidence: 0.86, status: "inferred", inferred: true, delay: 11300, step: 7,
+    rationaleSummary: "Caller voiceprint matches Speaker SPK-211.",
+    rationale: ["AudioRAG sim 0.86 vs SPK-211", "2 intercepted calls contributed to the cluster"] },
+  { id: "ve_cl_loc",  source: "vcl",  target: "vloc", type: "occurredAt", label: "near station",          confidence: 0.9,  status: "observed", delay: 11500, step: 7,
+    rationaleSummary: "4 of the 9 calls geolocate within Porta Susa perimeter.",
+    rationale: ["Cell-tower triangulation places 4 calls within 500m", "Window matches the seed time range"] },
+  { id: "ve_own_tx",  source: "vown", target: "vtx",  type: "sentMoneyTo", label: "card activity",        confidence: 0.88, status: "observed", delay: 11800, step: 7,
+    rationaleSummary: "ATM withdrawal from card belonging to the registered owner.",
+    rationale: ["Card ***3392 → owner OWN-3392", "€2,400 cash at 18:11"] },
+  { id: "ve_tx_loc",  source: "vtx",  target: "vloc", type: "occurredAt", label: "at",                    confidence: 0.95, status: "observed", delay: 12000, step: 7,
+    rationaleSummary: "ATM is 50m from Porta Susa, inside the geofence.",
+    rationale: ["ATM Via Cernaia surveyed location", "Within geofence GF-PS-001"] },
+];
+
+// ----- Agent log (vehicle scenario) -----
+export const vehicleAgentLogs: { message: string; delay: number; level: "info" | "warning" | "success" }[] = [
+  { message: "Case CASE-2026-0412 opened — suspicious vehicle near Porta Susa", delay: 0, level: "info" },
+  { message: "Seed: FIAT Tipo, partial plate AB123, 12 Apr 2026 17:00–20:00", delay: 600, level: "info" },
+  { message: "Querying vehicle registry for prefix AB123 + FIAT Tipo...", delay: 1900, level: "info" },
+  { message: "Registry MATCH: plate AB123XY → owner Luca Bianchi (OWN-3392)", delay: 2400, level: "success" },
+  { message: "ANPR network scan in seed window...", delay: 3700, level: "info" },
+  { message: "ANPR HIT: AB123XY captured by ANPR-07 at 17:42:11 (inbound)", delay: 4000, level: "success" },
+  { message: "Deckard query: 'FIAT Tipo plate AB123XY' across station feeds", delay: 5500, level: "info" },
+  { message: "MATCH: vehicle in CCTV-18 @ 17:44:02 — visual score 0.91", delay: 5900, level: "success" },
+  { message: "Person exits driver side — candidate sim 0.78 vs OWN-3392 — HYPOTHESIS", delay: 6500, level: "warning" },
+  { message: "OSINT match: public Instagram @luca.b_torino — vehicle + geo + tags", delay: 7400, level: "warning" },
+  { message: "NER: recurring entity 'Bar Centrale' extracted from 8 posts", delay: 7800, level: "info" },
+  { message: "Extracting 9s voice sample A-7714 from public post IG-44021", delay: 9200, level: "info" },
+  { message: "AudioRAG: voice sample joins speaker cluster SPK-211 (3 samples)", delay: 9500, level: "success" },
+  { message: "CDR batch: 9 calls from +39 011 555 0418 in 6h, 4 within geofence", delay: 11000, level: "info" },
+  { message: "Voiceprint of MSISDN matches SPK-211 — sim 0.86", delay: 11300, level: "warning" },
+  { message: "ALERT: €2,400 ATM withdrawal from card ***3392 (50m from station)", delay: 11800, level: "warning" },
+  { message: "Awaiting analyst review — 4 hypothesis links pending validation", delay: 12700, level: "info" },
+  { message: "Investigation graph complete — 14 entities, 21 relationships", delay: 13800, level: "success" },
+];
+
+// ----- Reasoning chain (vehicle scenario) -----
+export const vehicleReasoningSteps = [
+  { step: 1, title: "Vehicle Seed", detail: "Sighting report opens case CASE-2026-0412: suspicious FIAT Tipo, partial plate AB123, near Porta Susa, 17:00–20:00.", confidence: 0.92 },
+  { step: 2, title: "Registry → Owner", detail: "Plate prefix + descriptor uniquely match plate AB123XY in MIT registry, registered to Luca Bianchi (OWN-3392).", confidence: 0.95 },
+  { step: 3, title: "ANPR Confirmation", detail: "ANPR-07 captures plate AB123XY at 17:42:11 inbound to Porta Susa — independent structured confirmation of presence.", confidence: 0.96 },
+  { step: 4, title: "Deckard Visual Match", detail: "CCTV-18 shows the vehicle at 17:44:02 (sim 0.91) and a male exits driver side. Driver candidate ≈ owner with sim 0.78 — HYPOTHESIS.", confidence: 0.78 },
+  { step: 5, title: "OSINT Profile", detail: "Public Instagram @luca.b_torino surfaces via vehicle image match (CLIP 0.81), geo-cluster around Porta Susa, and shared event hashtag.", confidence: 0.74 },
+  { step: 6, title: "AudioRAG Speaker Cluster", detail: "AudioRAG clusters a 9s OSINT voice sample with 2 intercepted calls into Speaker SPK-211.", confidence: 0.86 },
+  { step: 7, title: "Comms & Financial Context", detail: "MSISDN +39 011 555 0418 voiceprint matches SPK-211; €2,400 ATM withdrawal from owner's card 50m from the station within seed window.", confidence: 0.88 },
+  { step: 8, title: "Analyst Validation", detail: "4 HYPOTHESIS links (driver≈owner, candidate↔social, speaker↔candidate, person-exiting) remain pending analyst validation.", confidence: 0.80 },
+];
+
+// ----- Timeline -----
+export const vehicleTimelineEvents = [
+  { time: "2026-04-12 17:05", event: "Sighting reported — FIAT Tipo near Porta Susa", entity: "vev1" },
+  { time: "2026-04-12 17:09", event: "Registry resolves plate AB123XY → Luca Bianchi", entity: "vown" },
+  { time: "2026-04-12 17:42", event: "ANPR-07 captures plate AB123XY inbound", entity: "vanpr" },
+  { time: "2026-04-12 17:44", event: "Deckard match in CCTV-18 — driver exits vehicle", entity: "vvd" },
+  { time: "2026-04-12 18:02", event: "OSINT match: @luca.b_torino (Instagram)", entity: "vsoc" },
+  { time: "2026-04-12 18:11", event: "€2,400 ATM withdrawal near station", entity: "vtx" },
+  { time: "2026-04-12 19:02", event: "AudioRAG cluster SPK-211 formed (3 samples)", entity: "vsp" },
+];
+
+// =====================================================================
+// SCENARIO SELECTOR
+// =====================================================================
+export type SeedMode = "visual" | "vehicle";
+
+export interface Scenario {
+  mode: SeedMode;
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  steps: DemoStep[];
+  totalMs: number;
+  agentLogs: { message: string; delay: number; level: "info" | "warning" | "success" }[];
+  reasoningSteps: { step: number; title: string; detail: string; confidence: number }[];
+  timelineEvents: { time: string; event: string; entity: string }[];
+  /** Default highlight chain when the user hits "Highlight Connection Chain" */
+  defaultHighlightChain: string[];
+}
+
+export const visualScenario: Scenario = {
+  mode: "visual",
+  nodes: demoNodes,
+  edges: demoEdges,
+  steps: demoSteps,
+  totalMs: demoTotalMs,
+  agentLogs,
+  reasoningSteps,
+  timelineEvents,
+  defaultHighlightChain: ["p1", "t1", "p2", "v2"],
+};
+
+export const vehicleScenario: Scenario = {
+  mode: "vehicle",
+  nodes: vehicleDemoNodes,
+  edges: vehicleDemoEdges,
+  steps: vehicleDemoSteps,
+  totalMs: vehicleDemoTotalMs,
+  agentLogs: vehicleAgentLogs,
+  reasoningSteps: vehicleReasoningSteps,
+  timelineEvents: vehicleTimelineEvents,
+  defaultHighlightChain: ["veh1", "vown", "vpc", "vsoc"],
+};
+
+export function getScenario(mode: SeedMode): Scenario {
+  return mode === "vehicle" ? vehicleScenario : visualScenario;
+}
+
