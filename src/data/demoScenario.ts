@@ -60,6 +60,10 @@ export interface GraphNode {
   y: number;
   confidence: number;
   evidence?: Evidence[];
+  /** Structured fact-list for evidence nodes (Camera/Time/Detection/Attribute…) */
+  facts?: EvidenceFact[];
+  /** Scenario-clock time of the event (e.g. "17:12") shown on the node and timeline */
+  eventTime?: string;
   sourceTrace?: SourceTraceItem[];
   delay: number; // ms delay before appearing
   /** Demo progression step (1-8) this node belongs to */
@@ -110,6 +114,8 @@ export interface DemoStep {
   startMs: number;
   title: string;
   subtitle: string;
+  /** Scenario-clock time displayed in the StepIndicator (e.g. "17:05") */
+  eventTime?: string;
 }
 
 export const demoSteps: DemoStep[] = [
