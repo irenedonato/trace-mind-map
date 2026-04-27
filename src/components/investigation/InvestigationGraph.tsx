@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   User, Video, Banknote, Smartphone, MapPin, AtSign,
   Briefcase, Calendar, UserSearch, ScanFace, Crop, FileText, Tag, Mic, Volume2, MessageSquare,
-  Car, ClipboardList, IdCard,
+  Car, ClipboardList, IdCard, Fingerprint, FileSearch, Camera, Headphones, Image as ImageIcon,
 } from "lucide-react";
 import { type GraphNode, type GraphEdge, type EdgeStatus, type NodeType, type Scenario } from "@/data/demoScenario";
 import { StepIndicator } from "./StepIndicator";
@@ -37,6 +37,10 @@ const nodeIcons: Record<NodeType, typeof User> = {
   vehicle: Car,
   vehicle_registration: ClipboardList,
   owner: IdCard,
+  evidence: FileSearch,
+  video_evidence: Camera,
+  audio_evidence: Headphones,
+  image_evidence: ImageIcon,
   // legacy aliases
   person: User,
   device: Smartphone,
@@ -62,6 +66,10 @@ const nodeColors: Record<NodeType, string> = {
   vehicle: "hsl(212, 90%, 60%)",
   vehicle_registration: "hsl(212, 50%, 60%)",
   owner: "hsl(262, 70%, 65%)",
+  evidence: "hsl(48, 96%, 60%)",
+  video_evidence: "hsl(48, 96%, 60%)",
+  audio_evidence: "hsl(180, 80%, 60%)",
+  image_evidence: "hsl(48, 96%, 60%)",
   // legacy aliases
   person: "hsl(262, 70%, 58%)",
   device: "hsl(220, 10%, 50%)",
@@ -87,6 +95,10 @@ const nodeBgClass: Record<NodeType, string> = {
   vehicle: "bg-sky-500/20 border-sky-500/60",
   vehicle_registration: "bg-sky-500/10 border-sky-500/30",
   owner: "bg-primary/20 border-primary/50",
+  evidence: "bg-amber/20 border-amber/60",
+  video_evidence: "bg-amber/20 border-amber/60",
+  audio_evidence: "bg-cyan-500/20 border-cyan-500/60",
+  image_evidence: "bg-amber/15 border-amber/50",
   // legacy aliases
   person: "bg-primary/20 border-primary/50",
   device: "bg-muted border-muted-foreground/30",
