@@ -605,8 +605,14 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 3 — ANPR / event logs
   {
-    id: "vanpr", type: "event", label: "ANPR Hit", sublabel: "Cam ANPR-07 · 17:42",
-    x: 280, y: 410, confidence: 0.96, delay: 3700, step: 3,
+    id: "vanpr", type: "evidence", label: "ANPR Hit", sublabel: "Structured Evidence",
+    x: 280, y: 410, confidence: 0.96, delay: 3700, step: 3, eventTime: "17:42",
+    facts: [
+      { label: "Camera",    value: "ANPR-07 · Corso Inghilterra" },
+      { label: "Time",      value: "2026-04-12 17:42:11" },
+      { label: "Plate OCR", value: "AB123XY (conf 0.96)" },
+      { label: "Direction", value: "Inbound to Porta Susa" },
+    ],
     evidence: [
       { type: "log", title: "ANPR Read", detail: "Plate AB123XY captured by ANPR camera ANPR-07 (Corso Inghilterra) at 17:42:11, direction inbound to Porta Susa.", timestamp: "2026-04-12T17:42:11Z" },
     ],
@@ -627,8 +633,16 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vvd", type: "video_detection", label: "Vehicle Detection", sublabel: "CCTV-18 · 17:44:02",
-    x: 280, y: 540, confidence: 0.91, delay: 5800, step: 4,
+    id: "vvd", type: "video_evidence", label: "Vehicle Detection", sublabel: "Video Evidence",
+    x: 280, y: 540, confidence: 0.91, delay: 5800, step: 4, eventTime: "17:44",
+    facts: [
+      { label: "Camera",    value: "Porta Susa Cam 18" },
+      { label: "Time",      value: "2026-04-12 17:44:02" },
+      { label: "Detection", value: "Vehicle stop · person exits driver side" },
+      { label: "Attribute", value: "FIAT Tipo · plate AB123XY · adult male, dark jacket" },
+      { label: "BBox",      value: "[602,310,820,488]" },
+      { label: "Score",     value: "0.91 (top match)" },
+    ],
     evidence: [
       { type: "video", title: "Vehicle Match", detail: "Deckard query \"FIAT Tipo plate AB123XY\" returned bbox [602,310,820,488] @ 17:44:02 with visual match score 0.91.", timestamp: "2026-04-12T17:44:02Z" },
       { type: "video", title: "Person Exiting Vehicle", detail: "0:04 after vehicle stop, an adult male exits driver side wearing a dark jacket.", timestamp: "2026-04-12T17:44:06Z" },
@@ -675,8 +689,14 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 6 — Audio
   {
-    id: "vvs", type: "voice_sample", label: "Voice Sample A-7714", sublabel: "from IG-44021 · 9s",
-    x: 700, y: 540, confidence: 0.83, delay: 9100, step: 6,
+    id: "vvs", type: "audio_evidence", label: "Voice Sample A-7714", sublabel: "Audio Evidence",
+    x: 700, y: 540, confidence: 0.83, delay: 9100, step: 6, eventTime: "19:02",
+    facts: [
+      { label: "Source",  value: "Instagram post IG-44021" },
+      { label: "Length",  value: "9s" },
+      { label: "Format",  value: "PCM 16kHz mono · SNR 16dB" },
+      { label: "Speaker", value: "Italian · Piedmontese accent" },
+    ],
     evidence: [
       { type: "metadata", title: "Audio Extraction", detail: "9s audio segment extracted from public Instagram video IG-44021. Subject speaks Italian with Piedmontese accent.", timestamp: "2025-11-18T11:24:14Z" },
     ],
