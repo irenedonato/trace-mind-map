@@ -555,7 +555,7 @@ export const vehicleDemoNodes: GraphNode[] = [
   },
   {
     id: "vev1", type: "event", label: "Vehicle Sighting Report", sublabel: "12 Apr 2026 · 17:00–20:00",
-    x: 280, y: 150, confidence: 1.0, delay: 400, step: 1,
+    x: 280, y: 150, confidence: 1.0, delay: 400, step: 1, eventTime: "17:05",
     evidence: [
       { type: "metadata", title: "Seed Report", detail: "Witness report: dark FIAT Tipo, partial plate AB123, loitering near Porta Susa entrance between 17:00 and 20:00.", timestamp: "2026-04-12T17:05:30Z" },
     ],
