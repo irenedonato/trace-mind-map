@@ -737,8 +737,15 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vtx", type: "transaction_record", label: "€2,400 cash withdrawal", sublabel: "TX: TR-44821",
-    x: 820, y: 150, confidence: 0.88, delay: 11600, step: 7,
+    id: "vtx", type: "evidence", label: "€2,400 ATM Withdrawal", sublabel: "Transaction Evidence",
+    x: 820, y: 150, confidence: 0.88, delay: 11600, step: 7, eventTime: "18:11",
+    facts: [
+      { label: "ATM",      value: "Via Cernaia · 50m from Porta Susa" },
+      { label: "Time",     value: "2026-04-12 18:11" },
+      { label: "Card",     value: "***3392 (owner OWN-3392)" },
+      { label: "Amount",   value: "€2,400 cash" },
+      { label: "Tx ID",    value: "TR-44821" },
+    ],
     evidence: [
       { type: "transaction", title: "ATM Withdrawal", detail: "€2,400 withdrawn at ATM (Via Cernaia, 50m from Porta Susa) at 18:11 from card ending ***3392 — same owner as the vehicle.", timestamp: "2026-04-12T18:11:00Z" },
     ],
