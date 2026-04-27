@@ -62,6 +62,19 @@ export function StepIndicator({ isRunning, steps, totalMs }: StepIndicatorProps)
                 >
                   {done ? <Check className="w-2.5 h-2.5" /> : s.step}
                 </div>
+                {s.eventTime && (
+                  <span
+                    className={`font-mono text-[9px] px-1 rounded flex-shrink-0 ${
+                      isActive
+                        ? "bg-primary/25 text-primary"
+                        : done
+                        ? "bg-emerald/15 text-emerald"
+                        : "bg-secondary text-muted-foreground/70"
+                    }`}
+                  >
+                    {s.eventTime}
+                  </span>
+                )}
                 <span
                   className={`font-display text-[10px] uppercase tracking-wider truncate ${
                     isActive
