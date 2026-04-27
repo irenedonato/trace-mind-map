@@ -17,10 +17,25 @@ export type NodeType =
   | "vehicle"
   | "vehicle_registration"
   | "owner"
+  // structured evidence nodes — atomic, citable pieces of evidence
+  // (distinct from entities). Typically produced by Deckard / AudioRAG / OSINT.
+  | "evidence"
+  | "video_evidence"
+  | "audio_evidence"
+  | "image_evidence"
   // legacy aliases — kept for backwards compatibility with existing demo data
   | "person"
   | "device"
   | "social";
+
+/**
+ * Structured fields rendered in the Evidence tab when a node of type
+ * `*_evidence` is selected. Each field is shown as label/value.
+ */
+export interface EvidenceFact {
+  label: string;
+  value: string;
+}
 
 export type EdgeType =
   | "appearsInVideo"
