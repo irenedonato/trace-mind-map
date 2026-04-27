@@ -288,6 +288,11 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
           const Icon = nodeIcons[node.type];
           const isSelected = selectedNode === node.id;
           const inPath = isInPath(node.id);
+          const isEvidence =
+            node.type === "evidence" ||
+            node.type === "video_evidence" ||
+            node.type === "audio_evidence" ||
+            node.type === "image_evidence";
 
           return (
             <motion.div
@@ -302,24 +307,55 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
               {/* Glow ring */}
               {(isSelected || inPath) && (
                 <motion.div
-                  className="absolute -inset-2 rounded-full"
+                  className={`absolute -inset-2 ${isEvidence ? "rounded-lg" : "rounded-full"}`}
                   style={{ background: `radial-gradient(circle, ${nodeColors[node.type]}33, transparent)` }}
                   animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
               )}
 
-              {/* Node circle */}
+              {/* Node shape — circle for entities, rounded square for evidence */}
               <div
-                className={`relative w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all ${nodeBgClass[node.type]} ${
+                className={`relative w-14 h-14 ${
+                  isEvidence ? "rounded-lg" : "rounded-full"
+                } border-2 flex items-center justify-center transition-all ${nodeBgClass[node.type]} ${
                   isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""
                 } group-hover:brightness-125`}
               >
                 <Icon className="w-5 h-5" style={{ color: nodeColors[node.type] }} />
+                {isEvidence && (
+                  <span
+                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1 rounded font-mono uppercase tracking-wider"
+                    style={{
+                      background: nodeColors[node.type],
+                      color: "hsl(220, 20%, 7%)",
+                      fontSize: "7px",
+                      lineHeight: "10px",
+                    }}
+                  >
+                    EVIDENCE
+                  </span>
+                )}
               </div>
 
+              {/* Event-time chip (top-left) */}
+              {node.eventTime && (
+                <div
+                  className="absolute -top-1 -left-1 px-1.5 py-0.5 rounded font-mono"
+                  style={{
+                    background: "hsl(220, 18%, 12%)",
+                    border: `1px solid ${nodeColors[node.type]}`,
+                    color: nodeColors[node.type],
+                    fontSize: "9px",
+                    lineHeight: "11px",
+                  }}
+                >
+                  {node.eventTime}
+                </div>
+              )}
+
               {/* Label */}
-              <div className="absolute top-full mt-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap text-center">
+              <div className={`absolute top-full ${isEvidence ? "mt-2.5" : "mt-1.5"} left-1/2 -translate-x-1/2 whitespace-nowrap text-center`}>
                 <div className="text-xs font-medium text-foreground font-mono">{node.label}</div>
                 {node.sublabel && (
                   <div className="text-data text-muted-foreground">{node.sublabel}</div>
