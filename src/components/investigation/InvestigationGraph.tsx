@@ -195,6 +195,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
           </marker>
         </defs>
 
+        <g transform={`translate(${offsetX}, ${offsetY})`}>
         <AnimatePresence>
           {visibleEdges.map((edge) => {
             const source = getNode(edge.source);
@@ -266,6 +267,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
             );
           })}
         </AnimatePresence>
+        </g>
       </svg>
 
       {/* Nodes */}
@@ -282,7 +284,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="absolute cursor-pointer group"
-              style={{ left: node.x - 28, top: node.y - 28 }}
+              style={{ left: node.x - 28 + offsetX, top: node.y - 28 + offsetY }}
               onClick={() => onNodeClick(node.id)}
             >
               {/* Glow ring */}
