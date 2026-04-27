@@ -88,11 +88,35 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
             <motion.div key="evidence" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}>
               {node ? (
                 <div className="space-y-3">
-                  <div className="flex items-center gap-0 mb-4">
+                  <div className="flex items-center gap-0 mb-2">
                     <h3 className="font-display text-sm font-semibold text-foreground">{node.label}</h3>
                     <span className="font-display text-sm text-primary mx-1">/</span>
                     <span className="text-data text-muted-foreground">{node.sublabel}</span>
                   </div>
+
+                  {/* Evidence card — structured facts (Camera/Time/Detection/Attribute…) */}
+                  {node.facts && node.facts.length > 0 && (
+                    <div className="p-3 rounded border-2 border-amber/40 bg-amber/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-data font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber/30 text-amber-foreground" style={{ fontSize: "9px" }}>
+                          {node.type === "audio_evidence" ? "Audio Evidence" : node.type === "image_evidence" ? "Image Evidence" : node.type === "video_evidence" ? "Video Evidence" : "Evidence"}
+                        </span>
+                        {node.eventTime && (
+                          <span className="text-data font-mono text-amber" style={{ fontSize: "10px" }}>
+                            {node.eventTime}
+                          </span>
+                        )}
+                      </div>
+                      <dl className="space-y-1.5">
+                        {node.facts.map((f, i) => (
+                          <div key={i} className="flex gap-2 text-data">
+                            <dt className="text-muted-foreground/70 font-mono uppercase tracking-wider w-20 flex-shrink-0">{f.label}</dt>
+                            <dd className="text-foreground/90 font-mono leading-relaxed">{f.value}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    </div>
+                  )}
 
                   {node.evidence?.map((ev, i) => {
                     const Icon = evidenceIcons[ev.type] || Info;
