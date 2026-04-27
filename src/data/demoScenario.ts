@@ -17,10 +17,25 @@ export type NodeType =
   | "vehicle"
   | "vehicle_registration"
   | "owner"
+  // structured evidence nodes — atomic, citable pieces of evidence
+  // (distinct from entities). Typically produced by Deckard / AudioRAG / OSINT.
+  | "evidence"
+  | "video_evidence"
+  | "audio_evidence"
+  | "image_evidence"
   // legacy aliases — kept for backwards compatibility with existing demo data
   | "person"
   | "device"
   | "social";
+
+/**
+ * Structured fields rendered in the Evidence tab when a node of type
+ * `*_evidence` is selected. Each field is shown as label/value.
+ */
+export interface EvidenceFact {
+  label: string;
+  value: string;
+}
 
 export type EdgeType =
   | "appearsInVideo"
@@ -45,6 +60,10 @@ export interface GraphNode {
   y: number;
   confidence: number;
   evidence?: Evidence[];
+  /** Structured fact-list for evidence nodes (Camera/Time/Detection/Attribute…) */
+  facts?: EvidenceFact[];
+  /** Scenario-clock time of the event (e.g. "17:12") shown on the node and timeline */
+  eventTime?: string;
   sourceTrace?: SourceTraceItem[];
   delay: number; // ms delay before appearing
   /** Demo progression step (1-8) this node belongs to */
@@ -95,17 +114,19 @@ export interface DemoStep {
   startMs: number;
   title: string;
   subtitle: string;
+  /** Scenario-clock time displayed in the StepIndicator (e.g. "17:05") */
+  eventTime?: string;
 }
 
 export const demoSteps: DemoStep[] = [
-  { step: 1, startMs:     0, title: "Seed received",                 subtitle: "Analyst submits semantic query + filters" },
-  { step: 2, startMs:  1800, title: "Deckard searches station video",subtitle: "Bimodal text→image search across 847 feeds" },
-  { step: 3, startMs:  3600, title: "Subject detected across cameras", subtitle: "Same crop re-identified in multiple feeds" },
-  { step: 4, startMs:  5400, title: "OSINT profile candidate found", subtitle: "Public Instagram match — garment + geo + tags" },
-  { step: 5, startMs:  7200, title: "Public video contains voice sample", subtitle: "Audio segment extracted from social media post" },
-  { step: 6, startMs:  9000, title: "AudioRAG creates speaker cluster", subtitle: "Voiceprint clustered across calls + public audio" },
-  { step: 7, startMs: 10800, title: "Logs and transaction records add context", subtitle: "CDR + financial records correlated to subject" },
-  { step: 8, startMs: 12600, title: "Analyst validates / rejects hypotheses", subtitle: "Hypothesis links promoted to VALIDATED or rejected" },
+  { step: 1, startMs:     0, eventTime: "02:14", title: "Seed received",                 subtitle: "Analyst submits semantic query + filters" },
+  { step: 2, startMs:  1800, eventTime: "02:14", title: "Deckard searches station video",subtitle: "Bimodal text→image search across 847 feeds" },
+  { step: 3, startMs:  3600, eventTime: "02:15", title: "Subject detected across cameras", subtitle: "Same crop re-identified in multiple feeds" },
+  { step: 4, startMs:  5400, eventTime: "10:02", title: "OSINT profile candidate found", subtitle: "Public Instagram match — garment + geo + tags" },
+  { step: 5, startMs:  7200, eventTime: "10:08", title: "Public video contains voice sample", subtitle: "Audio segment extracted from social media post" },
+  { step: 6, startMs:  9000, eventTime: "10:18", title: "AudioRAG creates speaker cluster", subtitle: "Voiceprint clustered across calls + public audio" },
+  { step: 7, startMs: 10800, eventTime: "11:02", title: "Logs and transaction records add context", subtitle: "CDR + financial records correlated to subject" },
+  { step: 8, startMs: 12600, eventTime: "11:30", title: "Analyst validates / rejects hypotheses", subtitle: "Hypothesis links promoted to VALIDATED or rejected" },
 ];
 
 export const demoTotalMs = 14400;
@@ -167,8 +188,16 @@ export const demoNodes: GraphNode[] = [
 
   // ---- STEP 3 — Subject detected across cameras ----
   {
-    id: "vd1", type: "video_detection", label: "Detection #88421", sublabel: "CCTV-12 · 02:14:33",
-    x: 180, y: 360, confidence: 0.93, delay: 3700, step: 3,
+    id: "vd1", type: "video_evidence", label: "Detection #88421", sublabel: "Video Evidence",
+    x: 180, y: 360, confidence: 0.93, delay: 3700, step: 3, eventTime: "02:14",
+    facts: [
+      { label: "Camera",    value: "Porta Susa Cam 12" },
+      { label: "Time",      value: "2024-03-14 02:14:33" },
+      { label: "Detection", value: "Subject matching seed query" },
+      { label: "Attribute", value: "Red sweatshirt · adult male" },
+      { label: "BBox",      value: "[412,188,540,402]" },
+      { label: "Score",     value: "0.93 (top-1)" },
+    ],
     evidence: [
       { type: "video", title: "Top-1 Detection", detail: "Bounding box [412,188,540,402], visual match score 0.93 against query \"man wearing a red sweatshirt\".", timestamp: "2024-03-14T02:14:33Z" },
     ],
@@ -212,8 +241,15 @@ export const demoNodes: GraphNode[] = [
 
   // ---- STEP 5 — Public video contains voice sample ----
   {
-    id: "vs1", type: "voice_sample", label: "Voice Sample A-9921", sublabel: "from IG-77123 · 12s",
-    x: 720, y: 280, confidence: 0.84, delay: 7300, step: 5,
+    id: "vs1", type: "audio_evidence", label: "Voice Sample A-9921", sublabel: "Audio Evidence",
+    x: 720, y: 280, confidence: 0.84, delay: 7300, step: 5, eventTime: "10:08",
+    facts: [
+      { label: "Source",   value: "Instagram post IG-77123" },
+      { label: "Time",     value: "2024-03-14 10:08 (extraction)" },
+      { label: "Length",   value: "12s" },
+      { label: "Format",   value: "PCM 16kHz mono · SNR 18dB" },
+      { label: "Speaker",  value: "Italian · Torinese accent" },
+    ],
     evidence: [
       { type: "metadata", title: "Audio Extraction", detail: "12s audio segment extracted from public Instagram video IG-77123. Subject speaks Italian, Torinese accent.", timestamp: "2024-02-28T15:11:12Z" },
     ],
@@ -256,8 +292,16 @@ export const demoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "t1", type: "transaction", label: "$47,200 Transfer", sublabel: "TX: 0x4f8a…c3d1",
-    x: 700, y: 580, confidence: 0.91, delay: 11500, step: 7,
+    id: "t1", type: "evidence", label: "$47,200 Wire Transfer", sublabel: "Transaction Evidence",
+    x: 700, y: 580, confidence: 0.91, delay: 11500, step: 7, eventTime: "06:33",
+    facts: [
+      { label: "From",   value: "Account ***4821" },
+      { label: "To",     value: "Account ***7293" },
+      { label: "Amount", value: "$47,200" },
+      { label: "Time",   value: "2024-03-14 06:33" },
+      { label: "Flag",   value: "Structuring (AML R-17)" },
+      { label: "Tx ID",  value: "0x4f8a…c3d1" },
+    ],
     evidence: [
       { type: "transaction", title: "Wire Transfer Record", detail: "From: Acct ***4821 → Acct ***7293. Flagged: structuring pattern detected.", timestamp: "2024-03-14T06:33:12Z" },
     ],
@@ -492,14 +536,14 @@ export const reasoningSteps = [
 // =====================================================================
 
 export const vehicleDemoSteps: DemoStep[] = [
-  { step: 1, startMs:     0, title: "Seed received",                       subtitle: "Vehicle · partial plate AB123 · Porta Susa · 17:00–20:00" },
-  { step: 2, startMs:  1800, title: "Vehicle registry → owner",            subtitle: "Structured lookup resolves plate to registered owner" },
-  { step: 3, startMs:  3600, title: "ANPR + event logs",                   subtitle: "Vehicle pinged by traffic cameras near the station" },
-  { step: 4, startMs:  5400, title: "Deckard searches station video",      subtitle: "Vehicle + person exiting matched in CCTV feeds" },
-  { step: 5, startMs:  7200, title: "OSINT profile candidate",             subtitle: "Public social profile linked to the candidate" },
-  { step: 6, startMs:  9000, title: "AudioRAG speaker cluster",            subtitle: "Voice sample from social + intercepted calls clustered" },
-  { step: 7, startMs: 10800, title: "Comms + transactions add context",    subtitle: "CDR and financial activity correlated to subject" },
-  { step: 8, startMs: 12600, title: "Analyst validates / rejects",         subtitle: "Hypothesis links pending promotion to VALIDATED" },
+  { step: 1, startMs:     0, eventTime: "17:05", title: "Seed received",                       subtitle: "Vehicle · partial plate AB123 · Porta Susa · 17:00–20:00" },
+  { step: 2, startMs:  1800, eventTime: "17:09", title: "Vehicle registry → owner",            subtitle: "Structured lookup resolves plate to registered owner" },
+  { step: 3, startMs:  3600, eventTime: "17:42", title: "ANPR + event logs",                   subtitle: "Vehicle pinged by traffic cameras near the station" },
+  { step: 4, startMs:  5400, eventTime: "17:44", title: "Deckard searches station video",      subtitle: "Vehicle + person exiting matched in CCTV feeds" },
+  { step: 5, startMs:  7200, eventTime: "18:02", title: "OSINT profile candidate",             subtitle: "Public social profile linked to the candidate" },
+  { step: 6, startMs:  9000, eventTime: "19:02", title: "AudioRAG speaker cluster",            subtitle: "Voice sample from social + intercepted calls clustered" },
+  { step: 7, startMs: 10800, eventTime: "18:11", title: "Comms + transactions add context",    subtitle: "CDR and financial activity correlated to subject" },
+  { step: 8, startMs: 12600, eventTime: "20:30", title: "Analyst validates / rejects",         subtitle: "Hypothesis links pending promotion to VALIDATED" },
 ];
 
 export const vehicleDemoTotalMs = 14400;
@@ -519,7 +563,7 @@ export const vehicleDemoNodes: GraphNode[] = [
   },
   {
     id: "vev1", type: "event", label: "Vehicle Sighting Report", sublabel: "12 Apr 2026 · 17:00–20:00",
-    x: 280, y: 150, confidence: 1.0, delay: 400, step: 1,
+    x: 280, y: 150, confidence: 1.0, delay: 400, step: 1, eventTime: "17:05",
     evidence: [
       { type: "metadata", title: "Seed Report", detail: "Witness report: dark FIAT Tipo, partial plate AB123, loitering near Porta Susa entrance between 17:00 and 20:00.", timestamp: "2026-04-12T17:05:30Z" },
     ],
@@ -569,8 +613,14 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 3 — ANPR / event logs
   {
-    id: "vanpr", type: "event", label: "ANPR Hit", sublabel: "Cam ANPR-07 · 17:42",
-    x: 280, y: 410, confidence: 0.96, delay: 3700, step: 3,
+    id: "vanpr", type: "evidence", label: "ANPR Hit", sublabel: "Structured Evidence",
+    x: 280, y: 410, confidence: 0.96, delay: 3700, step: 3, eventTime: "17:42",
+    facts: [
+      { label: "Camera",    value: "ANPR-07 · Corso Inghilterra" },
+      { label: "Time",      value: "2026-04-12 17:42:11" },
+      { label: "Plate OCR", value: "AB123XY (conf 0.96)" },
+      { label: "Direction", value: "Inbound to Porta Susa" },
+    ],
     evidence: [
       { type: "log", title: "ANPR Read", detail: "Plate AB123XY captured by ANPR camera ANPR-07 (Corso Inghilterra) at 17:42:11, direction inbound to Porta Susa.", timestamp: "2026-04-12T17:42:11Z" },
     ],
@@ -591,8 +641,16 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vvd", type: "video_detection", label: "Vehicle Detection", sublabel: "CCTV-18 · 17:44:02",
-    x: 280, y: 540, confidence: 0.91, delay: 5800, step: 4,
+    id: "vvd", type: "video_evidence", label: "Vehicle Detection", sublabel: "Video Evidence",
+    x: 280, y: 540, confidence: 0.91, delay: 5800, step: 4, eventTime: "17:44",
+    facts: [
+      { label: "Camera",    value: "Porta Susa Cam 18" },
+      { label: "Time",      value: "2026-04-12 17:44:02" },
+      { label: "Detection", value: "Vehicle stop · person exits driver side" },
+      { label: "Attribute", value: "FIAT Tipo · plate AB123XY · adult male, dark jacket" },
+      { label: "BBox",      value: "[602,310,820,488]" },
+      { label: "Score",     value: "0.91 (top match)" },
+    ],
     evidence: [
       { type: "video", title: "Vehicle Match", detail: "Deckard query \"FIAT Tipo plate AB123XY\" returned bbox [602,310,820,488] @ 17:44:02 with visual match score 0.91.", timestamp: "2026-04-12T17:44:02Z" },
       { type: "video", title: "Person Exiting Vehicle", detail: "0:04 after vehicle stop, an adult male exits driver side wearing a dark jacket.", timestamp: "2026-04-12T17:44:06Z" },
@@ -639,8 +697,14 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 6 — Audio
   {
-    id: "vvs", type: "voice_sample", label: "Voice Sample A-7714", sublabel: "from IG-44021 · 9s",
-    x: 700, y: 540, confidence: 0.83, delay: 9100, step: 6,
+    id: "vvs", type: "audio_evidence", label: "Voice Sample A-7714", sublabel: "Audio Evidence",
+    x: 700, y: 540, confidence: 0.83, delay: 9100, step: 6, eventTime: "19:02",
+    facts: [
+      { label: "Source",  value: "Instagram post IG-44021" },
+      { label: "Length",  value: "9s" },
+      { label: "Format",  value: "PCM 16kHz mono · SNR 16dB" },
+      { label: "Speaker", value: "Italian · Piedmontese accent" },
+    ],
     evidence: [
       { type: "metadata", title: "Audio Extraction", detail: "9s audio segment extracted from public Instagram video IG-44021. Subject speaks Italian with Piedmontese accent.", timestamp: "2025-11-18T11:24:14Z" },
     ],
@@ -681,8 +745,15 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vtx", type: "transaction_record", label: "€2,400 cash withdrawal", sublabel: "TX: TR-44821",
-    x: 820, y: 150, confidence: 0.88, delay: 11600, step: 7,
+    id: "vtx", type: "evidence", label: "€2,400 ATM Withdrawal", sublabel: "Transaction Evidence",
+    x: 820, y: 150, confidence: 0.88, delay: 11600, step: 7, eventTime: "18:11",
+    facts: [
+      { label: "ATM",      value: "Via Cernaia · 50m from Porta Susa" },
+      { label: "Time",     value: "2026-04-12 18:11" },
+      { label: "Card",     value: "***3392 (owner OWN-3392)" },
+      { label: "Amount",   value: "€2,400 cash" },
+      { label: "Tx ID",    value: "TR-44821" },
+    ],
     evidence: [
       { type: "transaction", title: "ATM Withdrawal", detail: "€2,400 withdrawn at ATM (Via Cernaia, 50m from Porta Susa) at 18:11 from card ending ***3392 — same owner as the vehicle.", timestamp: "2026-04-12T18:11:00Z" },
     ],
