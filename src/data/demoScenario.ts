@@ -119,14 +119,14 @@ export interface DemoStep {
 }
 
 export const demoSteps: DemoStep[] = [
-  { step: 1, startMs:     0, title: "Seed received",                 subtitle: "Analyst submits semantic query + filters" },
-  { step: 2, startMs:  1800, title: "Deckard searches station video",subtitle: "Bimodal text→image search across 847 feeds" },
-  { step: 3, startMs:  3600, title: "Subject detected across cameras", subtitle: "Same crop re-identified in multiple feeds" },
-  { step: 4, startMs:  5400, title: "OSINT profile candidate found", subtitle: "Public Instagram match — garment + geo + tags" },
-  { step: 5, startMs:  7200, title: "Public video contains voice sample", subtitle: "Audio segment extracted from social media post" },
-  { step: 6, startMs:  9000, title: "AudioRAG creates speaker cluster", subtitle: "Voiceprint clustered across calls + public audio" },
-  { step: 7, startMs: 10800, title: "Logs and transaction records add context", subtitle: "CDR + financial records correlated to subject" },
-  { step: 8, startMs: 12600, title: "Analyst validates / rejects hypotheses", subtitle: "Hypothesis links promoted to VALIDATED or rejected" },
+  { step: 1, startMs:     0, eventTime: "02:14", title: "Seed received",                 subtitle: "Analyst submits semantic query + filters" },
+  { step: 2, startMs:  1800, eventTime: "02:14", title: "Deckard searches station video",subtitle: "Bimodal text→image search across 847 feeds" },
+  { step: 3, startMs:  3600, eventTime: "02:15", title: "Subject detected across cameras", subtitle: "Same crop re-identified in multiple feeds" },
+  { step: 4, startMs:  5400, eventTime: "10:02", title: "OSINT profile candidate found", subtitle: "Public Instagram match — garment + geo + tags" },
+  { step: 5, startMs:  7200, eventTime: "10:08", title: "Public video contains voice sample", subtitle: "Audio segment extracted from social media post" },
+  { step: 6, startMs:  9000, eventTime: "10:18", title: "AudioRAG creates speaker cluster", subtitle: "Voiceprint clustered across calls + public audio" },
+  { step: 7, startMs: 10800, eventTime: "11:02", title: "Logs and transaction records add context", subtitle: "CDR + financial records correlated to subject" },
+  { step: 8, startMs: 12600, eventTime: "11:30", title: "Analyst validates / rejects hypotheses", subtitle: "Hypothesis links promoted to VALIDATED or rejected" },
 ];
 
 export const demoTotalMs = 14400;
@@ -513,14 +513,14 @@ export const reasoningSteps = [
 // =====================================================================
 
 export const vehicleDemoSteps: DemoStep[] = [
-  { step: 1, startMs:     0, title: "Seed received",                       subtitle: "Vehicle · partial plate AB123 · Porta Susa · 17:00–20:00" },
-  { step: 2, startMs:  1800, title: "Vehicle registry → owner",            subtitle: "Structured lookup resolves plate to registered owner" },
-  { step: 3, startMs:  3600, title: "ANPR + event logs",                   subtitle: "Vehicle pinged by traffic cameras near the station" },
-  { step: 4, startMs:  5400, title: "Deckard searches station video",      subtitle: "Vehicle + person exiting matched in CCTV feeds" },
-  { step: 5, startMs:  7200, title: "OSINT profile candidate",             subtitle: "Public social profile linked to the candidate" },
-  { step: 6, startMs:  9000, title: "AudioRAG speaker cluster",            subtitle: "Voice sample from social + intercepted calls clustered" },
-  { step: 7, startMs: 10800, title: "Comms + transactions add context",    subtitle: "CDR and financial activity correlated to subject" },
-  { step: 8, startMs: 12600, title: "Analyst validates / rejects",         subtitle: "Hypothesis links pending promotion to VALIDATED" },
+  { step: 1, startMs:     0, eventTime: "17:05", title: "Seed received",                       subtitle: "Vehicle · partial plate AB123 · Porta Susa · 17:00–20:00" },
+  { step: 2, startMs:  1800, eventTime: "17:09", title: "Vehicle registry → owner",            subtitle: "Structured lookup resolves plate to registered owner" },
+  { step: 3, startMs:  3600, eventTime: "17:42", title: "ANPR + event logs",                   subtitle: "Vehicle pinged by traffic cameras near the station" },
+  { step: 4, startMs:  5400, eventTime: "17:44", title: "Deckard searches station video",      subtitle: "Vehicle + person exiting matched in CCTV feeds" },
+  { step: 5, startMs:  7200, eventTime: "18:02", title: "OSINT profile candidate",             subtitle: "Public social profile linked to the candidate" },
+  { step: 6, startMs:  9000, eventTime: "19:02", title: "AudioRAG speaker cluster",            subtitle: "Voice sample from social + intercepted calls clustered" },
+  { step: 7, startMs: 10800, eventTime: "18:11", title: "Comms + transactions add context",    subtitle: "CDR and financial activity correlated to subject" },
+  { step: 8, startMs: 12600, eventTime: "20:30", title: "Analyst validates / rejects",         subtitle: "Hypothesis links pending promotion to VALIDATED" },
 ];
 
 export const vehicleDemoTotalMs = 14400;
