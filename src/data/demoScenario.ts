@@ -188,8 +188,16 @@ export const demoNodes: GraphNode[] = [
 
   // ---- STEP 3 — Subject detected across cameras ----
   {
-    id: "vd1", type: "video_detection", label: "Detection #88421", sublabel: "CCTV-12 · 02:14:33",
-    x: 180, y: 360, confidence: 0.93, delay: 3700, step: 3,
+    id: "vd1", type: "video_evidence", label: "Detection #88421", sublabel: "Video Evidence",
+    x: 180, y: 360, confidence: 0.93, delay: 3700, step: 3, eventTime: "02:14",
+    facts: [
+      { label: "Camera",    value: "Porta Susa Cam 12" },
+      { label: "Time",      value: "2024-03-14 02:14:33" },
+      { label: "Detection", value: "Subject matching seed query" },
+      { label: "Attribute", value: "Red sweatshirt · adult male" },
+      { label: "BBox",      value: "[412,188,540,402]" },
+      { label: "Score",     value: "0.93 (top-1)" },
+    ],
     evidence: [
       { type: "video", title: "Top-1 Detection", detail: "Bounding box [412,188,540,402], visual match score 0.93 against query \"man wearing a red sweatshirt\".", timestamp: "2024-03-14T02:14:33Z" },
     ],
@@ -233,8 +241,15 @@ export const demoNodes: GraphNode[] = [
 
   // ---- STEP 5 — Public video contains voice sample ----
   {
-    id: "vs1", type: "voice_sample", label: "Voice Sample A-9921", sublabel: "from IG-77123 · 12s",
-    x: 720, y: 280, confidence: 0.84, delay: 7300, step: 5,
+    id: "vs1", type: "audio_evidence", label: "Voice Sample A-9921", sublabel: "Audio Evidence",
+    x: 720, y: 280, confidence: 0.84, delay: 7300, step: 5, eventTime: "10:08",
+    facts: [
+      { label: "Source",   value: "Instagram post IG-77123" },
+      { label: "Time",     value: "2024-03-14 10:08 (extraction)" },
+      { label: "Length",   value: "12s" },
+      { label: "Format",   value: "PCM 16kHz mono · SNR 18dB" },
+      { label: "Speaker",  value: "Italian · Torinese accent" },
+    ],
     evidence: [
       { type: "metadata", title: "Audio Extraction", detail: "12s audio segment extracted from public Instagram video IG-77123. Subject speaks Italian, Torinese accent.", timestamp: "2024-02-28T15:11:12Z" },
     ],
