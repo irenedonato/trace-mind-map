@@ -292,8 +292,16 @@ export const demoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "t1", type: "transaction", label: "$47,200 Transfer", sublabel: "TX: 0x4f8a…c3d1",
-    x: 700, y: 580, confidence: 0.91, delay: 11500, step: 7,
+    id: "t1", type: "evidence", label: "$47,200 Wire Transfer", sublabel: "Transaction Evidence",
+    x: 700, y: 580, confidence: 0.91, delay: 11500, step: 7, eventTime: "06:33",
+    facts: [
+      { label: "From",   value: "Account ***4821" },
+      { label: "To",     value: "Account ***7293" },
+      { label: "Amount", value: "$47,200" },
+      { label: "Time",   value: "2024-03-14 06:33" },
+      { label: "Flag",   value: "Structuring (AML R-17)" },
+      { label: "Tx ID",  value: "0x4f8a…c3d1" },
+    ],
     evidence: [
       { type: "transaction", title: "Wire Transfer Record", detail: "From: Acct ***4821 → Acct ***7293. Flagged: structuring pattern detected.", timestamp: "2024-03-14T06:33:12Z" },
     ],
