@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef, useLayoutEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   User, Video, Banknote, Smartphone, MapPin, AtSign,
@@ -131,8 +131,46 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
 
   const isInPath = (id: string) => highlightPath.includes(id);
 
+  // Compute the bounding box of the full scenario so the graph has a stable
+  // layout regardless of which nodes have animated in.
+  const bbox = useMemo(() => {
+    if (!scenario.nodes.length) return { minX: 0, minY: 0, maxX: 0, maxY: 0 };
+    const xs = scenario.nodes.map((n) => n.x);
+    const ys = scenario.nodes.map((n) => n.y);
+    return {
+      minX: Math.min(...xs),
+      minY: Math.min(...ys),
+      maxX: Math.max(...xs),
+      maxY: Math.max(...ys),
+    };
+  }, [scenario]);
+
+  // Measure container and derive a translation that centers the bbox.
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ w: 0, h: 0 });
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => setSize({ w: el.clientWidth, h: el.clientHeight });
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // Reserve top space for the StepIndicator overlay and bottom for the legend.
+  const TOP_PAD = 96;
+  const BOTTOM_PAD = 80;
+  const SIDE_PAD = 40;
+  const graphW = bbox.maxX - bbox.minX;
+  const graphH = bbox.maxY - bbox.minY;
+  const availableW = Math.max(0, size.w - SIDE_PAD * 2);
+  const availableH = Math.max(0, size.h - TOP_PAD - BOTTOM_PAD);
+  const offsetX = size.w > 0 ? SIDE_PAD + (availableW - graphW) / 2 - bbox.minX : 0;
+  const offsetY = size.h > 0 ? TOP_PAD + (availableH - graphH) / 2 - bbox.minY : 0;
+
   return (
-    <div className="flex-1 relative overflow-hidden dot-grid">
+    <div ref={containerRef} className="flex-1 relative overflow-hidden dot-grid">
       <StepIndicator isRunning={isRunning} steps={scenario.steps} totalMs={scenario.totalMs} />
       {/* Empty state */}
       {!isRunning && visibleNodes.length === 0 && (
@@ -157,6 +195,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
           </marker>
         </defs>
 
+        <g transform={`translate(${offsetX}, ${offsetY})`}>
         <AnimatePresence>
           {visibleEdges.map((edge) => {
             const source = getNode(edge.source);
@@ -228,6 +267,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
             );
           })}
         </AnimatePresence>
+        </g>
       </svg>
 
       {/* Nodes */}
@@ -244,7 +284,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="absolute cursor-pointer group"
-              style={{ left: node.x - 28, top: node.y - 28 }}
+              style={{ left: node.x - 28 + offsetX, top: node.y - 28 + offsetY }}
               onClick={() => onNodeClick(node.id)}
             >
               {/* Glow ring */}
