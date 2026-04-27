@@ -43,10 +43,11 @@ AI-driven preprocessing and enrichment:
 - Entity extraction
 - Temporal normalization
 
-Vector DB:
+Additionally a vector database is used to::
 - Stores embeddings
 - Enables similarity search
 - Supports cross-modal retrieval
+This layer transforms raw data into searchable, linkable signals.
 
 ---
 
@@ -99,6 +100,8 @@ Role in NOESIS:
 ## Demo Scenario – Torino Porta Susa
 
 ### Step 1 — Seed
+The investigation starts from a minimal trigger. For example:
+
 Vehicle: FIAT Tipo  
 Plate: AB123 (partial)  
 Time: 12 Apr 2026, 17:00–20:00  
@@ -109,6 +112,8 @@ Location: Torino Porta Susa
 ### Step 2 — Structured Data
 
 Vehicle → Owner
+type: observed
+source: vehicle registry
 
 Owner expands to:
 - Devices (communication logs)
@@ -119,14 +124,22 @@ Owner expands to:
 
 ### Step 3 — Video (Deckard)
 - Detect person exiting vehicle (potentially not the owner)
-- Identify red sweatshirt
-- Track across cameras
+type: observed
+source: Deckard
+
+- Identify a man with red sweatshirt
+- Track across cameras ( “Find all occurrences of a man with a red sweatshirt in this area/time window” for
+movement reconstruction)
+
+Vehicle → Person Candidate
+type: inferred
+source: video analysis
 
 ---
 
 ### Step 4 — OSINT
 - Image similarity
-- Social profiles
+- Public social media matching
 - Contact network
 
 ---
