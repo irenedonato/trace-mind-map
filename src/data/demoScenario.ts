@@ -877,7 +877,7 @@ export const vehicleReasoningSteps = [
 
 // ----- Timeline -----
 export const vehicleTimelineEvents = [
-  { time: "2026-04-12 17:05", event: "Sighting reported — FIAT Tipo near Porta Susa", entity: "vev1" },
+  { time: "2026-04-12 17:05", event: "Sighting reported — FIAT Tipo near Porta Susa", entity: "vc1" },
   { time: "2026-04-12 17:09", event: "Registry resolves plate AB123XY → Luca Bianchi", entity: "vown" },
   { time: "2026-04-12 17:42", event: "ANPR-07 captures plate AB123XY inbound", entity: "vanpr" },
   { time: "2026-04-12 17:44", event: "Deckard match in CCTV-18 — driver exits vehicle", entity: "vvd" },
