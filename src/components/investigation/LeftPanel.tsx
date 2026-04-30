@@ -54,28 +54,7 @@ export function LeftPanel({ onLaunch, isRunning, seedMode, onSeedModeChange, tot
           </h2>
           <span className="font-display text-sm text-primary">/</span>
         </div>
-        <p className="text-xs text-muted-foreground">Select scenario and provide initial data</p>
-      </div>
-
-      {/* Seed Type Selection */}
-      <div className="p-4 space-y-2">
-        <label className="font-display text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Input Type</label>
-        <div className="grid grid-cols-2 gap-2">
-          {seedTypes.map(({ icon: Icon, label, id }) => (
-            <button
-              key={id}
-              onClick={() => setSelectedSeed(id)}
-              className={`flex items-center gap-2 p-2.5 rounded text-xs transition-all ${
-                selectedSeed === id
-                  ? "bg-primary/10 text-primary border border-primary/40 font-medium"
-                  : "bg-secondary border border-border text-muted-foreground hover:text-foreground hover:border-primary/20"
-              }`}
-            >
-              <Icon className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="truncate font-mono text-[11px]">{label}</span>
-            </button>
-          ))}
-        </div>
+        <p className="text-xs text-muted-foreground">Provide initial data to start the investigation</p>
       </div>
 
       {/* Seed Input */}
