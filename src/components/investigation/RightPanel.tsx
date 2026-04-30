@@ -10,13 +10,12 @@ interface RightPanelProps {
   scenario: Scenario;
 }
 
-type TabId = "evidence" | "reasoning" | "source" | "link" | "timeline";
+type TabId = "evidence" | "reasoning" | "source" | "timeline";
 
 const tabs: { id: TabId; label: string; icon: typeof FileText }[] = [
   { id: "evidence", label: "Evidence", icon: FileText },
   { id: "reasoning", label: "Reasoning", icon: Brain },
   { id: "source", label: "Source", icon: GitBranch },
-  { id: "link", label: "Link", icon: Link2 },
   { id: "timeline", label: "Timeline", icon: Clock },
 ];
 
