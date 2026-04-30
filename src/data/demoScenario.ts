@@ -928,7 +928,30 @@ export const vehicleScenario: Scenario = {
   defaultHighlightChain: ["veh1", "vown", "vpc", "vsoc"],
 };
 
+// =====================================================================
+// DEMO PLAYBACK SPEED
+// ---------------------------------------------------------------------
+// Multiplier applied to every node/edge/log delay and to totalMs.
+//   1   = original speed
+//   2   = twice as slow (recommended for live narration)
+//   3   = three times slower, etc.
+// Change this single value to slow the whole demo down/up.
+// =====================================================================
+export const DEMO_SPEED_MULTIPLIER = 3;
+
+function scaleScenario(s: Scenario, factor: number): Scenario {
+  if (factor === 1) return s;
+  return {
+    ...s,
+    nodes: s.nodes.map((n) => ({ ...n, delay: Math.round(n.delay * factor) })),
+    edges: s.edges.map((e) => ({ ...e, delay: Math.round(e.delay * factor) })),
+    agentLogs: s.agentLogs.map((l) => ({ ...l, delay: Math.round(l.delay * factor) })),
+    totalMs: Math.round(s.totalMs * factor),
+  };
+}
+
 export function getScenario(mode: SeedMode): Scenario {
-  return mode === "vehicle" ? vehicleScenario : visualScenario;
+  const base = mode === "vehicle" ? vehicleScenario : visualScenario;
+  return scaleScenario(base, DEMO_SPEED_MULTIPLIER);
 }
 
