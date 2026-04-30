@@ -550,24 +550,16 @@ export const vehicleDemoTotalMs = 14400;
 
 // ----- Nodes -----
 export const vehicleDemoNodes: GraphNode[] = [
-  // STEP 1 — seed
+  // STEP 1 — seed (merged case + sighting report)
   {
-    id: "vc1", type: "case", label: "CASE-2026-0412", sublabel: "Torino · Porta Susa",
-    x: 110, y: 150, confidence: 1.0, delay: 0, step: 1,
+    id: "vc1", type: "case", label: "CASE-2026-0412", sublabel: "Vehicle Sighting · Porta Susa · 17:00–20:00",
+    x: 200, y: 150, confidence: 1.0, delay: 0, step: 1, eventTime: "17:05",
     evidence: [
       { type: "metadata", title: "Case Opened", detail: "Suspicious vehicle reported near Torino Porta Susa station.", timestamp: "2026-04-12T17:05:00Z" },
-    ],
-    sourceTrace: [
-      { source: "Case Management", type: "log", reference: "case_id CASE-2026-0412", detail: "manual case creation by analyst id ANL-021", hash: "sha256:aa11…ff02", timestamp: "2026-04-12T17:05:00Z" },
-    ],
-  },
-  {
-    id: "vev1", type: "event", label: "Vehicle Sighting Report", sublabel: "12 Apr 2026 · 17:00–20:00",
-    x: 280, y: 150, confidence: 1.0, delay: 400, step: 1, eventTime: "17:05",
-    evidence: [
       { type: "metadata", title: "Seed Report", detail: "Witness report: dark FIAT Tipo, partial plate AB123, loitering near Porta Susa entrance between 17:00 and 20:00.", timestamp: "2026-04-12T17:05:30Z" },
     ],
     sourceTrace: [
+      { source: "Case Management", type: "log", reference: "case_id CASE-2026-0412", detail: "manual case creation by analyst id ANL-021", hash: "sha256:aa11…ff02", timestamp: "2026-04-12T17:05:00Z" },
       { source: "Operator Intake", type: "log", reference: "report_id RPT-77129", detail: "phone tip, transcribed by operator OP-09, geofence Porta Susa ±1km", hash: "sha256:b2c1…aa31", timestamp: "2026-04-12T17:05:30Z" },
     ],
   },
@@ -766,10 +758,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 // ----- Edges -----
 export const vehicleDemoEdges: GraphEdge[] = [
   // STEP 1 wiring
-  { id: "ve_c_ev",   source: "vc1",  target: "vev1", type: "partOfCase", label: "seed of",      confidence: 1.0,  status: "observed",  delay: 600,  step: 1,
-    rationaleSummary: "Sighting report registered as the initial seed of the case.",
-    rationale: ["Case CASE-2026-0412 opened by analyst ANL-021", "Report RPT-77129 attached as first artifact"] },
-  { id: "ve_ev_veh", source: "vev1", target: "veh1", type: "derivedFrom", label: "describes",   confidence: 0.92, status: "observed",  delay: 1000, step: 1,
+  { id: "ve_ev_veh", source: "vc1", target: "veh1", type: "derivedFrom", label: "describes",   confidence: 0.92, status: "observed",  delay: 1000, step: 1,
     rationaleSummary: "Vehicle descriptor extracted from the witness report.",
     rationale: ["Free-text descriptor 'FIAT Tipo, dark, AB123…'", "Operator OP-09 transcription"] },
   { id: "ve_veh_loc", source: "veh1", target: "vloc", type: "occurredAt", label: "spotted at",  confidence: 0.9,  status: "observed",  delay: 1300, step: 1,
@@ -888,7 +877,7 @@ export const vehicleReasoningSteps = [
 
 // ----- Timeline -----
 export const vehicleTimelineEvents = [
-  { time: "2026-04-12 17:05", event: "Sighting reported — FIAT Tipo near Porta Susa", entity: "vev1" },
+  { time: "2026-04-12 17:05", event: "Sighting reported — FIAT Tipo near Porta Susa", entity: "vc1" },
   { time: "2026-04-12 17:09", event: "Registry resolves plate AB123XY → Luca Bianchi", entity: "vown" },
   { time: "2026-04-12 17:42", event: "ANPR-07 captures plate AB123XY inbound", entity: "vanpr" },
   { time: "2026-04-12 17:44", event: "Deckard match in CCTV-18 — driver exits vehicle", entity: "vvd" },
