@@ -758,10 +758,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 // ----- Edges -----
 export const vehicleDemoEdges: GraphEdge[] = [
   // STEP 1 wiring
-  { id: "ve_c_ev",   source: "vc1",  target: "vev1", type: "partOfCase", label: "seed of",      confidence: 1.0,  status: "observed",  delay: 600,  step: 1,
-    rationaleSummary: "Sighting report registered as the initial seed of the case.",
-    rationale: ["Case CASE-2026-0412 opened by analyst ANL-021", "Report RPT-77129 attached as first artifact"] },
-  { id: "ve_ev_veh", source: "vev1", target: "veh1", type: "derivedFrom", label: "describes",   confidence: 0.92, status: "observed",  delay: 1000, step: 1,
+  { id: "ve_ev_veh", source: "vc1", target: "veh1", type: "derivedFrom", label: "describes",   confidence: 0.92, status: "observed",  delay: 1000, step: 1,
     rationaleSummary: "Vehicle descriptor extracted from the witness report.",
     rationale: ["Free-text descriptor 'FIAT Tipo, dark, AB123…'", "Operator OP-09 transcription"] },
   { id: "ve_veh_loc", source: "veh1", target: "vloc", type: "occurredAt", label: "spotted at",  confidence: 0.9,  status: "observed",  delay: 1300, step: 1,
