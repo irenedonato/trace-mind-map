@@ -57,37 +57,6 @@ export function LeftPanel({ onLaunch, isRunning, seedMode, onSeedModeChange, tot
         <p className="text-xs text-muted-foreground">Select scenario and provide initial data</p>
       </div>
 
-      {/* Seed Mode Toggle */}
-      <div className="p-4 pb-0 space-y-2">
-        <label className="font-display text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Scenario</label>
-        <div className="grid grid-cols-2 gap-1.5 p-1 bg-secondary rounded">
-          <button
-            onClick={() => onSeedModeChange("visual")}
-            disabled={isRunning}
-            className={`flex items-center justify-center gap-1.5 py-2 rounded text-[11px] font-mono transition-all ${
-              seedMode === "visual"
-                ? "bg-primary text-primary-foreground font-medium shadow"
-                : "text-muted-foreground hover:text-foreground"
-            } ${isRunning ? "opacity-50 cursor-not-allowed" : ""}`}
-          >
-            <Eye className="w-3.5 h-3.5" />
-            Visual clue
-          </button>
-          <button
-            onClick={() => onSeedModeChange("vehicle")}
-            disabled={isRunning}
-            className={`flex items-center justify-center gap-1.5 py-2 rounded text-[11px] font-mono transition-all ${
-              seedMode === "vehicle"
-                ? "bg-primary text-primary-foreground font-medium shadow"
-                : "text-muted-foreground hover:text-foreground"
-            } ${isRunning ? "opacity-50 cursor-not-allowed" : ""}`}
-          >
-            <Car className="w-3.5 h-3.5" />
-            Vehicle
-          </button>
-        </div>
-      </div>
-
       {/* Seed Type Selection */}
       <div className="p-4 space-y-2">
         <label className="font-display text-[10px] font-medium text-muted-foreground uppercase tracking-widest">Input Type</label>
