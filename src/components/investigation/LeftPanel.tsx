@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Camera, FileText, Phone, CreditCard, MapPin, Clock, Zap, ChevronDown, Car, Eye } from "lucide-react";
+import { MapPin, Clock, Zap, ChevronDown } from "lucide-react";
 import type { SeedMode } from "@/data/demoScenario";
 
 interface LeftPanelProps {
@@ -11,34 +11,16 @@ interface LeftPanelProps {
   totalMs: number;
 }
 
-const visualSeedTypes = [
-  { icon: Camera, label: "Image / Video", id: "image" },
-  { icon: FileText, label: "Text / Name", id: "text" },
-  { icon: Phone, label: "Phone Number", id: "phone" },
-  { icon: CreditCard, label: "Account / TX", id: "account" },
-];
-
-const vehicleSeedTypes = [
-  { icon: Car, label: "License Plate", id: "plate" },
-  { icon: FileText, label: "Vehicle Descr.", id: "descriptor" },
-  { icon: Camera, label: "ANPR / CCTV", id: "anpr" },
-  { icon: Phone, label: "Witness Tip", id: "tip" },
-];
-
-export function LeftPanel({ onLaunch, isRunning, seedMode, onSeedModeChange, totalMs }: LeftPanelProps) {
-  const seedTypes = seedMode === "vehicle" ? vehicleSeedTypes : visualSeedTypes;
-  const [selectedSeed, setSelectedSeed] = useState<string>(seedTypes[0].id);
+export function LeftPanel({ onLaunch, isRunning, seedMode, totalMs }: LeftPanelProps) {
   const [seedValue, setSeedValue] = useState<string>("");
   const [timeRange, setTimeRange] = useState<string>("");
 
   // Reset seed inputs when the mode changes
   useEffect(() => {
     if (seedMode === "vehicle") {
-      setSelectedSeed("plate");
       setSeedValue("FIAT Tipo · plate AB123**");
       setTimeRange("12 Apr 2026 · 17:00–20:00");
     } else {
-      setSelectedSeed("text");
       setSeedValue('"man wearing a red sweatshirt"');
       setTimeRange("72h lookback");
     }
