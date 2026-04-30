@@ -170,8 +170,8 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
     return () => ro.disconnect();
   }, []);
 
-  // Reserve top space for the StepIndicator overlay and bottom for the legend.
-  const TOP_PAD = 96;
+  // Reserve top/bottom space for layout chrome (legend, etc.).
+  const TOP_PAD = 24;
   const BOTTOM_PAD = 80;
   const SIDE_PAD = 40;
   const graphW = bbox.maxX - bbox.minX;
@@ -183,7 +183,6 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
 
   return (
     <div ref={containerRef} className="flex-1 relative overflow-hidden dot-grid">
-      <StepIndicator isRunning={isRunning} steps={scenario.steps} totalMs={scenario.totalMs} />
       {/* Empty state */}
       {!isRunning && visibleNodes.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center">
