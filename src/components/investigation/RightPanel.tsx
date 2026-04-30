@@ -50,9 +50,9 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
   const edgeSource = edge ? scenario.nodes.find((n) => n.id === edge.source) : undefined;
   const edgeTarget = edge ? scenario.nodes.find((n) => n.id === edge.target) : undefined;
 
-  // Auto-switch to Link tab when an edge is selected
+  // Auto-switch to Source tab when an edge is selected (link details now live in Source)
   useEffect(() => {
-    if (selectedEdge) setActiveTab("link");
+    if (selectedEdge) setActiveTab("source");
   }, [selectedEdge]);
 
   // Auto-switch back to Evidence when a node is selected
