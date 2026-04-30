@@ -937,7 +937,7 @@ export const vehicleScenario: Scenario = {
 //   3   = three times slower, etc.
 // Change this single value to slow the whole demo down/up.
 // =====================================================================
-export const DEMO_SPEED_MULTIPLIER = 3;
+export const DEMO_SPEED_MULTIPLIER = 4;
 
 function scaleScenario(s: Scenario, factor: number): Scenario {
   if (factor === 1) return s;
