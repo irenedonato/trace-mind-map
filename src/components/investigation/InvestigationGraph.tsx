@@ -6,7 +6,7 @@ import {
   Car, ClipboardList, IdCard, Fingerprint, FileSearch, Camera, Headphones, Image as ImageIcon,
 } from "lucide-react";
 import { type GraphNode, type GraphEdge, type EdgeStatus, type NodeType, type Scenario } from "@/data/demoScenario";
-import { StepIndicator } from "./StepIndicator";
+
 
 interface InvestigationGraphProps {
   isRunning: boolean;
