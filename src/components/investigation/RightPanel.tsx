@@ -118,16 +118,18 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                             ◈ {src.channel} · {src.label}
                           </span>
                         )}
-                        <span
-                          className="px-1.5 py-0.5 rounded font-mono ml-auto"
-                          style={{
-                            background: node.confidence >= 0.9 ? "hsl(160, 84%, 39%)" : node.confidence >= 0.8 ? "hsl(38, 92%, 50%)" : "hsl(0, 84%, 60%)",
-                            color: "hsl(220, 20%, 7%)",
-                            fontSize: "9px",
-                          }}
-                        >
-                          conf {Math.round(node.confidence * 100)}%
-                        </span>
+                        {getNodeLayer(node) === "inference" && (
+                          <span
+                            className="px-1.5 py-0.5 rounded font-mono ml-auto"
+                            style={{
+                              background: node.confidence >= 0.9 ? "hsl(160, 84%, 39%)" : node.confidence >= 0.8 ? "hsl(38, 92%, 50%)" : "hsl(0, 84%, 60%)",
+                              color: "hsl(220, 20%, 7%)",
+                              fontSize: "9px",
+                            }}
+                          >
+                            conf {Math.round(node.confidence * 100)}%
+                          </span>
+                        )}
                       </div>
                     );
                   })()}
