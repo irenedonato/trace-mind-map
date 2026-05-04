@@ -93,6 +93,45 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                     <span className="text-data text-muted-foreground">{node.sublabel}</span>
                   </div>
 
+                  {/* Layer / timestamp / source metadata */}
+                  {(() => {
+                    const layer = getNodeLayer(node);
+                    const lm = layerMeta[layer];
+                    const ts = getNodeTimestamp(node);
+                    const src = getNodePrimarySource(node);
+                    return (
+                      <div className="flex flex-wrap items-center gap-1.5 text-data font-mono">
+                        <span
+                          className="px-1.5 py-0.5 rounded uppercase tracking-wider"
+                          style={{ background: lm.color, color: "hsl(220, 20%, 7%)", fontSize: "9px" }}
+                          title={lm.description}
+                        >
+                          {lm.label}
+                        </span>
+                        {ts && (
+                          <span className="px-1.5 py-0.5 rounded bg-secondary text-foreground/80 border border-border" style={{ fontSize: "9px" }}>
+                            ⏱ {ts}
+                          </span>
+                        )}
+                        {src && (
+                          <span className="px-1.5 py-0.5 rounded bg-secondary text-foreground/80 border border-border" style={{ fontSize: "9px" }}>
+                            ◈ {src.channel} · {src.label}
+                          </span>
+                        )}
+                        <span
+                          className="px-1.5 py-0.5 rounded font-mono ml-auto"
+                          style={{
+                            background: node.confidence >= 0.9 ? "hsl(160, 84%, 39%)" : node.confidence >= 0.8 ? "hsl(38, 92%, 50%)" : "hsl(0, 84%, 60%)",
+                            color: "hsl(220, 20%, 7%)",
+                            fontSize: "9px",
+                          }}
+                        >
+                          conf {Math.round(node.confidence * 100)}%
+                        </span>
+                      </div>
+                    );
+                  })()}
+
                   {/* Evidence card — structured facts (Camera/Time/Detection/Attribute…) */}
                   {node.facts && node.facts.length > 0 && (
                     <div className="p-3 rounded border-2 border-amber/40 bg-amber/5">
