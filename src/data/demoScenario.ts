@@ -714,20 +714,12 @@ export const vehicleDemoNodes: GraphNode[] = [
       { source: "ANPR / City Camera", type: "log", reference: "anpr_event AE-22041 · partial plate", detail: "OCR confidence 0.76 on 5 of 7 characters", hash: "sha256:b2c1…aa31" },
     ],
   },
-  {
-    id: "vloc", type: "location", label: "Porta Susa", sublabel: "45.0729°N · 7.6660°E",
-    x: 110, y: 280, confidence: 0.99, delay: 900, step: 1,
-    sourceTrace: [
-      { source: "Geofence Service", type: "log", reference: "geofence_id GF-PS-001", detail: "Torino Porta Susa station perimeter", hash: "sha256:ce71…0042" },
-    ],
-  },
-
   // STEP 2 — Registered Owner
   {
-    id: "vown", type: "owner", label: "Registered Owner", sublabel: "Luca Moretti",
+    id: "vown", type: "owner", label: "Registered Owner", sublabel: "Andrea Ferraro",
     x: 680, y: 150, confidence: 0.9, delay: 1900, step: 2,
     evidence: [
-      { type: "metadata", title: "Registered Owner", detail: "Luca Moretti · address Torino, Italy · phone +39 XXX XXX XXXX · email luca.moretti@example.com · bank account ITXX XXXX XXXX.", timestamp: "2026-05-04T08:18:10Z" },
+      { type: "metadata", title: "Registered Owner", detail: "Andrea Ferraro · address Torino, Italy · phone +39 XXX XXX XXXX · email andrea.ferraro@example.com · bank account ITXX XXXX XXXX.", timestamp: "2026-05-04T08:18:10Z" },
     ],
     sourceTrace: [
       { source: "Vehicle Registry (MIT)", type: "log", reference: "owner_id OWN-7741", detail: "Resolved from candidate plates matching prefix GF-7K + FIAT Tipo (1 unique match after filter)", hash: "sha256:11aa…77ff", timestamp: "2026-05-04T08:18:10Z" },
@@ -857,14 +849,12 @@ export const vehicleDemoEdges: GraphEdge[] = [
   { id: "ve1", source: "vev1", target: "veh1", type: "derivedFrom", label: "detected vehicle", confidence: 0.82, status: "observed", delay: 800, step: 1,
     rationaleSummary: "Vehicle descriptor extracted from the ANPR + camera event.",
     rationale: ["FIAT Tipo, black", "Partial plate GF-7K*2", "Stop duration 14m in short-stay zone"] },
-  { id: "ve2", source: "vev1", target: "vloc", type: "occurredAt", label: "at",           confidence: 0.99, status: "validated", delay: 1100, step: 1,
-    rationaleSummary: "Camera ANPR-12 anchored to Porta Susa perimeter.",
-    rationale: ["Surveyed fixed camera", "Within geofence GF-PS-001"] },
+
 
   // STEP 2 — vehicle → owner
   { id: "ve3", source: "veh1", target: "vown", type: "linkedToProfile", label: "registered owner", confidence: 0.9, status: "observed", delay: 2200, step: 2,
     rationaleSummary: "Registry resolves the partial plate + descriptor to a single owner.",
-    rationale: ["Plate prefix GF-7K + FIAT Tipo → 1 unique match", "Owner OWN-7741 (Luca Moretti)"] },
+    rationale: ["Plate prefix GF-7K + FIAT Tipo → 1 unique match", "Owner OWN-7741 (Andrea Ferraro)"] },
 
   // STEP 3 — owner ↔ comms / financial
   { id: "ve4", source: "vown", target: "vcdr", type: "called", label: "has call pattern", confidence: 1.0, status: "observed", delay: 3900, step: 3,
@@ -911,7 +901,7 @@ export const vehicleAgentLogs: { message: string; delay: number; level: "info" |
   { message: "ANPR ALERT: black FIAT Tipo · partial plate GF-7K*2 · Porta Susa", delay: 0, level: "warning" },
   { message: "Anomaly: 14m stop in short-stay zone + prior sighting near sensitive site", delay: 700, level: "warning" },
   { message: "Resolving partial plate against vehicle registry...", delay: 1900, level: "info" },
-  { message: "Registry MATCH: plate GF-7KQ2 → owner Luca Moretti (OWN-7741)", delay: 2400, level: "success" },
+  { message: "Registry MATCH: plate GF-7KQ2 → owner Andrea Ferraro (OWN-7741)", delay: 2400, level: "success" },
   { message: "CDR pull: 14 calls in 72h to a recurring unknown number", delay: 3800, level: "info" },
   { message: "Last call placed 38m before Porta Susa detection", delay: 4000, level: "warning" },
   { message: "Banking records: €2,850 sent 2026-05-03 19:42 to 'LogiTorino Srl'", delay: 4300, level: "warning" },
@@ -927,7 +917,7 @@ export const vehicleAgentLogs: { message: string; delay: number; level: "info" |
 // ----- Reasoning chain (vehicle scenario) -----
 export const vehicleReasoningSteps = [
   { step: 1, title: "Suspicious Vehicle Detected", detail: "Black FIAT Tipo flagged at Porta Susa: overstay in short-stay zone, partial plate 'GF-7K*2', and prefix matches a vehicle seen near another sensitive site recently.", confidence: 0.82 },
-  { step: 2, title: "Owner Resolution", detail: "Partial plate + make/model uniquely match plate GF-7KQ2 in MIT registry, registered to Luca Moretti.", confidence: 0.9 },
+  { step: 2, title: "Owner Resolution", detail: "Partial plate + make/model uniquely match plate GF-7KQ2 in MIT registry, registered to Andrea Ferraro.", confidence: 0.9 },
   { step: 3, title: "Telecom + Financial Context", detail: "14 calls in 72h to a recurring unknown number (last 38m before the event) and a €2,850 transfer to a warehouse service provider the night before.", confidence: 1.0 },
   { step: 4, title: "Visual Evidence", detail: "Deckard exports a cropped frame from CCTV-12 showing a person exiting the driver side of the FIAT Tipo at 08:19.", confidence: 0.89 },
   { step: 5, title: "Deckard Visual Search", detail: "Cross-feed visual search returns a likely second appearance of the same individual near a logistics warehouse on the Turin outskirts at 09:06.", confidence: 0.79 },
@@ -941,7 +931,7 @@ export const vehicleTimelineEvents = [
   { time: "2026-05-03 19:42", event: "€2,850 transfer to warehouse service provider", entity: "vtx" },
   { time: "2026-05-04 07:39", event: "Last call to recurring unknown number", entity: "vcdr" },
   { time: "2026-05-04 08:17", event: "Suspicious vehicle detected at Porta Susa", entity: "vev1" },
-  { time: "2026-05-04 08:18", event: "Registry resolves owner: Luca Moretti", entity: "vown" },
+  { time: "2026-05-04 08:18", event: "Registry resolves owner: Andrea Ferraro", entity: "vown" },
   { time: "2026-05-04 08:19", event: "Deckard frame: person exits FIAT Tipo", entity: "vcrop" },
   { time: "2026-05-04 09:06", event: "Deckard match at logistics warehouse", entity: "vmatch" },
   { time: "2026-05-04 09:10", event: "AI hypothesis assembled", entity: "vinf" },
