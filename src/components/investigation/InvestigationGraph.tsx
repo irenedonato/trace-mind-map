@@ -393,6 +393,24 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
           ))}
         </div>
       )}
+
+      {/* Layer legend */}
+      {visibleNodes.length > 0 && (
+        <div className="absolute bottom-3 left-3 surface-glass border border-border rounded px-3 py-2 text-[9px] font-mono space-y-1 z-10">
+          <div className="text-muted-foreground uppercase tracking-wider mb-1">Node layer</div>
+          {(Object.entries(layerMeta) as [keyof typeof layerMeta, typeof layerMeta[keyof typeof layerMeta]][]).map(([key, m]) => (
+            <div key={key} className="flex items-center gap-2">
+              <span
+                className="px-1 rounded uppercase tracking-wider"
+                style={{ background: m.color, color: "hsl(220, 20%, 7%)", fontSize: "8px", lineHeight: "11px" }}
+              >
+                {m.abbrev}
+              </span>
+              <span className="text-foreground/80">{m.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
