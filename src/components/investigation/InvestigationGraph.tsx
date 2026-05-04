@@ -354,7 +354,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
               </div>
 
               {/* Confidence badge — only shown for AI-inferred nodes (observed nodes are certain) */}
-              {node.type === "inference" && (
+              {getNodeLayer(node) === "inference" && (
                 <div
                   className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded text-data font-medium"
                   style={{

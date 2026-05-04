@@ -118,7 +118,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                             ◈ {src.channel} · {src.label}
                           </span>
                         )}
-                        {node.type === "inference" && (
+                        {getNodeLayer(node) === "inference" && (
                           <span
                             className="px-1.5 py-0.5 rounded font-mono ml-auto"
                             style={{
