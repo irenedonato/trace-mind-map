@@ -112,6 +112,8 @@ export interface GraphNode {
   delay: number; // ms delay before appearing
   /** Demo progression step (1-8) this node belongs to */
   step?: number;
+  /** Optional media image (URL or imported asset) shown in a floating preview window when the node is selected. */
+  mediaImage?: { src: string; caption?: string };
 }
 
 export interface GraphEdge {
@@ -773,6 +775,10 @@ export const vehicleDemoNodes: GraphNode[] = [
   {
     id: "vvd", type: "video_evidence", label: "Vehicle Detection", sublabel: "Video Evidence",
     x: 280, y: 540, confidence: 0.91, delay: 5800, step: 4, eventTime: "17:44",
+    mediaImage: {
+      src: new URL("../assets/vehicle-detection-porta-susa.jpg", import.meta.url).href,
+      caption: "CCTV-18 · Porta Susa · 17:44:02 — FIAT Tipo · plate AB123XY",
+    },
     facts: [
       { label: "Camera",    value: "Porta Susa Cam 18" },
       { label: "Time",      value: "2026-04-12 17:44:02" },
