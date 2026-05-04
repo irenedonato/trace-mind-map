@@ -3,6 +3,7 @@ import { LeftPanel } from "@/components/investigation/LeftPanel";
 import { InvestigationGraph } from "@/components/investigation/InvestigationGraph";
 import { RightPanel } from "@/components/investigation/RightPanel";
 import { AgentActivityBar } from "@/components/investigation/AgentActivityBar";
+import { MediaPreview } from "@/components/investigation/MediaPreview";
 import { getScenario, type SeedMode } from "@/data/demoScenario";
 
 const Index = () => {
@@ -82,6 +83,9 @@ const Index = () => {
           scenario={scenario}
         />
       </div>
+
+      {/* Floating media preview (e.g. CCTV frame for Vehicle Detection) */}
+      <MediaPreview selectedNode={selectedNode} scenario={scenario} onClose={() => setSelectedNode(null)} />
 
       {/* Agent activity */}
       <AgentActivityBar isRunning={isRunning} scenario={scenario} />
