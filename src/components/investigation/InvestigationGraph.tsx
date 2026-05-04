@@ -5,7 +5,7 @@ import {
   Briefcase, Calendar, UserSearch, ScanFace, Crop, FileText, Tag, Mic, Volume2, MessageSquare,
   Car, ClipboardList, IdCard, Fingerprint, FileSearch, Camera, Headphones, Image as ImageIcon,
 } from "lucide-react";
-import { type GraphNode, type GraphEdge, type EdgeStatus, type NodeType, type Scenario } from "@/data/demoScenario";
+import { type GraphNode, type GraphEdge, type EdgeStatus, type NodeType, type Scenario, getNodeLayer, layerMeta } from "@/data/demoScenario";
 
 
 interface InvestigationGraphProps {
