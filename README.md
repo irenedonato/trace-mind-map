@@ -149,3 +149,73 @@ source: video analysis
 - Human-in-the-loop
 - Explainability
 - Data sovereignty
+
+---
+
+## Local Development
+
+### Requirements
+- Node.js 20+
+- npm 10+
+
+### Install
+
+```bash
+npm install
+```
+
+### Run In Development
+
+```bash
+npm run dev
+```
+
+The Vite dev server runs on `http://localhost:8080`.
+
+### Production Build
+
+```bash
+npm run build
+```
+
+The deployable output is generated in `dist/`.
+
+### Preview The Production Build (local deploy simulation)
+
+```bash
+npm run build && npm run preview
+```
+
+Vite will print the URL, usually `http://localhost:4173`. This serves the real production bundle locally, identical to what gets deployed.
+
+## Lovable Compatibility
+
+This project was originally built with Lovable integration in mind.
+
+The Vite configuration loads `lovable-tagger` only when it is available in the environment and only in development mode. This keeps the project usable in both cases:
+
+- Local development without a Lovable-specific plugin install
+- Lovable environments where the plugin is provided
+
+If you later need full local Lovable tagging again, install a `lovable-tagger` version that is compatible with the Vite version used by this project, or downgrade Vite to a version supported by the Lovable plugin.
+
+## Deploy
+
+This is a static Vite application. Deploy the contents of `dist/` to any static hosting platform.
+
+Typical settings:
+
+- Build command: `npm run build`
+- Output directory: `dist`
+
+Examples of supported targets:
+
+- Vercel
+- Netlify
+- GitHub Pages
+- Nginx or Apache serving static files
+- S3 + CloudFront
+
+## Routing Note
+
+The app uses `BrowserRouter`. If you add real client-side routes beyond `/`, configure your hosting provider to rewrite unknown paths to `index.html` so deep links keep working.
