@@ -257,7 +257,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span
                       className="text-data px-2 py-1 rounded font-mono uppercase tracking-wider"
                       style={{
@@ -276,8 +276,20 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                         fontSize: "9px",
                       }}
                     >
-                      {Math.round(edge.confidence * 100)}% confidence
+                      conf {Math.round(edge.confidence * 100)}%
                     </span>
+                    {(() => {
+                      const p = getEdgeProbability(edge);
+                      return (
+                        <span
+                          className="text-data px-2 py-1 rounded font-mono border border-primary/40 bg-primary/10 text-primary"
+                          style={{ fontSize: "9px" }}
+                          title="Probabilistic weight that the relationship actually holds"
+                        >
+                          P(link) {Math.round(p * 100)}%
+                        </span>
+                      );
+                    })()}
                   </div>
 
                   {edge.rationaleSummary && (
