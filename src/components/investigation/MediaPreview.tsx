@@ -69,6 +69,22 @@ export function MediaPreview({ selectedNode, scenario, onClose }: MediaPreviewPr
               {media.caption}
             </div>
           )}
+
+          {/* External Deckard action */}
+          {node.deckardLink && (
+            <a
+              href={node.deckardLink.url}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-between gap-2 px-3 py-2 border-t border-border bg-primary/10 hover:bg-primary/15 transition-colors text-primary text-data font-mono uppercase tracking-wider"
+            >
+              <span className="flex items-center gap-2">
+                <ExternalLink className="w-3.5 h-3.5" />
+                {node.deckardLink.label}
+              </span>
+              <span className="text-muted-foreground/70 normal-case tracking-normal">deckard ↗</span>
+            </a>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
