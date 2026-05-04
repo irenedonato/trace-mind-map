@@ -986,7 +986,7 @@ export const vehicleScenario: Scenario = {
   agentLogs: vehicleAgentLogs,
   reasoningSteps: vehicleReasoningSteps,
   timelineEvents: vehicleTimelineEvents,
-  defaultHighlightChain: ["veh1", "vown", "vpc", "vsoc"],
+  defaultHighlightChain: ["vev1", "veh1", "vown", "vcrop", "vmatch", "vinf"],
 };
 
 // =====================================================================
