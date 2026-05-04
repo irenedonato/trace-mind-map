@@ -849,9 +849,7 @@ export const vehicleDemoEdges: GraphEdge[] = [
   { id: "ve1", source: "vev1", target: "veh1", type: "derivedFrom", label: "detected vehicle", confidence: 0.82, status: "observed", delay: 800, step: 1,
     rationaleSummary: "Vehicle descriptor extracted from the ANPR + camera event.",
     rationale: ["FIAT Tipo, black", "Partial plate GF-7K*2", "Stop duration 14m in short-stay zone"] },
-  { id: "ve2", source: "vev1", target: "veh1", type: "derivedFrom", label: "vehicle descriptor", confidence: 0.82, status: "observed", delay: 1100, step: 1,
-    rationaleSummary: "Vehicle profile derived from ANPR + camera observation.",
-    rationale: ["Make/model FIAT Tipo", "Black color", "Partial plate GF-7K*2"] },
+
 
   // STEP 2 — vehicle → owner
   { id: "ve3", source: "veh1", target: "vown", type: "linkedToProfile", label: "registered owner", confidence: 0.9, status: "observed", delay: 2200, step: 2,
