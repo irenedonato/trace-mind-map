@@ -8,6 +8,7 @@ export default defineConfig(async ({ mode }) => {
 
   if (mode === "development") {
     try {
+      // @ts-ignore - optional plugin only present in Lovable environment
       const { componentTagger } = await import("lovable-tagger");
       plugins.push(componentTagger());
     } catch {
