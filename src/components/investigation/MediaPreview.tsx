@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Camera } from "lucide-react";
+import { X, Camera, ExternalLink } from "lucide-react";
 import { type Scenario } from "@/data/demoScenario";
 
 interface MediaPreviewProps {
