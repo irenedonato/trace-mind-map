@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FileText, Brain, Clock, Video, Database, CreditCard, Info, ChevronRight, GitBranch, Mic, Image as ImageIcon, Network, ShieldCheck, Link2, CheckCircle2 } from "lucide-react";
-import { type EdgeStatus, type Scenario } from "@/data/demoScenario";
+import { type EdgeStatus, type Scenario, getNodeLayer, layerMeta, getEdgeProbability, getNodeTimestamp, getNodePrimarySource } from "@/data/demoScenario";
 
 interface RightPanelProps {
   selectedNode: string | null;
