@@ -887,13 +887,13 @@ export const vehicleDemoEdges: GraphEdge[] = [
   { id: "ve11", source: "vev2", target: "vwhloc", type: "occurredAt", label: "at",          confidence: 0.95, status: "validated", delay: 9500, step: 6 },
 
   // STEP 7 — supports → inference (all evidence supports the hypothesis)
-  { id: "vi1", source: "vev1",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.82, status: "inferred", delay: 11000, step: 7 },
-  { id: "vi2", source: "veh1",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.76, status: "inferred", delay: 11100, step: 7 },
-  { id: "vi3", source: "vown",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.9,  status: "inferred", delay: 11200, step: 7 },
-  { id: "vi4", source: "vcdr",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 1.0,  status: "inferred", delay: 11300, step: 7 },
-  { id: "vi5", source: "vtx",   target: "vinf", type: "derivedFrom", label: "supports", confidence: 1.0,  status: "inferred", delay: 11400, step: 7 },
-  { id: "vi6", source: "vcrop", target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.89, status: "inferred", delay: 11500, step: 7 },
-  { id: "vi7", source: "vmatch",target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.79, status: "inferred", delay: 11600, step: 7 },
+  { id: "vi1", source: "vev1",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.82, status: "hypothesis", inferred: true, delay: 11000, step: 7 },
+  { id: "vi2", source: "veh1",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.76, status: "hypothesis", inferred: true, delay: 11100, step: 7 },
+  { id: "vi3", source: "vown",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.9,  status: "hypothesis", inferred: true, delay: 11200, step: 7 },
+  { id: "vi4", source: "vcdr",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 1.0,  status: "hypothesis", inferred: true, delay: 11300, step: 7 },
+  { id: "vi5", source: "vtx",   target: "vinf", type: "derivedFrom", label: "supports", confidence: 1.0,  status: "hypothesis", inferred: true, delay: 11400, step: 7 },
+  { id: "vi6", source: "vcrop", target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.89, status: "hypothesis", inferred: true, delay: 11500, step: 7 },
+  { id: "vi7", source: "vmatch",target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.79, status: "hypothesis", inferred: true, delay: 11600, step: 7 },
 ];
 
 // ----- Agent log (vehicle scenario) -----
