@@ -114,6 +114,8 @@ export interface GraphNode {
   step?: number;
   /** Optional media image (URL or imported asset) shown in a floating preview window when the node is selected. */
   mediaImage?: { src: string; caption?: string };
+  /** Optional external action — e.g. open the source video in Deckard (separate app). */
+  deckardLink?: { url: string; label: string };
 }
 
 export interface GraphEdge {
