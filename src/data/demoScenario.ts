@@ -714,14 +714,6 @@ export const vehicleDemoNodes: GraphNode[] = [
       { source: "ANPR / City Camera", type: "log", reference: "anpr_event AE-22041 · partial plate", detail: "OCR confidence 0.76 on 5 of 7 characters", hash: "sha256:b2c1…aa31" },
     ],
   },
-  {
-    id: "vloc", type: "location", label: "Porta Susa", sublabel: "45.0729°N · 7.6660°E",
-    x: 110, y: 280, confidence: 0.99, delay: 900, step: 1,
-    sourceTrace: [
-      { source: "Geofence Service", type: "log", reference: "geofence_id GF-PS-001", detail: "Torino Porta Susa station perimeter", hash: "sha256:ce71…0042" },
-    ],
-  },
-
   // STEP 2 — Registered Owner
   {
     id: "vown", type: "owner", label: "Registered Owner", sublabel: "Andrea Ferraro",
