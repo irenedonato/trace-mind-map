@@ -1088,8 +1088,29 @@ function scaleScenario(s: Scenario, factor: number): Scenario {
   };
 }
 
+/**
+ * Auto-fills `layer`, `timestamp`, `primarySource` on every node and
+ * `probability` on every edge so existing scenario data does not need to
+ * be edited by hand to comply with the multi-layer model.
+ */
+function normalizeScenario(s: Scenario): Scenario {
+  return {
+    ...s,
+    nodes: s.nodes.map((n) => ({
+      ...n,
+      layer: getNodeLayer(n),
+      timestamp: getNodeTimestamp(n),
+      primarySource: getNodePrimarySource(n),
+    })),
+    edges: s.edges.map((e) => ({
+      ...e,
+      probability: getEdgeProbability(e),
+    })),
+  };
+}
+
 export function getScenario(mode: SeedMode): Scenario {
   const base = mode === "vehicle" ? vehicleScenario : visualScenario;
-  return scaleScenario(base, DEMO_SPEED_MULTIPLIER);
+  return scaleScenario(normalizeScenario(base), DEMO_SPEED_MULTIPLIER);
 }
 
