@@ -865,12 +865,12 @@ export const vehicleDemoEdges: GraphEdge[] = [
     rationale: ["€2,850 sent on 2026-05-03 19:42", "Recipient: LogiTorino Srl"] },
 
   // STEP 4 — event → cropped visual evidence
-  { id: "ve6", source: "vev1", target: "vcrop", type: "appearsInVideo", label: "visual evidence", confidence: 0.89, status: "observed", delay: 5700, step: 4,
-    rationaleSummary: "Deckard extracted a frame showing a person exiting the vehicle.",
-    rationale: ["Frame CR-22041 @ 08:19:11", "Camera porta_susa_cam_12", "Confidence 0.89"] },
-  { id: "ve7", source: "vcrop", target: "veh1", type: "appearsInVideo", label: "near vehicle", confidence: 0.89, status: "observed", delay: 5900, step: 4,
-    rationaleSummary: "Cropped person observed exiting driver side of the FIAT Tipo.",
-    rationale: ["Spatial overlap with vehicle bbox", "Same frame as vehicle detection"] },
+  { id: "ve6", source: "vev1", target: "vcrop", type: "appearsInVideo", label: "visual evidence", confidence: 0.78, status: "inferred", inferred: true, delay: 5700, step: 4,
+    rationaleSummary: "AI extracted a frame and associated a person to this vehicle event — not 100% certain it is the same vehicle/person.",
+    rationale: ["Frame CR-22041 @ 08:19:11", "Camera porta_susa_cam_12", "Vehicle re-id score 0.81", "Person-vehicle spatial association 0.78"] },
+  { id: "ve7", source: "vcrop", target: "veh1", type: "appearsInVideo", label: "near vehicle", confidence: 0.78, status: "inferred", inferred: true, delay: 5900, step: 4,
+    rationaleSummary: "Cropped person inferred to be exiting driver side of the FIAT Tipo based on spatial overlap.",
+    rationale: ["Spatial overlap with vehicle bbox", "Same frame as vehicle detection", "Association not visually confirmed"] },
 
   // STEP 5 — Deckard search match
   { id: "ve8", source: "vcrop", target: "vmatch", type: "linkedToProfile", label: "searched in Deckard", confidence: 0.79, status: "inferred", delay: 7500, step: 5,
