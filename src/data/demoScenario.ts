@@ -743,7 +743,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vtx", type: "evidence", label: "Suspicious Transaction", sublabel: "Transaction Evidence",
+    id: "vtx", type: "transaction_record", label: "Suspicious Transaction", sublabel: "Transaction Evidence",
     x: 880, y: 380, confidence: 1.0, delay: 4100, step: 3, eventTime: "19:42",
     facts: [
       { label: "Amount",    value: "€2,850" },
