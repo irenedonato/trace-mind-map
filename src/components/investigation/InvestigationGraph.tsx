@@ -328,20 +328,6 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
               >
                 <Icon className="w-5 h-5" style={{ color: typeColor }} />
               </div>
-                {/* Layer chip — bottom of node */}
-                <span
-                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1 rounded font-mono uppercase tracking-wider"
-                  style={{
-                    background: lm.color,
-                    color: "hsl(220, 20%, 7%)",
-                    fontSize: "7px",
-                    lineHeight: "10px",
-                  }}
-                  title={lm.label}
-                >
-                  {lm.abbrev}
-                </span>
-              </div>
 
               {/* Event-time chip (top-left) */}
               {node.eventTime && (
