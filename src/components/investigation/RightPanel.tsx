@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FileText, Brain, Clock, Video, Database, CreditCard, Info, ChevronRight, GitBranch, Mic, Image as ImageIcon, Network, ShieldCheck, Link2, CheckCircle2 } from "lucide-react";
-import { type EdgeStatus, type Scenario } from "@/data/demoScenario";
+import { type EdgeStatus, type Scenario, getNodeLayer, layerMeta, getEdgeProbability, getNodeTimestamp, getNodePrimarySource } from "@/data/demoScenario";
 
 interface RightPanelProps {
   selectedNode: string | null;
@@ -92,6 +92,45 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                     <span className="font-display text-sm text-primary mx-1">/</span>
                     <span className="text-data text-muted-foreground">{node.sublabel}</span>
                   </div>
+
+                  {/* Layer / timestamp / source metadata */}
+                  {(() => {
+                    const layer = getNodeLayer(node);
+                    const lm = layerMeta[layer];
+                    const ts = getNodeTimestamp(node);
+                    const src = getNodePrimarySource(node);
+                    return (
+                      <div className="flex flex-wrap items-center gap-1.5 text-data font-mono">
+                        <span
+                          className="px-1.5 py-0.5 rounded uppercase tracking-wider"
+                          style={{ background: lm.color, color: "hsl(220, 20%, 7%)", fontSize: "9px" }}
+                          title={lm.description}
+                        >
+                          {lm.label}
+                        </span>
+                        {ts && (
+                          <span className="px-1.5 py-0.5 rounded bg-secondary text-foreground/80 border border-border" style={{ fontSize: "9px" }}>
+                            ⏱ {ts}
+                          </span>
+                        )}
+                        {src && (
+                          <span className="px-1.5 py-0.5 rounded bg-secondary text-foreground/80 border border-border" style={{ fontSize: "9px" }}>
+                            ◈ {src.channel} · {src.label}
+                          </span>
+                        )}
+                        <span
+                          className="px-1.5 py-0.5 rounded font-mono ml-auto"
+                          style={{
+                            background: node.confidence >= 0.9 ? "hsl(160, 84%, 39%)" : node.confidence >= 0.8 ? "hsl(38, 92%, 50%)" : "hsl(0, 84%, 60%)",
+                            color: "hsl(220, 20%, 7%)",
+                            fontSize: "9px",
+                          }}
+                        >
+                          conf {Math.round(node.confidence * 100)}%
+                        </span>
+                      </div>
+                    );
+                  })()}
 
                   {/* Evidence card — structured facts (Camera/Time/Detection/Attribute…) */}
                   {node.facts && node.facts.length > 0 && (
@@ -218,7 +257,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span
                       className="text-data px-2 py-1 rounded font-mono uppercase tracking-wider"
                       style={{
@@ -237,8 +276,20 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                         fontSize: "9px",
                       }}
                     >
-                      {Math.round(edge.confidence * 100)}% confidence
+                      conf {Math.round(edge.confidence * 100)}%
                     </span>
+                    {(() => {
+                      const p = getEdgeProbability(edge);
+                      return (
+                        <span
+                          className="text-data px-2 py-1 rounded font-mono border border-primary/40 bg-primary/10 text-primary"
+                          style={{ fontSize: "9px" }}
+                          title="Probabilistic weight that the relationship actually holds"
+                        >
+                          P(link) {Math.round(p * 100)}%
+                        </span>
+                      );
+                    })()}
                   </div>
 
                   {edge.rationaleSummary && (

@@ -51,14 +51,58 @@ export type EdgeType =
   | "occurredAt";
 export type EdgeStatus = "observed" | "inferred" | "hypothesis" | "validated";
 
+/**
+ * Multi-layer taxonomy for investigation graphs.
+ *  - observation : raw, atomic data captured from a sensor or feed
+ *                  (CCTV crop, ANPR read, CDR row, transaction line, voice sample, social post…)
+ *  - entity      : real-world things the investigation is about
+ *                  (person, vehicle, device, owner, social profile, location)
+ *  - event       : spatio-temporal occurrences
+ *                  (a sighting, a call, a money transfer, a detection moment)
+ *  - inference   : AI-generated hypotheses bridging the other layers
+ *                  (candidate identity, speaker cluster, "driver ≈ owner" guess)
+ */
+export type NodeLayer = "observation" | "entity" | "event" | "inference";
+
+/** Source channel a piece of data was captured from. */
+export type SourceChannel =
+  | "video"
+  | "audio"
+  | "telecom"
+  | "transaction"
+  | "social"
+  | "registry"
+  | "geo"
+  | "case";
+
+export interface NodeSource {
+  channel: SourceChannel;
+  label: string;
+}
+
+/** Inclusive time range (ISO strings or scenario-clock strings). */
+export interface TimeRange {
+  start: string;
+  end: string;
+}
+
 export interface GraphNode {
   id: string;
   type: NodeType;
+  /** Investigation layer — see {@link NodeLayer}. Auto-derived from `type` if omitted. */
+  layer?: NodeLayer;
   label: string;
   sublabel?: string;
   x: number;
   y: number;
+  /** Confidence score in [0,1] that this node is correct/relevant. */
   confidence: number;
+  /** Single timestamp (instant) for this node — auto-filled from `eventTime` or sourceTrace. */
+  timestamp?: string;
+  /** Time range when the node represents a window rather than an instant. */
+  timeRange?: TimeRange;
+  /** Primary source channel — auto-derived from `sourceTrace` if omitted. */
+  primarySource?: NodeSource;
   evidence?: Evidence[];
   /** Structured fact-list for evidence nodes (Camera/Time/Detection/Attribute…) */
   facts?: EvidenceFact[];
@@ -76,7 +120,14 @@ export interface GraphEdge {
   target: string;
   type: EdgeType;
   label: string;
+  /** Confidence the link is meaningful (model/source quality). */
   confidence: number;
+  /**
+   * Probabilistic weight in [0,1] that the relationship actually holds.
+   * Defaults to `confidence` when the link is `observed`/`validated`,
+   * and to a slightly discounted value for `inferred`/`hypothesis`.
+   */
+  probability?: number;
   /** @deprecated use `status` instead. Kept for backwards compatibility. */
   inferred?: boolean;
   status: EdgeStatus;
@@ -88,6 +139,93 @@ export interface GraphEdge {
   /** Demo progression step (1-8) this edge belongs to */
   step?: number;
 }
+
+// ---------------------------------------------------------------------
+// Layer / source / probability helpers — used to auto-enrich nodes and
+// edges so existing scenario data does not need to be hand-edited.
+// ---------------------------------------------------------------------
+
+const NODE_TYPE_TO_LAYER: Record<NodeType, NodeLayer> = {
+  // entities
+  case: "entity",
+  person_candidate: "inference",
+  person: "entity",
+  vehicle: "entity",
+  owner: "entity",
+  device: "entity",
+  social_profile: "entity",
+  social: "entity",
+  location: "entity",
+  entity: "entity",
+  speaker: "inference",
+
+  // events (spatio-temporal occurrences)
+  event: "event",
+
+  // observations (raw atomic captures)
+  video: "observation",
+  video_detection: "observation",
+  crop: "observation",
+  document: "observation",
+  voice_sample: "observation",
+  communications_log: "observation",
+  transaction: "observation",
+  transaction_record: "observation",
+  vehicle_registration: "observation",
+  evidence: "observation",
+  video_evidence: "observation",
+  audio_evidence: "observation",
+  image_evidence: "observation",
+};
+
+const SOURCE_TYPE_TO_CHANNEL: Record<SourceTraceItem["type"], SourceChannel> = {
+  video: "video",
+  audio: "audio",
+  log: "telecom",
+  transaction: "transaction",
+  image: "social",
+  vector: "video",
+  nlp: "social",
+};
+
+export function getNodeLayer(node: GraphNode): NodeLayer {
+  return node.layer ?? NODE_TYPE_TO_LAYER[node.type] ?? "entity";
+}
+
+export function getNodePrimarySource(node: GraphNode): NodeSource | undefined {
+  if (node.primarySource) return node.primarySource;
+  const first = node.sourceTrace?.[0];
+  if (!first) return undefined;
+  return { channel: SOURCE_TYPE_TO_CHANNEL[first.type] ?? "case", label: first.source };
+}
+
+export function getNodeTimestamp(node: GraphNode): string | undefined {
+  return (
+    node.timestamp ??
+    node.eventTime ??
+    node.sourceTrace?.find((s) => s.timestamp)?.timestamp ??
+    node.evidence?.[0]?.timestamp
+  );
+}
+
+export function getEdgeProbability(edge: GraphEdge): number {
+  if (typeof edge.probability === "number") return edge.probability;
+  // Discount inferred/hypothesis links so probability ≠ confidence.
+  switch (edge.status) {
+    case "validated": return Math.min(1, edge.confidence);
+    case "observed":  return edge.confidence;
+    case "inferred":  return edge.confidence * 0.9;
+    case "hypothesis": return edge.confidence * 0.75;
+    default: return edge.confidence;
+  }
+}
+
+export const layerMeta: Record<NodeLayer, { label: string; color: string; abbrev: string; description: string }> = {
+  observation: { label: "Observation", abbrev: "OBS", color: "hsl(160, 84%, 39%)", description: "Raw data captured from a sensor or feed" },
+  entity:      { label: "Entity",      abbrev: "ENT", color: "hsl(212, 90%, 60%)", description: "People, vehicles, devices, locations" },
+  event:       { label: "Event",       abbrev: "EVT", color: "hsl(45, 95%, 60%)",  description: "Spatio-temporal occurrence" },
+  inference:   { label: "Inference",   abbrev: "INF", color: "hsl(280, 70%, 65%)", description: "AI-generated hypothesis" },
+};
 
 export interface Evidence {
   type: "video" | "log" | "transaction" | "metadata";
@@ -950,8 +1088,29 @@ function scaleScenario(s: Scenario, factor: number): Scenario {
   };
 }
 
+/**
+ * Auto-fills `layer`, `timestamp`, `primarySource` on every node and
+ * `probability` on every edge so existing scenario data does not need to
+ * be edited by hand to comply with the multi-layer model.
+ */
+function normalizeScenario(s: Scenario): Scenario {
+  return {
+    ...s,
+    nodes: s.nodes.map((n) => ({
+      ...n,
+      layer: getNodeLayer(n),
+      timestamp: getNodeTimestamp(n),
+      primarySource: getNodePrimarySource(n),
+    })),
+    edges: s.edges.map((e) => ({
+      ...e,
+      probability: getEdgeProbability(e),
+    })),
+  };
+}
+
 export function getScenario(mode: SeedMode): Scenario {
   const base = mode === "vehicle" ? vehicleScenario : visualScenario;
-  return scaleScenario(base, DEMO_SPEED_MULTIPLIER);
+  return scaleScenario(normalizeScenario(base), DEMO_SPEED_MULTIPLIER);
 }
 

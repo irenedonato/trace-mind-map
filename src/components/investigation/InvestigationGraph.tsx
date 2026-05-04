@@ -5,7 +5,7 @@ import {
   Briefcase, Calendar, UserSearch, ScanFace, Crop, FileText, Tag, Mic, Volume2, MessageSquare,
   Car, ClipboardList, IdCard, Fingerprint, FileSearch, Camera, Headphones, Image as ImageIcon,
 } from "lucide-react";
-import { type GraphNode, type GraphEdge, type EdgeStatus, type NodeType, type Scenario } from "@/data/demoScenario";
+import { type GraphNode, type GraphEdge, type EdgeStatus, type NodeType, type Scenario, getNodeLayer, layerMeta } from "@/data/demoScenario";
 
 
 interface InvestigationGraphProps {
@@ -292,6 +292,8 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
             node.type === "video_evidence" ||
             node.type === "audio_evidence" ||
             node.type === "image_evidence";
+          const layer = getNodeLayer(node);
+          const lm = layerMeta[layer];
 
           return (
             <motion.div
@@ -322,19 +324,19 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
                 } group-hover:brightness-125`}
               >
                 <Icon className="w-5 h-5" style={{ color: nodeColors[node.type] }} />
-                {isEvidence && (
-                  <span
-                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1 rounded font-mono uppercase tracking-wider"
-                    style={{
-                      background: nodeColors[node.type],
-                      color: "hsl(220, 20%, 7%)",
-                      fontSize: "7px",
-                      lineHeight: "10px",
-                    }}
-                  >
-                    EVIDENCE
-                  </span>
-                )}
+                {/* Layer chip — bottom of node */}
+                <span
+                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1 rounded font-mono uppercase tracking-wider"
+                  style={{
+                    background: lm.color,
+                    color: "hsl(220, 20%, 7%)",
+                    fontSize: "7px",
+                    lineHeight: "10px",
+                  }}
+                  title={lm.label}
+                >
+                  {lm.abbrev}
+                </span>
               </div>
 
               {/* Event-time chip (top-left) */}
@@ -387,6 +389,24 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
                 <line x1="0" y1="3" x2="22" y2="3" stroke={s.stroke} strokeWidth="2" strokeDasharray={s.dash} />
               </svg>
               <span className="text-foreground/80">{key}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Layer legend */}
+      {visibleNodes.length > 0 && (
+        <div className="absolute bottom-3 left-3 surface-glass border border-border rounded px-3 py-2 text-[9px] font-mono space-y-1 z-10">
+          <div className="text-muted-foreground uppercase tracking-wider mb-1">Node layer</div>
+          {(Object.entries(layerMeta) as [keyof typeof layerMeta, typeof layerMeta[keyof typeof layerMeta]][]).map(([key, m]) => (
+            <div key={key} className="flex items-center gap-2">
+              <span
+                className="px-1 rounded uppercase tracking-wider"
+                style={{ background: m.color, color: "hsl(220, 20%, 7%)", fontSize: "8px", lineHeight: "11px" }}
+              >
+                {m.abbrev}
+              </span>
+              <span className="text-foreground/80">{m.label}</span>
             </div>
           ))}
         </div>
