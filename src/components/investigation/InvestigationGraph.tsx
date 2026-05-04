@@ -292,8 +292,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
             node.type === "video_evidence" ||
             node.type === "audio_evidence" ||
             node.type === "image_evidence";
-          const layer = getNodeLayer(node);
-          const lm = layerMeta[layer];
+          const typeColor = nodeColors[node.type];
 
           return (
             <motion.div
@@ -309,21 +308,26 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
               {(isSelected || inPath) && (
                 <motion.div
                   className={`absolute -inset-2 ${isEvidence ? "rounded-lg" : "rounded-full"}`}
-                  style={{ background: `radial-gradient(circle, ${nodeColors[node.type]}33, transparent)` }}
+                  style={{ background: `radial-gradient(circle, ${typeColor}33, transparent)` }}
                   animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
               )}
 
-              {/* Node shape — circle for entities, rounded square for evidence */}
+              {/* Node shape — colored by node type */}
               <div
                 className={`relative w-14 h-14 ${
                   isEvidence ? "rounded-lg" : "rounded-full"
-                } border-2 flex items-center justify-center transition-all ${nodeBgClass[node.type]} ${
+                } border-2 flex items-center justify-center transition-all ${
                   isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""
                 } group-hover:brightness-125`}
+                style={{
+                  background: `${typeColor}33`,
+                  borderColor: typeColor,
+                }}
               >
-                <Icon className="w-5 h-5" style={{ color: nodeColors[node.type] }} />
+                <Icon className="w-5 h-5" style={{ color: typeColor }} />
+              </div>
                 {/* Layer chip — bottom of node */}
                 <span
                   className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1 rounded font-mono uppercase tracking-wider"
