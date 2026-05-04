@@ -353,17 +353,19 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
                 )}
               </div>
 
-              {/* Confidence badge */}
-              <div
-                className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded text-data font-medium"
-                style={{
-                  background: node.confidence >= 0.9 ? "hsl(160, 84%, 39%)" : node.confidence >= 0.8 ? "hsl(38, 92%, 50%)" : "hsl(0, 84%, 60%)",
-                  color: "hsl(220, 20%, 7%)",
-                  fontSize: "9px",
-                }}
-              >
-                {Math.round(node.confidence * 100)}%
-              </div>
+              {/* Confidence badge — only shown for AI-inferred nodes (observed nodes are certain) */}
+              {node.type === "inference" && (
+                <div
+                  className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded text-data font-medium"
+                  style={{
+                    background: node.confidence >= 0.9 ? "hsl(160, 84%, 39%)" : node.confidence >= 0.8 ? "hsl(38, 92%, 50%)" : "hsl(0, 84%, 60%)",
+                    color: "hsl(220, 20%, 7%)",
+                    fontSize: "9px",
+                  }}
+                >
+                  {Math.round(node.confidence * 100)}%
+                </div>
+              )}
             </motion.div>
           );
         })}
