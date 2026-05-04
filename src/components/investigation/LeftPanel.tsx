@@ -18,8 +18,8 @@ export function LeftPanel({ onLaunch, isRunning, seedMode, totalMs }: LeftPanelP
   // Reset seed inputs when the mode changes
   useEffect(() => {
     if (seedMode === "vehicle") {
-      setSeedValue("FIAT Tipo · plate AB123**");
-      setTimeRange("12 Apr 2026 · 17:00–20:00");
+      setSeedValue("Black FIAT Tipo · partial plate GF-7K*2");
+      setTimeRange("4 May 2026 · 08:00–10:00");
     } else {
       setSeedValue('"man wearing a red sweatshirt"');
       setTimeRange("72h lookback");
