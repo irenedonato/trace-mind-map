@@ -965,7 +965,8 @@ export const vehicleTimelineEvents = [
   { time: "2026-05-04 07:39", event: "Last call to recurring unknown number", entity: "vcdr" },
   { time: "2026-05-04 08:17", event: "Suspicious vehicle detected at Porta Susa", entity: "vev1" },
   { time: "2026-05-04 08:18", event: "Registry resolves owner: Andrea Ferraro", entity: "vown" },
-  { time: "2026-05-04 08:19", event: "Deckard frame: person exits FIAT Tipo", entity: "vcrop" },
+  { time: "2025-11-22 (prior)", event: "US partner agency flagged subject (Midwest transit hubs)", entity: "vflag" },
+  { time: "2026-05-04 08:19", event: "Deckard frame: woman exits FIAT Tipo (passenger side)", entity: "vcrop" },
   { time: "2026-05-04 09:06", event: "Deckard match at logistics warehouse", entity: "vmatch" },
   { time: "2026-05-04 09:10", event: "AI hypothesis assembled", entity: "vinf" },
 ];
