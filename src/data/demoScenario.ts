@@ -761,11 +761,11 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 4 — Cropped visual evidence (Deckard frame export)
   {
-    id: "vcrop", type: "image_evidence", label: "Person Exiting Vehicle", sublabel: "Deckard frame · CCTV-12",
+    id: "vcrop", type: "image_evidence", label: "Woman Exiting Vehicle", sublabel: "Deckard frame · CCTV-12",
     x: 280, y: 410, confidence: 0.89, delay: 5500, step: 4, eventTime: "08:19",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_portasusa.png", import.meta.url).href,
-      caption: "Porta Susa Cam 12 · 08:19:11 — adult male exits driver side of black FIAT Tipo",
+      caption: "Porta Susa Cam 12 · 08:19:11 — adult female exits passenger side of black FIAT Tipo (owner is male — driver identity not confirmed)",
     },
     deckardLink: {
       url: "https://deckard.example/case/CASE-2026-0504/clip/CR-22041",
