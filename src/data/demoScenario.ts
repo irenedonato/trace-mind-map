@@ -902,11 +902,6 @@ export const vehicleDemoEdges: GraphEdge[] = [
     rationaleSummary: "US partner agency dossier portrait matches the Porta Susa crop via face embedding.",
     rationale: ["Cosine similarity 0.83 between dossier portrait and CR-22041", "Subject previously flagged as suspicious by US partner agency", "Behavioral pattern: presence near transit hubs with persons of interest"] },
 
-  // STEP 4c — explicit mismatch flag: passenger ≠ registered owner (validation request)
-  { id: "ve7c", source: "vcrop", target: "vown", type: "linkedToProfile", label: "not matching registered owner", confidence: 0.95, status: "hypothesis", inferred: true, delay: 6500, step: 4,
-    rationaleSummary: "Validation requested: the observed passenger is female, the registered owner is male — identity of the actual driver is unconfirmed.",
-    rationale: ["Passenger gender ≠ owner gender", "No direct evidence the owner is in the vehicle", "Analyst validation required"] },
-
   // STEP 5 — Deckard search match
   { id: "ve8", source: "vcrop", target: "vmatch", type: "linkedToProfile", label: "searched in Deckard", confidence: 0.79, status: "inferred", delay: 7500, step: 5,
     rationaleSummary: "Cross-feed visual search returned a likely second appearance.",
