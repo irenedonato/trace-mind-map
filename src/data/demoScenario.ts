@@ -755,7 +755,7 @@ export const vehicleDemoNodes: GraphNode[] = [
       { type: "transaction", title: "Bank Transfer", detail: "€2,850 sent to a logistics-related account (warehouse service provider) the evening before the Porta Susa event.", timestamp: "2026-05-03T19:42:00Z" },
     ],
     sourceTrace: [
-      { source: "Financial Records", type: "transaction", reference: "tx_id TR-99820", detail: "Sender account ITXX XXXX XXXX (owner) → recipient 'LogiTorino Srl'", hash: "sha256:31bb…e4f7", timestamp: "2026-05-03T19:42:00Z" },
+      { source: "Financial Records", type: "transaction", reference: "tx_id TR-99820", detail: "Sender account ITXX XXXX XXXX (owner) → recipient 'ID Logistics'", hash: "sha256:31bb…e4f7", timestamp: "2026-05-03T19:42:00Z" },
     ],
   },
 
@@ -876,7 +876,7 @@ export const vehicleDemoEdges: GraphEdge[] = [
     rationale: ["14 calls in 72h", "Recurring peer", "Last call 38m before Porta Susa event"] },
   { id: "ve5", source: "vown", target: "vtx", type: "sentMoneyTo", label: "made transaction", confidence: 1.0, status: "observed", delay: 4300, step: 3,
     rationaleSummary: "Bank transfer from owner's account to a warehouse service provider.",
-    rationale: ["€2,850 sent on 2026-05-03 19:42", "Recipient: LogiTorino Srl"] },
+    rationale: ["€2,850 sent on 2026-05-03 19:42", "Recipient: ID Logistics"] },
 
   // STEP 4 — event → cropped visual evidence
   { id: "ve6", source: "vev1", target: "vcrop", type: "appearsInVideo", label: "visual evidence", confidence: 0.78, status: "inferred", inferred: true, delay: 5700, step: 4,
@@ -900,7 +900,7 @@ export const vehicleDemoEdges: GraphEdge[] = [
   { id: "ve11", source: "vmatch", target: "vwhloc", type: "occurredAt", label: "at", confidence: 0.95, status: "validated", delay: 9500, step: 6 },
   { id: "ve_cdr_wh", source: "vcdr", target: "vwhloc", type: "called", label: "call to site", confidence: 1.0, status: "observed", delay: 9700, step: 6,
     rationaleSummary: "One of the recurring numbers in the call pattern resolves to a line registered at the logistics site.",
-    rationale: ["Recipient number registered to 'LogiTorino Srl'", "Same site as the visual match", "Call placed within the 72h pattern window"] },
+    rationale: ["Recipient number registered to 'ID Logistics'", "Same site as the visual match", "Call placed within the 72h pattern window"] },
 
   // STEP 7 — supports → inference (all evidence supports the hypothesis)
   { id: "vi1", source: "vev1",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.82, status: "hypothesis", inferred: true, delay: 11000, step: 7 },
@@ -915,7 +915,7 @@ export const vehicleDemoEdges: GraphEdge[] = [
   { id: "vi5", source: "vtx",   target: "vinf", type: "derivedFrom", label: "supports", confidence: 1.0,  status: "hypothesis", inferred: true, delay: 11400, step: 7,
     rationaleSummary: "Recent financial transfer to a logistics service provider within 12 hours of the observed activity — consistent with pre-event operational setup.",
     rationale: [
-      "€2,850 transfer to 'LogiTorino Srl' (warehouse service provider)",
+      "€2,850 transfer to 'ID Logistics' (warehouse service provider)",
       "Executed within 12 hours of the Porta Susa event",
       "Pattern consistent with pre-event operational setup",
       "Correlation, not proof of coordination",
@@ -933,7 +933,7 @@ export const vehicleAgentLogs: { message: string; delay: number; level: "info" |
   { message: "Registry MATCH: plate GF-7KQ2 → owner Andrea Ferraro (OWN-7741)", delay: 2400, level: "success" },
   { message: "CDR pull: 14 calls in 72h to a recurring unknown number", delay: 3800, level: "info" },
   { message: "Last call placed 38m before Porta Susa detection", delay: 4000, level: "warning" },
-  { message: "Banking records: €2,850 sent 2026-05-03 19:42 to 'LogiTorino Srl'", delay: 4300, level: "warning" },
+  { message: "Banking records: €2,850 sent 2026-05-03 19:42 to 'ID Logistics'", delay: 4300, level: "warning" },
   { message: "Deckard: extracting frame CR-22041 — woman exits passenger side", delay: 5700, level: "info" },
   { message: "Face match: subject = US partner agency dossier PA-USA-3318 (sim 0.83)", delay: 6100, level: "warning" },
   { message: "Prior intel: subject flagged for presence at US transit hubs with persons of interest", delay: 6400, level: "warning" },
