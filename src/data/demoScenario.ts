@@ -728,7 +728,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 3 — Telecom + Financial evidence
   {
-    id: "vcdr", type: "communications_log", label: "Recent Call Pattern", sublabel: "CDR · 14 calls / 72h",
+    id: "vcdr", type: "communications_log", label: "Telecom Activity Pattern", sublabel: "14 calls / 72h · recurrent unknown contact · peak before event",
     x: 880, y: 240, confidence: 1.0, delay: 3700, step: 3, eventTime: "07:39",
     facts: [
       { label: "Calls",    value: "14 in last 72h" },
@@ -743,7 +743,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vtx", type: "transaction_record", label: "Transaction", sublabel: "Transaction Evidence",
+    id: "vtx", type: "transaction_record", label: "Financial Activity (Correlated Event)", sublabel: "€2,850 → warehouse service provider · night prior to event",
     x: 880, y: 380, confidence: 1.0, delay: 4100, step: 3, eventTime: "19:42",
     facts: [
       { label: "Amount",    value: "€2,850" },
@@ -812,7 +812,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 5 — Deckard search result (visual match elsewhere)
   {
-    id: "vmatch", type: "image_evidence", label: "Same Individual Detected Again", sublabel: "Deckard visual search · warehouse",
+    id: "vmatch", type: "image_evidence", label: "Recurring Individual Detection", sublabel: "Visual match across frames · proximity to vehicle & later site · cross-camera correlation enabled",
     x: 480, y: 410, confidence: 0.79, delay: 7300, step: 5, eventTime: "09:06",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_logistica.png", import.meta.url).href,
@@ -836,7 +836,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vwhloc", type: "location", label: "Logistics Warehouse", sublabel: "Turin outskirts",
+    id: "vwhloc", type: "location", label: "Logistics Facility (Validated Location)", sublabel: "Industrial zone — Turin outskirts · geospatial correlation · irregular access windows",
     x: 680, y: 320, confidence: 0.92, delay: 7700, step: 5,
     sourceTrace: [
       { source: "Geo-registry", type: "log", reference: "site_id WH-7712", detail: "Industrial warehouse, Turin outskirts", hash: "sha256:42aa…02de" },
@@ -845,7 +845,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 6 — Warehouse appearance event
   {
-    id: "vev2", type: "event", label: "Warehouse Appearance", sublabel: "09:06 · Turin outskirts",
+    id: "vev2", type: "event", label: "Subject Presence at Logistics Site", sublabel: "09:06 · visual confirmation (low res) · movement consistent with prior subject",
     x: 680, y: 460, confidence: 0.79, delay: 9100, step: 6, eventTime: "09:06",
     evidence: [
       { type: "metadata", title: "Spatio-temporal Event", detail: "Same individual appears near a logistics warehouse less than one hour after the Porta Susa event.", timestamp: "2026-05-04T09:06:42Z" },
@@ -857,7 +857,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 7 — AI inference
   {
-    id: "vinf", type: "person_candidate", label: "Possible Coordinated Logistics Activity", sublabel: "AI hypothesis · INF-014",
+    id: "vinf", type: "person_candidate", label: "Hypothesis: Coordinated Logistics Operation", sublabel: "Multi-source correlation · vehicle + unknown individual + logistics + financial/telecom · confidence: medium",
     x: 460, y: 600, confidence: 0.74, delay: 10900, step: 7, eventTime: "09:10",
     evidence: [
       { type: "metadata", title: "AI-generated Hypothesis", detail: "Vehicle detection, owner records, recent calls, suspicious financial transaction, and a second visual match together suggest possible coordinated logistics activity.", timestamp: "2026-05-04T09:10:00Z" },
