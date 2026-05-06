@@ -778,10 +778,35 @@ export const vehicleDemoNodes: GraphNode[] = [
       { label: "Confidence",value: "0.89" },
     ],
     evidence: [
-      { type: "video", title: "Cropped Frame", detail: "Image of a person exiting the black FIAT Tipo, extracted from CCTV-12 by Deckard. Full video review must be performed in Deckard.", timestamp: "2026-05-04T08:19:11Z" },
+      { type: "video", title: "Cropped Frame", detail: "Image of a woman exiting the passenger side of the black FIAT Tipo, extracted from CCTV-12 by Deckard. Vehicle owner is male — driver identity not confirmed. Full video review must be performed in Deckard.", timestamp: "2026-05-04T08:19:11Z" },
     ],
     sourceTrace: [
       { source: "Deckard — CCTV-12 export", type: "image", reference: "frame_id CR-22041 / vector_id VEC-77c12", detail: "Frame export only — full video resides in Deckard", hash: "sha256:9f2a…b71c", timestamp: "2026-05-04T08:19:11Z" },
+    ],
+  },
+
+  // STEP 4b — Partner agency prior flag on the same individual
+  {
+    id: "vflag", type: "image_evidence", label: "Partner Agency Flag", sublabel: "US partner · prior sightings",
+    x: 80, y: 410, confidence: 0.83, delay: 6100, step: 4, eventTime: "prior",
+    mediaImage: {
+      src: new URL("../assets/donna_sospetta_midwestUSA.png", import.meta.url).href,
+      caption: "US partner agency dossier · subject repeatedly observed near Midwest transit hubs with persons of interest",
+    },
+    facts: [
+      { label: "Source",    value: "Partner agency (US)" },
+      { label: "Dossier",   value: "PA-USA-3318" },
+      { label: "Status",    value: "Suspicious — no charges" },
+      { label: "Pattern",   value: "Frequent presence at transport hubs" },
+      { label: "Associates",value: "Observed with flagged individuals" },
+    ],
+    evidence: [
+      { type: "metadata", title: "Partner Agency Dossier", detail: "Subject was previously flagged in the United States by a partner intelligence agency: repeatedly observed near Midwest transit hubs (bus terminals, freight yards) and frequently in the company of persons of interest. No charges filed; classified as 'suspicious — monitor'.", timestamp: "2025-11-22T00:00:00Z" },
+      { type: "metadata", title: "Face Match", detail: "Face embedding from partner dossier matches the Porta Susa crop with similarity 0.83.", timestamp: "2026-05-04T08:21:00Z" },
+    ],
+    sourceTrace: [
+      { source: "Partner Agency (US) — Dossier PA-USA-3318", type: "image", reference: "dossier_id PA-USA-3318", detail: "Photo + behavioral notes shared via international liaison channel", hash: "sha256:55cd…11ab", timestamp: "2025-11-22T00:00:00Z" },
+      { source: "Face Match Service", type: "vector", reference: "face_match FM-44021", detail: "Cosine similarity 0.83 between dossier portrait and crop CR-22041", hash: "sha256:77ee…22df" },
     ],
   },
 
