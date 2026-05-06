@@ -924,6 +924,7 @@ export const vehicleDemoEdges: GraphEdge[] = [
   { id: "vi5", source: "vtx",   target: "vinf", type: "derivedFrom", label: "supports", confidence: 1.0,  status: "hypothesis", inferred: true, delay: 11400, step: 7 },
   { id: "vi6", source: "vcrop", target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.89, status: "hypothesis", inferred: true, delay: 11500, step: 7 },
   { id: "vi7", source: "vmatch",target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.79, status: "hypothesis", inferred: true, delay: 11600, step: 7 },
+  { id: "vi8", source: "vflag", target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.83, status: "hypothesis", inferred: true, delay: 11700, step: 7 },
 ];
 
 // ----- Agent log (vehicle scenario) -----
