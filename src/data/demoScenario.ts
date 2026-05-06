@@ -918,8 +918,6 @@ export const vehicleDemoEdges: GraphEdge[] = [
 
   // STEP 7 — supports → inference (all evidence supports the hypothesis)
   { id: "vi1", source: "vev1",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.82, status: "hypothesis", inferred: true, delay: 11000, step: 7 },
-  { id: "vi2", source: "veh1",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.76, status: "hypothesis", inferred: true, delay: 11100, step: 7 },
-  { id: "vi3", source: "vown",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.9,  status: "hypothesis", inferred: true, delay: 11200, step: 7 },
   { id: "vi4", source: "vcdr",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 1.0,  status: "hypothesis", inferred: true, delay: 11300, step: 7,
     rationaleSummary: "Elevated call frequency to a recurrent unidentified number, peaking prior to the observed event — suggesting possible coordination.",
     rationale: [
