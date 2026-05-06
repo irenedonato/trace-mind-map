@@ -815,7 +815,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     id: "vmatch", type: "image_evidence", label: "Same Individual Detected Again", sublabel: "Deckard visual search · warehouse",
     x: 480, y: 410, confidence: 0.79, delay: 7300, step: 5, eventTime: "09:06",
     mediaImage: {
-      src: new URL("../assets/deckard-warehouse-match.jpg", import.meta.url).href,
+      src: new URL("../assets/donna_sospetta_logistica.png", import.meta.url).href,
       caption: "Deckard match · logistics warehouse, Turin outskirts · 09:06:42",
     },
     deckardLink: {
