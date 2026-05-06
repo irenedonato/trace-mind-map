@@ -812,7 +812,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 5 — Deckard search result (visual match elsewhere)
   {
-    id: "vmatch", type: "image_evidence", label: "Recurring Individual Detection", sublabel: "Visual match across frames · proximity to vehicle & later site · cross-camera correlation enabled",
+    id: "vmatch", type: "image_evidence", label: "Recurring Match", sublabel: "Cross-camera · 09:06",
     x: 480, y: 410, confidence: 0.79, delay: 7300, step: 5, eventTime: "09:06",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_logistica.png", import.meta.url).href,
