@@ -952,10 +952,10 @@ export const vehicleReasoningSteps = [
   { step: 1, title: "Suspicious Vehicle Detected", detail: "Black FIAT Tipo flagged at Porta Susa: overstay in short-stay zone, partial plate 'GF-7K*2', and prefix matches a vehicle seen near another sensitive site recently.", confidence: 0.82 },
   { step: 2, title: "Owner Resolution", detail: "Partial plate + make/model uniquely match plate GF-7KQ2 in MIT registry, registered to Andrea Ferraro.", confidence: 0.9 },
   { step: 3, title: "Telecom + Financial Context", detail: "14 calls in 72h to a recurring unknown number (last 38m before the event) and a €2,850 transfer to a warehouse service provider the night before.", confidence: 1.0 },
-  { step: 4, title: "Visual Evidence", detail: "Deckard exports a cropped frame from CCTV-12 showing a person exiting the driver side of the FIAT Tipo at 08:19.", confidence: 0.89 },
-  { step: 5, title: "Deckard Visual Search", detail: "Cross-feed visual search returns a likely second appearance of the same individual near a logistics warehouse on the Turin outskirts at 09:06.", confidence: 0.79 },
+  { step: 4, title: "Visual Evidence", detail: "Deckard exports a cropped frame from CCTV-12 showing a woman exiting the passenger side of the FIAT Tipo at 08:19. The vehicle owner is male — driver identity remains unconfirmed.", confidence: 0.89 },
+  { step: 5, title: "Partner Agency Match & Deckard Visual Search", detail: "Face match against a US partner agency dossier (PA-USA-3318) identifies the woman as a previously flagged subject — repeatedly observed near Midwest transit hubs with persons of interest. A cross-feed visual search returns a likely second appearance near a logistics warehouse on the Turin outskirts at 09:06.", confidence: 0.81 },
   { step: 6, title: "Warehouse Appearance Event", detail: "Spatio-temporal event built from the Deckard match anchored to warehouse coordinates.", confidence: 0.79 },
-  { step: 7, title: "AI Hypothesis", detail: "Vehicle, owner, recent comms, financial transfer, and second visual match jointly support 'Possible coordinated logistics activity'.", confidence: 0.74 },
+  { step: 7, title: "AI Hypothesis", detail: "Vehicle, owner, recent comms, financial transfer, partner-agency prior, and second visual match jointly support 'Possible coordinated logistics activity'.", confidence: 0.78 },
   { step: 8, title: "Analyst Validation", detail: "Inferred links remain HYPOTHESIS until promoted by the analyst.", confidence: 0.8 },
 ];
 
