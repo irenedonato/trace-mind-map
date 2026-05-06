@@ -761,11 +761,11 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 4 — Cropped visual evidence (Deckard frame export)
   {
-    id: "vcrop", type: "image_evidence", label: "Person Exiting Vehicle", sublabel: "Deckard frame · CCTV-12",
+    id: "vcrop", type: "image_evidence", label: "Woman Exiting Vehicle", sublabel: "Deckard frame · CCTV-12",
     x: 280, y: 410, confidence: 0.89, delay: 5500, step: 4, eventTime: "08:19",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_portasusa.png", import.meta.url).href,
-      caption: "Porta Susa Cam 12 · 08:19:11 — adult male exits driver side of black FIAT Tipo",
+      caption: "Porta Susa Cam 12 · 08:19:11 — adult female exits passenger side of black FIAT Tipo (owner is male — driver identity not confirmed)",
     },
     deckardLink: {
       url: "https://deckard.example/case/CASE-2026-0504/clip/CR-22041",
@@ -778,10 +778,35 @@ export const vehicleDemoNodes: GraphNode[] = [
       { label: "Confidence",value: "0.89" },
     ],
     evidence: [
-      { type: "video", title: "Cropped Frame", detail: "Image of a person exiting the black FIAT Tipo, extracted from CCTV-12 by Deckard. Full video review must be performed in Deckard.", timestamp: "2026-05-04T08:19:11Z" },
+      { type: "video", title: "Cropped Frame", detail: "Image of a woman exiting the passenger side of the black FIAT Tipo, extracted from CCTV-12 by Deckard. Vehicle owner is male — driver identity not confirmed. Full video review must be performed in Deckard.", timestamp: "2026-05-04T08:19:11Z" },
     ],
     sourceTrace: [
       { source: "Deckard — CCTV-12 export", type: "image", reference: "frame_id CR-22041 / vector_id VEC-77c12", detail: "Frame export only — full video resides in Deckard", hash: "sha256:9f2a…b71c", timestamp: "2026-05-04T08:19:11Z" },
+    ],
+  },
+
+  // STEP 4b — Partner agency prior flag on the same individual
+  {
+    id: "vflag", type: "image_evidence", label: "Partner Agency Flag", sublabel: "US partner · prior sightings",
+    x: 80, y: 410, confidence: 0.83, delay: 6100, step: 4, eventTime: "prior",
+    mediaImage: {
+      src: new URL("../assets/donna_sospetta_midwestUSA.png", import.meta.url).href,
+      caption: "US partner agency dossier · subject repeatedly observed near Midwest transit hubs with persons of interest",
+    },
+    facts: [
+      { label: "Source",    value: "Partner agency (US)" },
+      { label: "Dossier",   value: "PA-USA-3318" },
+      { label: "Status",    value: "Suspicious — no charges" },
+      { label: "Pattern",   value: "Frequent presence at transport hubs" },
+      { label: "Associates",value: "Observed with flagged individuals" },
+    ],
+    evidence: [
+      { type: "metadata", title: "Partner Agency Dossier", detail: "Subject was previously flagged in the United States by a partner intelligence agency: repeatedly observed near Midwest transit hubs (bus terminals, freight yards) and frequently in the company of persons of interest. No charges filed; classified as 'suspicious — monitor'.", timestamp: "2025-11-22T00:00:00Z" },
+      { type: "metadata", title: "Face Match", detail: "Face embedding from partner dossier matches the Porta Susa crop with similarity 0.83.", timestamp: "2026-05-04T08:21:00Z" },
+    ],
+    sourceTrace: [
+      { source: "Partner Agency (US) — Dossier PA-USA-3318", type: "image", reference: "dossier_id PA-USA-3318", detail: "Photo + behavioral notes shared via international liaison channel", hash: "sha256:55cd…11ab", timestamp: "2025-11-22T00:00:00Z" },
+      { source: "Face Match Service", type: "vector", reference: "face_match FM-44021", detail: "Cosine similarity 0.83 between dossier portrait and crop CR-22041", hash: "sha256:77ee…22df" },
     ],
   },
 
@@ -869,8 +894,13 @@ export const vehicleDemoEdges: GraphEdge[] = [
     rationaleSummary: "AI extracted a frame and associated a person to this vehicle event — not 100% certain it is the same vehicle/person.",
     rationale: ["Frame CR-22041 @ 08:19:11", "Camera porta_susa_cam_12", "Vehicle re-id score 0.81", "Person-vehicle spatial association 0.78"] },
   { id: "ve7", source: "vcrop", target: "veh1", type: "appearsInVideo", label: "near vehicle", confidence: 0.78, status: "inferred", inferred: true, delay: 5900, step: 4,
-    rationaleSummary: "Cropped person inferred to be exiting driver side of the FIAT Tipo based on spatial overlap.",
-    rationale: ["Spatial overlap with vehicle bbox", "Same frame as vehicle detection", "Association not visually confirmed"] },
+    rationaleSummary: "Cropped woman inferred to be exiting passenger side of the FIAT Tipo based on spatial overlap. She is not the registered owner (who is male) — driver identity unconfirmed.",
+    rationale: ["Spatial overlap with vehicle bbox", "Same frame as vehicle detection", "Subject ≠ registered owner (gender mismatch)", "Association not visually confirmed"] },
+
+  // STEP 4b — partner agency flag links to the cropped subject
+  { id: "ve7b", source: "vflag", target: "vcrop", type: "linkedToProfile", label: "face match", confidence: 0.83, status: "inferred", inferred: true, delay: 6300, step: 4,
+    rationaleSummary: "US partner agency dossier portrait matches the Porta Susa crop via face embedding.",
+    rationale: ["Cosine similarity 0.83 between dossier portrait and CR-22041", "Subject previously flagged as suspicious by US partner agency", "Behavioral pattern: presence near transit hubs with persons of interest"] },
 
   // STEP 5 — Deckard search match
   { id: "ve8", source: "vcrop", target: "vmatch", type: "linkedToProfile", label: "searched in Deckard", confidence: 0.79, status: "inferred", delay: 7500, step: 5,
@@ -894,6 +924,7 @@ export const vehicleDemoEdges: GraphEdge[] = [
   { id: "vi5", source: "vtx",   target: "vinf", type: "derivedFrom", label: "supports", confidence: 1.0,  status: "hypothesis", inferred: true, delay: 11400, step: 7 },
   { id: "vi6", source: "vcrop", target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.89, status: "hypothesis", inferred: true, delay: 11500, step: 7 },
   { id: "vi7", source: "vmatch",target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.79, status: "hypothesis", inferred: true, delay: 11600, step: 7 },
+  { id: "vi8", source: "vflag", target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.83, status: "hypothesis", inferred: true, delay: 11700, step: 7 },
 ];
 
 // ----- Agent log (vehicle scenario) -----
@@ -905,7 +936,9 @@ export const vehicleAgentLogs: { message: string; delay: number; level: "info" |
   { message: "CDR pull: 14 calls in 72h to a recurring unknown number", delay: 3800, level: "info" },
   { message: "Last call placed 38m before Porta Susa detection", delay: 4000, level: "warning" },
   { message: "Banking records: €2,850 sent 2026-05-03 19:42 to 'LogiTorino Srl'", delay: 4300, level: "warning" },
-  { message: "Deckard: extracting frame CR-22041 — person exits driver side", delay: 5700, level: "info" },
+  { message: "Deckard: extracting frame CR-22041 — woman exits passenger side", delay: 5700, level: "info" },
+  { message: "Face match: subject = US partner agency dossier PA-USA-3318 (sim 0.83)", delay: 6100, level: "warning" },
+  { message: "Prior intel: subject flagged for presence at US transit hubs with persons of interest", delay: 6400, level: "warning" },
   { message: "Deckard visual search across regional feeds...", delay: 7300, level: "info" },
   { message: "MATCH: same individual at logistics warehouse @ 09:06 (sim 0.79)", delay: 7700, level: "success" },
   { message: "Building spatio-temporal event 'Warehouse Appearance'", delay: 9300, level: "info" },
@@ -919,10 +952,10 @@ export const vehicleReasoningSteps = [
   { step: 1, title: "Suspicious Vehicle Detected", detail: "Black FIAT Tipo flagged at Porta Susa: overstay in short-stay zone, partial plate 'GF-7K*2', and prefix matches a vehicle seen near another sensitive site recently.", confidence: 0.82 },
   { step: 2, title: "Owner Resolution", detail: "Partial plate + make/model uniquely match plate GF-7KQ2 in MIT registry, registered to Andrea Ferraro.", confidence: 0.9 },
   { step: 3, title: "Telecom + Financial Context", detail: "14 calls in 72h to a recurring unknown number (last 38m before the event) and a €2,850 transfer to a warehouse service provider the night before.", confidence: 1.0 },
-  { step: 4, title: "Visual Evidence", detail: "Deckard exports a cropped frame from CCTV-12 showing a person exiting the driver side of the FIAT Tipo at 08:19.", confidence: 0.89 },
-  { step: 5, title: "Deckard Visual Search", detail: "Cross-feed visual search returns a likely second appearance of the same individual near a logistics warehouse on the Turin outskirts at 09:06.", confidence: 0.79 },
+  { step: 4, title: "Visual Evidence", detail: "Deckard exports a cropped frame from CCTV-12 showing a woman exiting the passenger side of the FIAT Tipo at 08:19. The vehicle owner is male — driver identity remains unconfirmed.", confidence: 0.89 },
+  { step: 5, title: "Partner Agency Match & Deckard Visual Search", detail: "Face match against a US partner agency dossier (PA-USA-3318) identifies the woman as a previously flagged subject — repeatedly observed near Midwest transit hubs with persons of interest. A cross-feed visual search returns a likely second appearance near a logistics warehouse on the Turin outskirts at 09:06.", confidence: 0.81 },
   { step: 6, title: "Warehouse Appearance Event", detail: "Spatio-temporal event built from the Deckard match anchored to warehouse coordinates.", confidence: 0.79 },
-  { step: 7, title: "AI Hypothesis", detail: "Vehicle, owner, recent comms, financial transfer, and second visual match jointly support 'Possible coordinated logistics activity'.", confidence: 0.74 },
+  { step: 7, title: "AI Hypothesis", detail: "Vehicle, owner, recent comms, financial transfer, partner-agency prior, and second visual match jointly support 'Possible coordinated logistics activity'.", confidence: 0.78 },
   { step: 8, title: "Analyst Validation", detail: "Inferred links remain HYPOTHESIS until promoted by the analyst.", confidence: 0.8 },
 ];
 
@@ -932,7 +965,8 @@ export const vehicleTimelineEvents = [
   { time: "2026-05-04 07:39", event: "Last call to recurring unknown number", entity: "vcdr" },
   { time: "2026-05-04 08:17", event: "Suspicious vehicle detected at Porta Susa", entity: "vev1" },
   { time: "2026-05-04 08:18", event: "Registry resolves owner: Andrea Ferraro", entity: "vown" },
-  { time: "2026-05-04 08:19", event: "Deckard frame: person exits FIAT Tipo", entity: "vcrop" },
+  { time: "2025-11-22 (prior)", event: "US partner agency flagged subject (Midwest transit hubs)", entity: "vflag" },
+  { time: "2026-05-04 08:19", event: "Deckard frame: woman exits FIAT Tipo (passenger side)", entity: "vcrop" },
   { time: "2026-05-04 09:06", event: "Deckard match at logistics warehouse", entity: "vmatch" },
   { time: "2026-05-04 09:10", event: "AI hypothesis assembled", entity: "vinf" },
 ];
@@ -976,7 +1010,7 @@ export const vehicleScenario: Scenario = {
   agentLogs: vehicleAgentLogs,
   reasoningSteps: vehicleReasoningSteps,
   timelineEvents: vehicleTimelineEvents,
-  defaultHighlightChain: ["vev1", "veh1", "vown", "vcrop", "vmatch", "vinf"],
+  defaultHighlightChain: ["vev1", "veh1", "vown", "vcrop", "vflag", "vmatch", "vinf"],
 };
 
 // =====================================================================
