@@ -787,7 +787,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 4b — Partner agency prior flag on the same individual
   {
-    id: "vflag", type: "image_evidence", label: "External Intelligence Match (US Partner)", sublabel: "Partial facial similarity · transit hubs & logistics · confidence: moderate",
+    id: "vflag", type: "image_evidence", label: "External Match", sublabel: "US Partner",
     x: 80, y: 410, confidence: 0.83, delay: 6100, step: 4, eventTime: "prior",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_midwestUSA.png", import.meta.url).href,
