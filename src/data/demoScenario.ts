@@ -694,7 +694,7 @@ export const vehicleDemoTotalMs = 14400;
 export const vehicleDemoNodes: GraphNode[] = [
   // STEP 1 — Suspicious Vehicle Detected (Event) + Vehicle entity + Location
   {
-    id: "vev1", type: "event", label: "Suspicious Vehicle Detected", sublabel: "Porta Susa · 08:17",
+    id: "vev1", type: "event", label: "Vehicle flagged in restricted transit zone", sublabel: "Porta Susa · 08:17 · overstay beyond allowed dwell time",
     x: 280, y: 150, confidence: 0.82, delay: 0, step: 1, eventTime: "08:17",
     evidence: [
       { type: "metadata", title: "Event", detail: "Black FIAT Tipo detected near Torino Porta Susa with partial license plate and abnormally long stop in a short-stay / drop-off area.", timestamp: "2026-05-04T08:17:00Z" },
@@ -705,7 +705,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "veh1", type: "vehicle", label: "Black FIAT Tipo", sublabel: "partial plate GF-7K*2",
+    id: "veh1", type: "vehicle", label: "Vehicle Identification (Probabilistic Match)", sublabel: "Black FIAT Tipo · plate GF-7K*2 · confidence: high",
     x: 480, y: 150, confidence: 0.76, delay: 600, step: 1,
     evidence: [
       { type: "metadata", title: "Vehicle Descriptor", detail: "Make/model: FIAT Tipo · Color: black · Partial plate: GF-7K*2 (last 2 chars unreadable).", timestamp: "2026-05-04T08:17:05Z" },
@@ -716,7 +716,7 @@ export const vehicleDemoNodes: GraphNode[] = [
   },
   // STEP 2 — Registered Owner
   {
-    id: "vown", type: "owner", label: "Registered Owner", sublabel: "Andrea Ferraro",
+    id: "vown", type: "owner", label: "Registered Owner", sublabel: "Andrea Ferraro (IT) · no prior flags · verified via national registry",
     x: 680, y: 150, confidence: 0.9, delay: 1900, step: 2,
     evidence: [
       { type: "metadata", title: "Registered Owner", detail: "Andrea Ferraro · address Torino, Italy · phone +39 XXX XXX XXXX · email andrea.ferraro@example.com · bank account ITXX XXXX XXXX.", timestamp: "2026-05-04T08:18:10Z" },
@@ -761,7 +761,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 4 — Cropped visual evidence (Deckard frame export)
   {
-    id: "vcrop", type: "image_evidence", label: "Woman Exiting Vehicle", sublabel: "Deckard frame · CCTV-12",
+    id: "vcrop", type: "image_evidence", label: "Unknown Female – Passenger Exit", sublabel: "Observed exiting passenger side · 08:19 · face partially visible",
     x: 280, y: 410, confidence: 0.89, delay: 5500, step: 4, eventTime: "08:19",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_portasusa.png", import.meta.url).href,
@@ -787,7 +787,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 4b — Partner agency prior flag on the same individual
   {
-    id: "vflag", type: "image_evidence", label: "Partner Agency Flag", sublabel: "US partner · prior sightings",
+    id: "vflag", type: "image_evidence", label: "External Intelligence Match (US Partner)", sublabel: "Partial facial similarity · transit hubs & logistics · confidence: moderate",
     x: 80, y: 410, confidence: 0.83, delay: 6100, step: 4, eventTime: "prior",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_midwestUSA.png", import.meta.url).href,
@@ -901,6 +901,11 @@ export const vehicleDemoEdges: GraphEdge[] = [
   { id: "ve7b", source: "vflag", target: "vcrop", type: "linkedToProfile", label: "face match", confidence: 0.83, status: "inferred", inferred: true, delay: 6300, step: 4,
     rationaleSummary: "US partner agency dossier portrait matches the Porta Susa crop via face embedding.",
     rationale: ["Cosine similarity 0.83 between dossier portrait and CR-22041", "Subject previously flagged as suspicious by US partner agency", "Behavioral pattern: presence near transit hubs with persons of interest"] },
+
+  // STEP 4c — explicit mismatch flag: passenger ≠ registered owner (validation request)
+  { id: "ve7c", source: "vcrop", target: "vown", type: "linkedToProfile", label: "not matching registered owner", confidence: 0.95, status: "hypothesis", inferred: true, delay: 6500, step: 4,
+    rationaleSummary: "Validation requested: the observed passenger is female, the registered owner is male — identity of the actual driver is unconfirmed.",
+    rationale: ["Passenger gender ≠ owner gender", "No direct evidence the owner is in the vehicle", "Analyst validation required"] },
 
   // STEP 5 — Deckard search match
   { id: "ve8", source: "vcrop", target: "vmatch", type: "linkedToProfile", label: "searched in Deckard", confidence: 0.79, status: "inferred", delay: 7500, step: 5,
