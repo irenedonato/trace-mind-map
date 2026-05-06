@@ -845,7 +845,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 6 — Warehouse appearance event
   {
-    id: "vev2", type: "event", label: "Subject Presence at Logistics Site", sublabel: "09:06 · visual confirmation (low res) · movement consistent with prior subject",
+    id: "vev2", type: "event", label: "Subject at Site", sublabel: "09:06",
     x: 680, y: 460, confidence: 0.79, delay: 9100, step: 6, eventTime: "09:06",
     evidence: [
       { type: "metadata", title: "Spatio-temporal Event", detail: "Same individual appears near a logistics warehouse less than one hour after the Porta Susa event.", timestamp: "2026-05-04T09:06:42Z" },
