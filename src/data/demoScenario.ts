@@ -857,7 +857,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 7 — AI inference
   {
-    id: "vinf", type: "person_candidate", label: "Hypothesis: Coordinated Logistics Operation", sublabel: "Multi-source correlation · vehicle + unknown individual + logistics + financial/telecom · confidence: medium",
+    id: "vinf", type: "person_candidate", label: "Coordinated Activity", sublabel: "Hypothesis",
     x: 460, y: 600, confidence: 0.74, delay: 10900, step: 7, eventTime: "09:10",
     evidence: [
       { type: "metadata", title: "AI-generated Hypothesis", detail: "Vehicle detection, owner records, recent calls, suspicious financial transaction, and a second visual match together suggest possible coordinated logistics activity.", timestamp: "2026-05-04T09:10:00Z" },
