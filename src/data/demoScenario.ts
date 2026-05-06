@@ -761,7 +761,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 4 — Cropped visual evidence (Deckard frame export)
   {
-    id: "vcrop", type: "image_evidence", label: "Unknown Female – Passenger Exit", sublabel: "Observed exiting passenger side · 08:19 · face partially visible",
+    id: "vcrop", type: "image_evidence", label: "Unknown Female", sublabel: "Passenger Exit · 08:19",
     x: 280, y: 410, confidence: 0.89, delay: 5500, step: 4, eventTime: "08:19",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_portasusa.png", import.meta.url).href,
