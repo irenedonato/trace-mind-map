@@ -118,7 +118,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                             ◈ {src.channel} · {src.label}
                           </span>
                         )}
-                        {getNodeLayer(node) === "inference" && (
+                        {typeof node.confidence === "number" && (
                           <span
                             className="px-1.5 py-0.5 rounded font-mono ml-auto"
                             style={{
@@ -126,6 +126,7 @@ export function RightPanel({ selectedNode, selectedEdge, onHighlightPath, scenar
                               color: "hsl(220, 20%, 7%)",
                               fontSize: "9px",
                             }}
+                            title="Confidence level for this node"
                           >
                             conf {Math.round(node.confidence * 100)}%
                           </span>
