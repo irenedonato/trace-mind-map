@@ -427,35 +427,18 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
         })}
       </AnimatePresence>
 
-      {/* Color + edge legend */}
+      {/* Edge legend */}
       {visibleEdges.length > 0 && (
-        <div className="absolute bottom-3 right-3 surface-glass border border-border rounded px-3 py-2 text-[9px] font-mono space-y-2 z-10">
-          <div>
-            <div className="text-muted-foreground uppercase tracking-wider mb-1">Node type</div>
-            {[
-              { c: COLOR.yellow, l: "visual evidence" },
-              { c: COLOR.blue,   l: "physical / location" },
-              { c: COLOR.purple, l: "people / inference" },
-              { c: COLOR.orange, l: "financial" },
-              { c: COLOR.grey,   l: "telecom / metadata" },
-            ].map((it) => (
-              <div key={it.l} className="flex items-center gap-2">
-                <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: it.c }} />
-                <span className="text-foreground/80">{it.l}</span>
-              </div>
-            ))}
-          </div>
-          <div className="pt-1 border-t border-border">
-            <div className="text-muted-foreground uppercase tracking-wider mb-1">Edge status</div>
-            {(Object.entries(edgeStatusStyle) as [EdgeStatus, typeof edgeStatusStyle[EdgeStatus]][]).map(([key, s]) => (
-              <div key={key} className="flex items-center gap-2">
-                <svg width="22" height="6">
-                  <line x1="0" y1="3" x2="22" y2="3" stroke={s.stroke} strokeWidth="2" strokeDasharray={s.dash} />
-                </svg>
-                <span className="text-foreground/80">{key}</span>
-              </div>
-            ))}
-          </div>
+        <div className="absolute bottom-3 right-3 surface-glass border border-border rounded px-3 py-2 text-[9px] font-mono z-10">
+          <div className="text-muted-foreground uppercase tracking-wider mb-1">Edge status</div>
+          {(Object.entries(edgeStatusStyle) as [EdgeStatus, typeof edgeStatusStyle[EdgeStatus]][]).map(([key, s]) => (
+            <div key={key} className="flex items-center gap-2">
+              <svg width="22" height="6">
+                <line x1="0" y1="3" x2="22" y2="3" stroke={s.stroke} strokeWidth="2" strokeDasharray={s.dash} />
+              </svg>
+              <span className="text-foreground/80">{key}</span>
+            </div>
+          ))}
         </div>
       )}
 
