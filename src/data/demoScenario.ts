@@ -743,7 +743,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vtx", type: "transaction_record", label: "Financial Activity (Correlated Event)", sublabel: "€2,850 → warehouse service provider · night prior to event",
+    id: "vtx", type: "transaction_record", label: "Transaction", sublabel: "€2,850",
     x: 880, y: 380, confidence: 1.0, delay: 4100, step: 3, eventTime: "19:42",
     facts: [
       { label: "Amount",    value: "€2,850" },
