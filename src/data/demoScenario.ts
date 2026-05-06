@@ -728,7 +728,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 3 — Telecom + Financial evidence
   {
-    id: "vcdr", type: "communications_log", label: "Telecom Activity Pattern", sublabel: "14 calls / 72h · recurrent unknown contact · peak before event",
+    id: "vcdr", type: "communications_log", label: "Call Pattern", sublabel: "14 calls / 72h",
     x: 880, y: 240, confidence: 1.0, delay: 3700, step: 3, eventTime: "07:39",
     facts: [
       { label: "Calls",    value: "14 in last 72h" },
