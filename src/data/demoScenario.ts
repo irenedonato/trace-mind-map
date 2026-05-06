@@ -764,7 +764,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     id: "vcrop", type: "image_evidence", label: "Person Exiting Vehicle", sublabel: "Deckard frame · CCTV-12",
     x: 280, y: 410, confidence: 0.89, delay: 5500, step: 4, eventTime: "08:19",
     mediaImage: {
-      src: new URL("../assets/vehicle-detection-porta-susa.jpg", import.meta.url).href,
+      src: new URL("../assets/donna_sospetta_portasusa.png", import.meta.url).href,
       caption: "Porta Susa Cam 12 · 08:19:11 — adult male exits driver side of black FIAT Tipo",
     },
     deckardLink: {
