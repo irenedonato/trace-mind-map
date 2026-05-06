@@ -761,7 +761,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 4 — Cropped visual evidence (Deckard frame export)
   {
-    id: "vcrop", type: "image_evidence", label: "Unknown Female", sublabel: "Passenger Exit · 08:19",
+    id: "vcrop", type: "image_evidence", label: "Passenger Exit", sublabel: "Unknown Female",
     x: 280, y: 410, confidence: 0.89, delay: 5500, step: 4, eventTime: "08:19",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_portasusa.png", import.meta.url).href,
@@ -787,7 +787,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 4b — Partner agency prior flag on the same individual
   {
-    id: "vflag", type: "image_evidence", label: "External Match", sublabel: "US Partner",
+    id: "vflag", type: "image_evidence", label: "Partner Agency Flag", sublabel: "US Sighting",
     x: 80, y: 410, confidence: 0.83, delay: 6100, step: 4, eventTime: "prior",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_midwestUSA.png", import.meta.url).href,
@@ -812,7 +812,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 5 — Deckard search result (visual match elsewhere)
   {
-    id: "vmatch", type: "image_evidence", label: "Recurring Match", sublabel: "Cross-camera · 09:06",
+    id: "vmatch", type: "image_evidence", label: "Same Subject Detected", sublabel: "Cross-site",
     x: 480, y: 410, confidence: 0.79, delay: 7300, step: 5, eventTime: "09:06",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_logistica.png", import.meta.url).href,
