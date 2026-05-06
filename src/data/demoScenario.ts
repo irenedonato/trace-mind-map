@@ -694,7 +694,7 @@ export const vehicleDemoTotalMs = 14400;
 export const vehicleDemoNodes: GraphNode[] = [
   // STEP 1 — Suspicious Vehicle Detected (Event) + Vehicle entity + Location
   {
-    id: "vev1", type: "event", label: "Vehicle flagged in restricted transit zone", sublabel: "Porta Susa · 08:17 · overstay beyond allowed dwell time",
+    id: "vev1", type: "event", label: "Vehicle Flagged", sublabel: "Porta Susa · 08:17",
     x: 280, y: 150, confidence: 0.82, delay: 0, step: 1, eventTime: "08:17",
     evidence: [
       { type: "metadata", title: "Event", detail: "Black FIAT Tipo detected near Torino Porta Susa with partial license plate and abnormally long stop in a short-stay / drop-off area.", timestamp: "2026-05-04T08:17:00Z" },
