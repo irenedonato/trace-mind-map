@@ -898,6 +898,9 @@ export const vehicleDemoEdges: GraphEdge[] = [
 
   // STEP 6 — warehouse event built from match
   { id: "ve11", source: "vmatch", target: "vwhloc", type: "occurredAt", label: "at", confidence: 0.95, status: "validated", delay: 9500, step: 6 },
+  { id: "ve_cdr_wh", source: "vcdr", target: "vwhloc", type: "called", label: "call to site", confidence: 1.0, status: "observed", delay: 9700, step: 6,
+    rationaleSummary: "One of the recurring numbers in the call pattern resolves to a line registered at the logistics site.",
+    rationale: ["Recipient number registered to 'LogiTorino Srl'", "Same site as the visual match", "Call placed within the 72h pattern window"] },
 
   // STEP 7 — supports → inference (all evidence supports the hypothesis)
   { id: "vi1", source: "vev1",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.82, status: "hypothesis", inferred: true, delay: 11000, step: 7 },
