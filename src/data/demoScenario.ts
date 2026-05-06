@@ -705,7 +705,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "veh1", type: "vehicle", label: "Vehicle Identification (Probabilistic Match)", sublabel: "Black FIAT Tipo · plate GF-7K*2 · confidence: high",
+    id: "veh1", type: "vehicle", label: "FIAT Tipo (Black)", sublabel: "GF-7K*2",
     x: 480, y: 150, confidence: 0.76, delay: 600, step: 1,
     evidence: [
       { type: "metadata", title: "Vehicle Descriptor", detail: "Make/model: FIAT Tipo · Color: black · Partial plate: GF-7K*2 (last 2 chars unreadable).", timestamp: "2026-05-04T08:17:05Z" },
