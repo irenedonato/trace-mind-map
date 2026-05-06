@@ -897,10 +897,7 @@ export const vehicleDemoEdges: GraphEdge[] = [
     rationale: ["Camera geo-registry", "Site WH-7712 (Turin outskirts)"] },
 
   // STEP 6 — warehouse event built from match
-  { id: "ve10", source: "vmatch", target: "vev2", type: "occurredAt", label: "observed at", confidence: 0.79, status: "inferred", delay: 9300, step: 6,
-    rationaleSummary: "Spatio-temporal event derived from the Deckard match.",
-    rationale: ["Match deckard_crop_017 @ 09:06:42", "Anchored to warehouse location"] },
-  { id: "ve11", source: "vev2", target: "vwhloc", type: "occurredAt", label: "at",          confidence: 0.95, status: "validated", delay: 9500, step: 6 },
+  { id: "ve11", source: "vmatch", target: "vwhloc", type: "occurredAt", label: "at", confidence: 0.95, status: "validated", delay: 9500, step: 6 },
 
   // STEP 7 — supports → inference (all evidence supports the hypothesis)
   { id: "vi1", source: "vev1",  target: "vinf", type: "derivedFrom", label: "supports", confidence: 0.82, status: "hypothesis", inferred: true, delay: 11000, step: 7 },
