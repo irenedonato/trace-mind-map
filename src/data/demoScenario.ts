@@ -893,9 +893,6 @@ export const vehicleDemoEdges: GraphEdge[] = [
   { id: "ve6", source: "vev1", target: "vcrop", type: "appearsInVideo", label: "visual evidence", confidence: 0.78, status: "inferred", inferred: true, delay: 5700, step: 4,
     rationaleSummary: "AI extracted a frame and associated a person to this vehicle event — not 100% certain it is the same vehicle/person.",
     rationale: ["Frame CR-22041 @ 08:19:11", "Camera porta_susa_cam_12", "Vehicle re-id score 0.81", "Person-vehicle spatial association 0.78"] },
-  { id: "ve7_removed", source: "vcrop", target: "veh1", type: "appearsInVideo", label: "near vehicle", confidence: 0.78, status: "inferred", inferred: true, delay: 5900, step: 4, _disabled: true,
-    rationaleSummary: "Cropped woman inferred to be exiting passenger side of the FIAT Tipo based on spatial overlap. She is not the registered owner (who is male) — driver identity unconfirmed.",
-    rationale: ["Spatial overlap with vehicle bbox", "Same frame as vehicle detection", "Subject ≠ registered owner (gender mismatch)", "Association not visually confirmed"] },
 
   // STEP 4b — partner agency flag links to the cropped subject
   { id: "ve7b", source: "vflag", target: "vcrop", type: "linkedToProfile", label: "face match", confidence: 0.83, status: "inferred", inferred: true, delay: 6300, step: 4,
