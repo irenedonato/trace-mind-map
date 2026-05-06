@@ -716,7 +716,7 @@ export const vehicleDemoNodes: GraphNode[] = [
   },
   // STEP 2 — Registered Owner
   {
-    id: "vown", type: "owner", label: "Registered Owner", sublabel: "Andrea Ferraro (IT) · no prior flags · verified via national registry",
+    id: "vown", type: "owner", label: "Registered Owner", sublabel: "Andrea Ferraro",
     x: 680, y: 150, confidence: 0.9, delay: 1900, step: 2,
     evidence: [
       { type: "metadata", title: "Registered Owner", detail: "Andrea Ferraro · address Torino, Italy · phone +39 XXX XXX XXXX · email andrea.ferraro@example.com · bank account ITXX XXXX XXXX.", timestamp: "2026-05-04T08:18:10Z" },
