@@ -836,7 +836,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vwhloc", type: "location", label: "Logistics Facility (Validated Location)", sublabel: "Industrial zone — Turin outskirts · geospatial correlation · irregular access windows",
+    id: "vwhloc", type: "location", label: "Logistics Site", sublabel: "Turin Outskirts",
     x: 680, y: 320, confidence: 0.92, delay: 7700, step: 5,
     sourceTrace: [
       { source: "Geo-registry", type: "log", reference: "site_id WH-7712", detail: "Industrial warehouse, Turin outskirts", hash: "sha256:42aa…02de" },
