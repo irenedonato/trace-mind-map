@@ -678,7 +678,7 @@ export const reasoningSteps = [
 // =====================================================================
 
 export const vehicleDemoSteps: DemoStep[] = [
-  { step: 1, startMs:     0, eventTime: "08:17", title: "Suspicious vehicle detected",       subtitle: "ANPR / city camera flags black FIAT Tipo at Porta Susa" },
+  { step: 1, startMs:     0, eventTime: "08:17", title: "Suspicious vehicle detected",       subtitle: "ANPR / city camera flags black FIAT Punto at Porta Susa" },
   { step: 2, startMs:  1800, eventTime: "08:18", title: "Registry → owner",                  subtitle: "Partial plate resolves to registered owner" },
   { step: 3, startMs:  3600, eventTime: "08:19", title: "Telecom + financial context",       subtitle: "Recent calls and a suspicious transaction surface" },
   { step: 4, startMs:  5400, eventTime: "08:19", title: "Deckard extracts visual evidence",  subtitle: "Person exiting the vehicle captured at Porta Susa" },
@@ -697,7 +697,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     id: "vev1", type: "event", label: "Vehicle Flagged", sublabel: "Porta Susa · 08:17",
     x: 280, y: 150, confidence: 0.82, delay: 0, step: 1, eventTime: "08:17",
     evidence: [
-      { type: "metadata", title: "Event", detail: "Black FIAT Tipo detected near Torino Porta Susa with partial license plate and abnormally long stop in a short-stay / drop-off area.", timestamp: "2026-05-04T08:17:00Z" },
+      { type: "metadata", title: "Event", detail: "Black FIAT Punto detected near Torino Porta Susa with partial license plate and abnormally long stop in a short-stay / drop-off area.", timestamp: "2026-05-04T08:17:00Z" },
       { type: "metadata", title: "Why suspicious", detail: "1) overstay in short-stay zone; 2) ANPR captured only partial plate 'GF-7K*2'; 3) prefix matches a vehicle seen near another sensitive location in the prior 72h.", timestamp: "2026-05-04T08:17:30Z" },
     ],
     sourceTrace: [
@@ -705,10 +705,10 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "veh1", type: "vehicle", label: "FIAT Tipo (Black)", sublabel: "GF-7K*2",
+    id: "veh1", type: "vehicle", label: "FIAT Punto (Black)", sublabel: "GF-7K*2",
     x: 480, y: 150, confidence: 0.76, delay: 600, step: 1,
     evidence: [
-      { type: "metadata", title: "Vehicle Descriptor", detail: "Make/model: FIAT Tipo · Color: black · Partial plate: GF-7K*2 (last 2 chars unreadable).", timestamp: "2026-05-04T08:17:05Z" },
+      { type: "metadata", title: "Vehicle Descriptor", detail: "Make/model: FIAT Punto · Color: black · Partial plate: GF-7K*2 (last 2 chars unreadable).", timestamp: "2026-05-04T08:17:05Z" },
     ],
     sourceTrace: [
       { source: "ANPR / City Camera", type: "log", reference: "anpr_event AE-22041 · partial plate", detail: "OCR confidence 0.76 on 5 of 7 characters", hash: "sha256:b2c1…aa31" },
@@ -722,7 +722,7 @@ export const vehicleDemoNodes: GraphNode[] = [
       { type: "metadata", title: "Registered Owner", detail: "Andrea Ferraro · address Torino, Italy · phone +39 XXX XXX XXXX · email andrea.ferraro@example.com · bank account ITXX XXXX XXXX.", timestamp: "2026-05-04T08:18:10Z" },
     ],
     sourceTrace: [
-      { source: "Vehicle Registry (MIT)", type: "log", reference: "owner_id OWN-7741", detail: "Resolved from candidate plates matching prefix GF-7K + FIAT Tipo (1 unique match after filter)", hash: "sha256:11aa…77ff", timestamp: "2026-05-04T08:18:10Z" },
+      { source: "Vehicle Registry (MIT)", type: "log", reference: "owner_id OWN-7741", detail: "Resolved from candidate plates matching prefix GF-7K + FIAT Punto (1 unique match after filter)", hash: "sha256:11aa…77ff", timestamp: "2026-05-04T08:18:10Z" },
     ],
   },
 
@@ -765,7 +765,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     x: 280, y: 410, confidence: 0.89, delay: 5500, step: 4, eventTime: "08:19",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_portasusa.png", import.meta.url).href,
-      caption: "Porta Susa Cam 12 · 08:19:11 — adult female exits passenger side of black FIAT Tipo (owner is male — driver identity not confirmed)",
+      caption: "Porta Susa Cam 12 · 08:19:11 — adult female exits passenger side of black FIAT Punto (owner is male — driver identity not confirmed)",
     },
     deckardLink: {
       url: "https://deckard.example/case/CASE-2026-0504/clip/CR-22041",
@@ -778,7 +778,7 @@ export const vehicleDemoNodes: GraphNode[] = [
       { label: "Confidence",value: "0.89" },
     ],
     evidence: [
-      { type: "video", title: "Cropped Frame", detail: "Image of a woman exiting the passenger side of the black FIAT Tipo, extracted from CCTV-12 by Deckard. Vehicle owner is male — driver identity not confirmed. Full video review must be performed in Deckard.", timestamp: "2026-05-04T08:19:11Z" },
+      { type: "video", title: "Cropped Frame", detail: "Image of a woman exiting the passenger side of the black FIAT Punto, extracted from CCTV-12 by Deckard. Vehicle owner is male — driver identity not confirmed. Full video review must be performed in Deckard.", timestamp: "2026-05-04T08:19:11Z" },
     ],
     sourceTrace: [
       { source: "Deckard — CCTV-12 export", type: "image", reference: "frame_id CR-22041 / vector_id VEC-77c12", detail: "Frame export only — full video resides in Deckard", hash: "sha256:9f2a…b71c", timestamp: "2026-05-04T08:19:11Z" },
@@ -873,13 +873,13 @@ export const vehicleDemoEdges: GraphEdge[] = [
   // STEP 1 — event ↔ vehicle ↔ location
   { id: "ve1", source: "vev1", target: "veh1", type: "derivedFrom", label: "detected vehicle", confidence: 0.82, status: "observed", delay: 800, step: 1,
     rationaleSummary: "Vehicle descriptor extracted from the ANPR + camera event.",
-    rationale: ["FIAT Tipo, black", "Partial plate GF-7K*2", "Stop duration 14m in short-stay zone"] },
+    rationale: ["FIAT Punto, black", "Partial plate GF-7K*2", "Stop duration 14m in short-stay zone"] },
 
 
   // STEP 2 — vehicle → owner
   { id: "ve3", source: "veh1", target: "vown", type: "linkedToProfile", label: "registered owner", confidence: 0.9, status: "observed", delay: 2200, step: 2,
     rationaleSummary: "Registry resolves the partial plate + descriptor to a single owner.",
-    rationale: ["Plate prefix GF-7K + FIAT Tipo → 1 unique match", "Owner OWN-7741 (Andrea Ferraro)"] },
+    rationale: ["Plate prefix GF-7K + FIAT Punto → 1 unique match", "Owner OWN-7741 (Andrea Ferraro)"] },
 
   // STEP 3 — owner ↔ comms / financial
   { id: "ve4", source: "vown", target: "vcdr", type: "called", label: "has call pattern", confidence: 1.0, status: "observed", delay: 3900, step: 3,
@@ -938,7 +938,7 @@ export const vehicleDemoEdges: GraphEdge[] = [
 
 // ----- Agent log (vehicle scenario) -----
 export const vehicleAgentLogs: { message: string; delay: number; level: "info" | "warning" | "success" }[] = [
-  { message: "ANPR ALERT: black FIAT Tipo · partial plate GF-7K*2 · Porta Susa", delay: 0, level: "warning" },
+  { message: "ANPR ALERT: black FIAT Punto · partial plate GF-7K*2 · Porta Susa", delay: 0, level: "warning" },
   { message: "Anomaly: 14m stop in short-stay zone + prior sighting near sensitive site", delay: 700, level: "warning" },
   { message: "Resolving partial plate against vehicle registry...", delay: 1900, level: "info" },
   { message: "Registry MATCH: plate GF-7KQ2 → owner Andrea Ferraro (OWN-7741)", delay: 2400, level: "success" },
@@ -958,10 +958,10 @@ export const vehicleAgentLogs: { message: string; delay: number; level: "info" |
 
 // ----- Reasoning chain (vehicle scenario) -----
 export const vehicleReasoningSteps = [
-  { step: 1, title: "Suspicious Vehicle Detected", detail: "Black FIAT Tipo flagged at Porta Susa: overstay in short-stay zone, partial plate 'GF-7K*2', and prefix matches a vehicle seen near another sensitive site recently.", confidence: 0.82 },
+  { step: 1, title: "Suspicious Vehicle Detected", detail: "Black FIAT Punto flagged at Porta Susa: overstay in short-stay zone, partial plate 'GF-7K*2', and prefix matches a vehicle seen near another sensitive site recently.", confidence: 0.82 },
   { step: 2, title: "Owner Resolution", detail: "Partial plate + make/model uniquely match plate GF-7KQ2 in MIT registry, registered to Andrea Ferraro.", confidence: 0.9 },
   { step: 3, title: "Telecom + Financial Context", detail: "14 calls in 72h to a recurring unknown number (last 38m before the event) and a €2,850 transfer to a warehouse service provider the night before.", confidence: 1.0 },
-  { step: 4, title: "Visual Evidence", detail: "Deckard exports a cropped frame from CCTV-12 showing a woman exiting the passenger side of the FIAT Tipo at 08:19. The vehicle owner is male — driver identity remains unconfirmed.", confidence: 0.89 },
+  { step: 4, title: "Visual Evidence", detail: "Deckard exports a cropped frame from CCTV-12 showing a woman exiting the passenger side of the FIAT Punto at 08:19. The vehicle owner is male — driver identity remains unconfirmed.", confidence: 0.89 },
   { step: 5, title: "Partner Agency Match & Deckard Visual Search", detail: "Face match against a US partner agency dossier (PA-USA-3318) identifies the woman as a previously flagged subject — repeatedly observed near Midwest transit hubs with persons of interest. A cross-feed visual search returns a likely second appearance near a logistics warehouse on the Turin outskirts at 09:06.", confidence: 0.81 },
   { step: 6, title: "Warehouse Appearance Event", detail: "Spatio-temporal event built from the Deckard match anchored to warehouse coordinates.", confidence: 0.79 },
   { step: 7, title: "AI Hypothesis", detail: "Vehicle, owner, recent comms, financial transfer, partner-agency prior, and second visual match jointly support 'Possible coordinated logistics activity'.", confidence: 0.78 },
@@ -975,7 +975,7 @@ export const vehicleTimelineEvents = [
   { time: "2026-05-04 08:17", event: "Suspicious vehicle detected at Porta Susa", entity: "vev1" },
   { time: "2026-05-04 08:18", event: "Registry resolves owner: Andrea Ferraro", entity: "vown" },
   { time: "2025-11-22 (prior)", event: "US partner agency flagged subject (Midwest transit hubs)", entity: "vflag" },
-  { time: "2026-05-04 08:19", event: "Deckard frame: woman exits FIAT Tipo (passenger side)", entity: "vcrop" },
+  { time: "2026-05-04 08:19", event: "Deckard frame: woman exits FIAT Punto (passenger side)", entity: "vcrop" },
   { time: "2026-05-04 09:06", event: "Deckard match at logistics warehouse", entity: "vmatch" },
   { time: "2026-05-04 09:10", event: "AI hypothesis assembled", entity: "vinf" },
 ];
