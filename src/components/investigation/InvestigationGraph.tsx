@@ -5,7 +5,7 @@ import {
   Briefcase, Calendar, UserSearch, ScanFace, Crop, FileText, Tag, Mic, Volume2, MessageSquare,
   Car, ClipboardList, IdCard, Fingerprint, FileSearch, Camera, Headphones, Image as ImageIcon,
 } from "lucide-react";
-import { type GraphNode, type GraphEdge, type EdgeStatus, type NodeType, type Scenario, getNodeLayer, layerMeta } from "@/data/demoScenario";
+import { type GraphNode, type GraphEdge, type EdgeStatus, type NodeType, type Scenario } from "@/data/demoScenario";
 
 
 interface InvestigationGraphProps {
@@ -41,80 +41,106 @@ const nodeIcons: Record<NodeType, typeof User> = {
   video_evidence: Camera,
   audio_evidence: Headphones,
   image_evidence: ImageIcon,
-  // legacy aliases
   person: User,
   device: Smartphone,
   social: AtSign,
 };
 
-const nodeColors: Record<NodeType, string> = {
-  case: "hsl(262, 70%, 58%)",
-  event: "hsl(45, 95%, 60%)",
-  person_candidate: "hsl(262, 70%, 58%)",
-  video: "hsl(160, 84%, 39%)",
-  video_detection: "hsl(160, 70%, 50%)",
-  crop: "hsl(160, 60%, 45%)",
-  social_profile: "hsl(200, 80%, 55%)",
-  document: "hsl(220, 15%, 65%)",
-  entity: "hsl(280, 60%, 60%)",
-  voice_sample: "hsl(180, 70%, 50%)",
-  speaker: "hsl(180, 80%, 55%)",
-  communications_log: "hsl(220, 10%, 55%)",
-  transaction: "hsl(20, 90%, 58%)",
-  transaction_record: "hsl(20, 90%, 58%)",
-  location: "hsl(0, 84%, 60%)",
-  vehicle: "hsl(212, 90%, 60%)",
-  vehicle_registration: "hsl(212, 50%, 60%)",
-  owner: "hsl(262, 70%, 65%)",
-  evidence: "hsl(48, 96%, 60%)",
-  video_evidence: "hsl(48, 96%, 60%)",
-  audio_evidence: "hsl(180, 80%, 60%)",
-  image_evidence: "hsl(48, 96%, 60%)",
-  // legacy aliases
-  person: "hsl(262, 70%, 58%)",
-  device: "hsl(220, 10%, 50%)",
-  social: "hsl(200, 80%, 55%)",
+// Color semantics:
+// YELLOW  → Visual evidence (video / CCTV / images)
+// BLUE    → Physical entities (vehicles, locations, devices, events)
+// PURPLE  → People / identities / correlations / inferences
+// ORANGE  → Financial activity
+// GREY    → Telecom / metadata signals
+const COLOR = {
+  yellow: "hsl(48, 96%, 60%)",
+  blue:   "hsl(212, 90%, 60%)",
+  purple: "hsl(280, 70%, 65%)",
+  orange: "hsl(20, 90%, 58%)",
+  grey:   "hsl(220, 10%, 60%)",
 };
 
-const nodeBgClass: Record<NodeType, string> = {
-  case: "bg-primary/20 border-primary/60",
-  event: "bg-amber/20 border-amber/50",
-  person_candidate: "bg-primary/20 border-primary/50",
-  video: "bg-emerald/20 border-emerald/50",
-  video_detection: "bg-emerald/15 border-emerald/40",
-  crop: "bg-emerald/10 border-emerald/30",
-  social_profile: "bg-sky-500/20 border-sky-500/50",
-  document: "bg-muted border-muted-foreground/40",
-  entity: "bg-primary/15 border-primary/40",
-  voice_sample: "bg-cyan-500/20 border-cyan-500/50",
-  speaker: "bg-cyan-500/20 border-cyan-500/50",
-  communications_log: "bg-muted border-muted-foreground/30",
-  transaction: "bg-amber/20 border-amber/50",
-  transaction_record: "bg-amber/20 border-amber/50",
-  location: "bg-crimson/20 border-crimson/50",
-  vehicle: "bg-sky-500/20 border-sky-500/60",
-  vehicle_registration: "bg-sky-500/10 border-sky-500/30",
-  owner: "bg-primary/20 border-primary/50",
-  evidence: "bg-amber/20 border-amber/60",
-  video_evidence: "bg-amber/20 border-amber/60",
-  audio_evidence: "bg-cyan-500/20 border-cyan-500/60",
-  image_evidence: "bg-amber/15 border-amber/50",
-  // legacy aliases
-  person: "bg-primary/20 border-primary/50",
-  device: "bg-muted border-muted-foreground/30",
-  social: "bg-sky-500/20 border-sky-500/50",
+const nodeColors: Record<NodeType, string> = {
+  // visual evidence
+  video: COLOR.yellow,
+  video_detection: COLOR.yellow,
+  crop: COLOR.yellow,
+  video_evidence: COLOR.yellow,
+  image_evidence: COLOR.yellow,
+  evidence: COLOR.yellow,
+  // physical entities + events
+  vehicle: COLOR.blue,
+  vehicle_registration: COLOR.blue,
+  location: COLOR.blue,
+  device: COLOR.blue,
+  event: COLOR.blue,
+  // people / identities / correlations / inferences
+  person: COLOR.purple,
+  person_candidate: COLOR.purple,
+  owner: COLOR.purple,
+  social_profile: COLOR.purple,
+  social: COLOR.purple,
+  speaker: COLOR.purple,
+  voice_sample: COLOR.purple,
+  audio_evidence: COLOR.purple,
+  case: COLOR.purple,
+  entity: COLOR.purple,
+  // financial
+  transaction: COLOR.orange,
+  transaction_record: COLOR.orange,
+  // telecom / metadata
+  communications_log: COLOR.grey,
+  document: COLOR.grey,
 };
 
 const edgeStatusStyle: Record<EdgeStatus, { stroke: string; dash: string; label: string }> = {
-  observed:   { stroke: "hsl(220, 14%, 45%)", dash: "none",  label: "OBSERVED" },
-  validated:  { stroke: "hsl(160, 84%, 39%)", dash: "none",  label: "VALIDATED" },
-  inferred:   { stroke: "hsl(38, 92%, 50%)",  dash: "6 4",   label: "INFERRED" },
-  hypothesis: { stroke: "hsl(280, 70%, 65%)", dash: "2 4",   label: "HYPOTHESIS" },
+  observed:   { stroke: "hsl(220, 14%, 50%)", dash: "none",  label: "observed" },
+  validated:  { stroke: "hsl(160, 84%, 45%)", dash: "none",  label: "validated" },
+  inferred:   { stroke: "hsl(38, 92%, 55%)",  dash: "6 4",   label: "inferred" },
+  hypothesis: { stroke: "hsl(280, 70%, 70%)", dash: "2 4",   label: "hypothesis" },
 };
+
+const NODE_RADIUS = 28;
+const LABEL_WIDTH = 132;
+const MIN_DISTANCE = 150; // minimum centre-to-centre distance
+
+// Simple iterative collision avoidance — pushes overlapping nodes apart
+// without changing the overall layout structure.
+function relaxPositions(nodes: GraphNode[], minDist = MIN_DISTANCE, iterations = 60) {
+  const pos = nodes.map((n) => ({ id: n.id, x: n.x, y: n.y }));
+  for (let it = 0; it < iterations; it++) {
+    let moved = false;
+    for (let i = 0; i < pos.length; i++) {
+      for (let j = i + 1; j < pos.length; j++) {
+        const a = pos[i];
+        const b = pos[j];
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const d = Math.sqrt(dx * dx + dy * dy) || 0.01;
+        if (d < minDist) {
+          const overlap = (minDist - d) / 2;
+          const ux = dx / d;
+          const uy = dy / d;
+          a.x -= ux * overlap;
+          a.y -= uy * overlap;
+          b.x += ux * overlap;
+          b.y += uy * overlap;
+          moved = true;
+        }
+      }
+    }
+    if (!moved) break;
+  }
+  const map: Record<string, { x: number; y: number }> = {};
+  for (const p of pos) map[p.id] = { x: p.x, y: p.y };
+  return map;
+}
 
 export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highlightPath, onEdgeClick, selectedEdge, scenario }: InvestigationGraphProps) {
   const [visibleNodes, setVisibleNodes] = useState<GraphNode[]>([]);
   const [visibleEdges, setVisibleEdges] = useState<GraphEdge[]>([]);
+  const [hoveredEdge, setHoveredEdge] = useState<string | null>(null);
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
   useEffect(() => {
     setVisibleNodes([]);
@@ -139,25 +165,30 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
     };
   }, [isRunning, scenario]);
 
+  // Resolve overlapping positions for the full scenario (stable layout).
+  const positions = useMemo(() => relaxPositions(scenario.nodes), [scenario]);
+  const getPos = useCallback((id: string) => positions[id], [positions]);
+
   const getNode = useCallback((id: string) => visibleNodes.find((n) => n.id === id), [visibleNodes]);
 
   const isInPath = (id: string) => highlightPath.includes(id);
 
-  // Compute the bounding box of the full scenario so the graph has a stable
-  // layout regardless of which nodes have animated in.
-  const bbox = useMemo(() => {
-    if (!scenario.nodes.length) return { minX: 0, minY: 0, maxX: 0, maxY: 0 };
-    const xs = scenario.nodes.map((n) => n.x);
-    const ys = scenario.nodes.map((n) => n.y);
-    return {
-      minX: Math.min(...xs),
-      minY: Math.min(...ys),
-      maxX: Math.max(...xs),
-      maxY: Math.max(...ys),
-    };
-  }, [scenario]);
+  // Edges connected to selected/hovered node — to highlight on selection
+  const connectedEdgeIds = useMemo(() => {
+    const focus = selectedNode || hoveredNode;
+    if (!focus) return new Set<string>();
+    return new Set(scenario.edges.filter((e) => e.source === focus || e.target === focus).map((e) => e.id));
+  }, [selectedNode, hoveredNode, scenario]);
 
-  // Measure container and derive a translation that centers the bbox.
+  // Bounding box from relaxed positions.
+  const bbox = useMemo(() => {
+    const pts = Object.values(positions);
+    if (!pts.length) return { minX: 0, minY: 0, maxX: 0, maxY: 0 };
+    const xs = pts.map((p) => p.x);
+    const ys = pts.map((p) => p.y);
+    return { minX: Math.min(...xs), minY: Math.min(...ys), maxX: Math.max(...xs), maxY: Math.max(...ys) };
+  }, [positions]);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 0, h: 0 });
   useLayoutEffect(() => {
@@ -170,10 +201,9 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
     return () => ro.disconnect();
   }, []);
 
-  // Reserve top/bottom space for layout chrome (legend, etc.).
-  const TOP_PAD = 24;
-  const BOTTOM_PAD = 80;
-  const SIDE_PAD = 40;
+  const TOP_PAD = 32;
+  const BOTTOM_PAD = 88;
+  const SIDE_PAD = 48;
   const graphW = bbox.maxX - bbox.minX;
   const graphH = bbox.maxY - bbox.minY;
   const availableW = Math.max(0, size.w - SIDE_PAD * 2);
@@ -212,11 +242,17 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
             const source = getNode(edge.source);
             const target = getNode(edge.target);
             if (!source || !target) return null;
+            const sp = getPos(edge.source);
+            const tp = getPos(edge.target);
+            if (!sp || !tp) return null;
 
             const inPath = isInPath(edge.source) && isInPath(edge.target);
             const isEdgeSelected = selectedEdge === edge.id;
-            const midX = (source.x + target.x) / 2;
-            const midY = (source.y + target.y) / 2;
+            const isEdgeHovered = hoveredEdge === edge.id;
+            const isConnected = connectedEdgeIds.has(edge.id);
+            const showLabel = isEdgeSelected || isEdgeHovered || isConnected || inPath;
+            const midX = (sp.x + tp.x) / 2;
+            const midY = (sp.y + tp.y) / 2;
 
             const style = edgeStatusStyle[edge.status] ?? edgeStatusStyle.observed;
             const strokeColor = isEdgeSelected
@@ -224,56 +260,54 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
               : inPath
               ? "hsl(262, 70%, 58%)"
               : style.stroke;
+            const dimmed = (selectedNode || hoveredNode) && !isConnected && !inPath && !isEdgeSelected && !isEdgeHovered;
             return (
               <motion.g
                 key={edge.id}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6 }}
+                animate={{ opacity: dimmed ? 0.18 : 1 }}
+                transition={{ duration: 0.3 }}
                 onClick={(e) => {
                   e.stopPropagation();
                   onEdgeClick(edge.id);
                 }}
+                onMouseEnter={() => setHoveredEdge(edge.id)}
+                onMouseLeave={() => setHoveredEdge((id) => (id === edge.id ? null : id))}
                 style={{ cursor: "pointer" }}
               >
-                {/* Invisible thick hit area for easier clicking */}
+                {/* Invisible thick hit area */}
+                <line x1={sp.x} y1={sp.y} x2={tp.x} y2={tp.y} stroke="transparent" strokeWidth={16} />
                 <line
-                  x1={source.x}
-                  y1={source.y}
-                  x2={target.x}
-                  y2={target.y}
-                  stroke="transparent"
-                  strokeWidth={16}
-                />
-                <line
-                  x1={source.x}
-                  y1={source.y}
-                  x2={target.x}
-                  y2={target.y}
+                  x1={sp.x}
+                  y1={sp.y}
+                  x2={tp.x}
+                  y2={tp.y}
                   stroke={strokeColor}
-                  strokeWidth={isEdgeSelected ? 3 : inPath ? 2 : 1.5}
+                  strokeWidth={isEdgeSelected || isEdgeHovered ? 2.5 : inPath ? 2 : 1.25}
                   strokeDasharray={inPath || isEdgeSelected ? "none" : style.dash}
-                  opacity={isEdgeSelected ? 1 : inPath ? 1 : 0.7}
+                  opacity={isEdgeSelected || isEdgeHovered ? 1 : inPath ? 1 : 0.55}
                   markerEnd={inPath || isEdgeSelected ? "url(#arrowhead-highlight)" : "url(#arrowhead)"}
                   style={{ pointerEvents: "none" }}
                 />
-                <rect
-                  x={midX - 38}
-                  y={midY - 18}
-                  width="76"
-                  height="32"
-                  rx="3"
-                  fill="hsl(220, 18%, 10%)"
-                  opacity="0.9"
-                  stroke={isEdgeSelected ? strokeColor : "transparent"}
-                  strokeWidth={isEdgeSelected ? 1 : 0}
-                />
-                <text x={midX} y={midY - 5} textAnchor="middle" fill="hsl(220, 10%, 65%)" fontSize="9" fontFamily="'JetBrains Mono', monospace" style={{ pointerEvents: "none" }}>
-                  {edge.label}
-                </text>
-                <text x={midX} y={midY + 8} textAnchor="middle" fill={style.stroke} fontSize="8" fontFamily="'JetBrains Mono', monospace" style={{ letterSpacing: "0.05em", pointerEvents: "none" }}>
-                  {style.label}
-                </text>
+                {showLabel && (
+                  <g style={{ pointerEvents: "none" }}>
+                    <rect
+                      x={midX - 36}
+                      y={midY - 8}
+                      width="72"
+                      height="16"
+                      rx="3"
+                      fill="hsl(220, 18%, 10%)"
+                      opacity="0.92"
+                      stroke={style.stroke}
+                      strokeOpacity="0.4"
+                      strokeWidth={0.75}
+                    />
+                    <text x={midX} y={midY + 3} textAnchor="middle" fill={style.stroke} fontSize="8" fontFamily="'JetBrains Mono', monospace" style={{ letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                      {style.label}
+                    </text>
+                  </g>
+                )}
               </motion.g>
             );
           })}
@@ -286,6 +320,7 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
         {visibleNodes.map((node) => {
           const Icon = nodeIcons[node.type];
           const isSelected = selectedNode === node.id;
+          const isHovered = hoveredNode === node.id;
           const inPath = isInPath(node.id);
           const isEvidence =
             node.type === "evidence" ||
@@ -293,28 +328,35 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
             node.type === "audio_evidence" ||
             node.type === "image_evidence";
           const typeColor = nodeColors[node.type];
+          const pos = getPos(node.id) ?? { x: node.x, y: node.y };
+          const dimmed = (selectedNode || hoveredNode) && !isSelected && !isHovered && !inPath;
 
           return (
             <motion.div
               key={node.id}
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              animate={{ scale: 1, opacity: dimmed ? 0.35 : 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="absolute cursor-pointer group"
-              style={{ left: node.x - 28 + offsetX, top: node.y - 28 + offsetY }}
+              style={{
+                left: pos.x - NODE_RADIUS + offsetX,
+                top: pos.y - NODE_RADIUS + offsetY,
+              }}
               onClick={() => onNodeClick(node.id)}
+              onMouseEnter={() => setHoveredNode(node.id)}
+              onMouseLeave={() => setHoveredNode((id) => (id === node.id ? null : id))}
             >
               {/* Glow ring */}
-              {(isSelected || inPath) && (
+              {(isSelected || inPath || isHovered) && (
                 <motion.div
                   className={`absolute -inset-2 ${isEvidence ? "rounded-lg" : "rounded-full"}`}
-                  style={{ background: `radial-gradient(circle, ${typeColor}33, transparent)` }}
-                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
+                  style={{ background: `radial-gradient(circle, ${typeColor}55, transparent)` }}
+                  animate={{ scale: [1, 1.15, 1], opacity: [0.6, 0.9, 0.6] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
               )}
 
-              {/* Node shape — colored by node type */}
+              {/* Node shape */}
               <div
                 className={`relative w-14 h-14 ${
                   isEvidence ? "rounded-lg" : "rounded-full"
@@ -329,14 +371,14 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
                 <Icon className="w-5 h-5" style={{ color: typeColor }} />
               </div>
 
-              {/* Event-time chip (top-left) */}
+              {/* Event-time chip */}
               {node.eventTime && (
                 <div
                   className="absolute -top-1 -left-1 px-1.5 py-0.5 rounded font-mono"
                   style={{
                     background: "hsl(220, 18%, 12%)",
-                    border: `1px solid ${nodeColors[node.type]}`,
-                    color: nodeColors[node.type],
+                    border: `1px solid ${typeColor}`,
+                    color: typeColor,
                     fontSize: "9px",
                     lineHeight: "11px",
                   }}
@@ -345,11 +387,38 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
                 </div>
               )}
 
-              {/* Label */}
-              <div className={`absolute top-full ${isEvidence ? "mt-2.5" : "mt-1.5"} left-1/2 -translate-x-1/2 whitespace-nowrap text-center`}>
-                <div className="text-xs font-medium text-foreground font-mono">{node.label}</div>
+              {/* Label — fixed width, max 2 lines, ellipsis */}
+              <div
+                className={`absolute top-full ${isEvidence ? "mt-2.5" : "mt-1.5"} left-1/2 -translate-x-1/2 text-center pointer-events-none`}
+                style={{ width: LABEL_WIDTH }}
+              >
+                <div
+                  className="text-[11px] font-medium text-foreground font-mono leading-tight"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    wordBreak: "break-word",
+                  }}
+                  title={node.label}
+                >
+                  {node.label}
+                </div>
                 {node.sublabel && (
-                  <div className="text-data text-muted-foreground">{node.sublabel}</div>
+                  <div
+                    className="text-[10px] text-muted-foreground font-mono leading-tight mt-0.5"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 1,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      wordBreak: "break-word",
+                    }}
+                    title={node.sublabel}
+                  >
+                    {node.sublabel}
+                  </div>
                 )}
               </div>
 
@@ -358,18 +427,35 @@ export function InvestigationGraph({ isRunning, onNodeClick, selectedNode, highl
         })}
       </AnimatePresence>
 
-      {/* Edge status legend */}
+      {/* Color + edge legend */}
       {visibleEdges.length > 0 && (
-        <div className="absolute bottom-3 right-3 surface-glass border border-border rounded px-3 py-2 text-[9px] font-mono space-y-1 z-10">
-          <div className="text-muted-foreground uppercase tracking-wider mb-1">Edge status</div>
-          {(Object.entries(edgeStatusStyle) as [EdgeStatus, typeof edgeStatusStyle[EdgeStatus]][]).map(([key, s]) => (
-            <div key={key} className="flex items-center gap-2">
-              <svg width="22" height="6">
-                <line x1="0" y1="3" x2="22" y2="3" stroke={s.stroke} strokeWidth="2" strokeDasharray={s.dash} />
-              </svg>
-              <span className="text-foreground/80">{key}</span>
-            </div>
-          ))}
+        <div className="absolute bottom-3 right-3 surface-glass border border-border rounded px-3 py-2 text-[9px] font-mono space-y-2 z-10">
+          <div>
+            <div className="text-muted-foreground uppercase tracking-wider mb-1">Node type</div>
+            {[
+              { c: COLOR.yellow, l: "visual evidence" },
+              { c: COLOR.blue,   l: "physical / location" },
+              { c: COLOR.purple, l: "people / inference" },
+              { c: COLOR.orange, l: "financial" },
+              { c: COLOR.grey,   l: "telecom / metadata" },
+            ].map((it) => (
+              <div key={it.l} className="flex items-center gap-2">
+                <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: it.c }} />
+                <span className="text-foreground/80">{it.l}</span>
+              </div>
+            ))}
+          </div>
+          <div className="pt-1 border-t border-border">
+            <div className="text-muted-foreground uppercase tracking-wider mb-1">Edge status</div>
+            {(Object.entries(edgeStatusStyle) as [EdgeStatus, typeof edgeStatusStyle[EdgeStatus]][]).map(([key, s]) => (
+              <div key={key} className="flex items-center gap-2">
+                <svg width="22" height="6">
+                  <line x1="0" y1="3" x2="22" y2="3" stroke={s.stroke} strokeWidth="2" strokeDasharray={s.dash} />
+                </svg>
+                <span className="text-foreground/80">{key}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

@@ -694,7 +694,7 @@ export const vehicleDemoTotalMs = 14400;
 export const vehicleDemoNodes: GraphNode[] = [
   // STEP 1 — Suspicious Vehicle Detected (Event) + Vehicle entity + Location
   {
-    id: "vev1", type: "event", label: "Vehicle flagged in restricted transit zone", sublabel: "Porta Susa · 08:17 · overstay beyond allowed dwell time",
+    id: "vev1", type: "event", label: "Vehicle Flagged", sublabel: "Porta Susa · 08:17",
     x: 280, y: 150, confidence: 0.82, delay: 0, step: 1, eventTime: "08:17",
     evidence: [
       { type: "metadata", title: "Event", detail: "Black FIAT Tipo detected near Torino Porta Susa with partial license plate and abnormally long stop in a short-stay / drop-off area.", timestamp: "2026-05-04T08:17:00Z" },
@@ -705,7 +705,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "veh1", type: "vehicle", label: "Vehicle Identification (Probabilistic Match)", sublabel: "Black FIAT Tipo · plate GF-7K*2 · confidence: high",
+    id: "veh1", type: "vehicle", label: "FIAT Tipo (Black)", sublabel: "GF-7K*2",
     x: 480, y: 150, confidence: 0.76, delay: 600, step: 1,
     evidence: [
       { type: "metadata", title: "Vehicle Descriptor", detail: "Make/model: FIAT Tipo · Color: black · Partial plate: GF-7K*2 (last 2 chars unreadable).", timestamp: "2026-05-04T08:17:05Z" },
@@ -716,7 +716,7 @@ export const vehicleDemoNodes: GraphNode[] = [
   },
   // STEP 2 — Registered Owner
   {
-    id: "vown", type: "owner", label: "Registered Owner", sublabel: "Andrea Ferraro (IT) · no prior flags · verified via national registry",
+    id: "vown", type: "owner", label: "Registered Owner", sublabel: "Andrea Ferraro",
     x: 680, y: 150, confidence: 0.9, delay: 1900, step: 2,
     evidence: [
       { type: "metadata", title: "Registered Owner", detail: "Andrea Ferraro · address Torino, Italy · phone +39 XXX XXX XXXX · email andrea.ferraro@example.com · bank account ITXX XXXX XXXX.", timestamp: "2026-05-04T08:18:10Z" },
@@ -728,7 +728,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 3 — Telecom + Financial evidence
   {
-    id: "vcdr", type: "communications_log", label: "Telecom Activity Pattern", sublabel: "14 calls / 72h · recurrent unknown contact · peak before event",
+    id: "vcdr", type: "communications_log", label: "Call Pattern", sublabel: "14 calls / 72h",
     x: 880, y: 240, confidence: 1.0, delay: 3700, step: 3, eventTime: "07:39",
     facts: [
       { label: "Calls",    value: "14 in last 72h" },
@@ -743,7 +743,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vtx", type: "transaction_record", label: "Financial Activity (Correlated Event)", sublabel: "€2,850 → warehouse service provider · night prior to event",
+    id: "vtx", type: "transaction_record", label: "Transaction", sublabel: "€2,850",
     x: 880, y: 380, confidence: 1.0, delay: 4100, step: 3, eventTime: "19:42",
     facts: [
       { label: "Amount",    value: "€2,850" },
@@ -761,7 +761,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 4 — Cropped visual evidence (Deckard frame export)
   {
-    id: "vcrop", type: "image_evidence", label: "Unknown Female – Passenger Exit", sublabel: "Observed exiting passenger side · 08:19 · face partially visible",
+    id: "vcrop", type: "image_evidence", label: "Unknown Female", sublabel: "Passenger Exit · 08:19",
     x: 280, y: 410, confidence: 0.89, delay: 5500, step: 4, eventTime: "08:19",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_portasusa.png", import.meta.url).href,
@@ -787,7 +787,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 4b — Partner agency prior flag on the same individual
   {
-    id: "vflag", type: "image_evidence", label: "External Intelligence Match (US Partner)", sublabel: "Partial facial similarity · transit hubs & logistics · confidence: moderate",
+    id: "vflag", type: "image_evidence", label: "External Match", sublabel: "US Partner",
     x: 80, y: 410, confidence: 0.83, delay: 6100, step: 4, eventTime: "prior",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_midwestUSA.png", import.meta.url).href,
@@ -812,7 +812,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 5 — Deckard search result (visual match elsewhere)
   {
-    id: "vmatch", type: "image_evidence", label: "Recurring Individual Detection", sublabel: "Visual match across frames · proximity to vehicle & later site · cross-camera correlation enabled",
+    id: "vmatch", type: "image_evidence", label: "Recurring Match", sublabel: "Cross-camera · 09:06",
     x: 480, y: 410, confidence: 0.79, delay: 7300, step: 5, eventTime: "09:06",
     mediaImage: {
       src: new URL("../assets/donna_sospetta_logistica.png", import.meta.url).href,
@@ -836,7 +836,7 @@ export const vehicleDemoNodes: GraphNode[] = [
     ],
   },
   {
-    id: "vwhloc", type: "location", label: "Logistics Facility (Validated Location)", sublabel: "Industrial zone — Turin outskirts · geospatial correlation · irregular access windows",
+    id: "vwhloc", type: "location", label: "Logistics Site", sublabel: "Turin Outskirts",
     x: 680, y: 320, confidence: 0.92, delay: 7700, step: 5,
     sourceTrace: [
       { source: "Geo-registry", type: "log", reference: "site_id WH-7712", detail: "Industrial warehouse, Turin outskirts", hash: "sha256:42aa…02de" },
@@ -845,7 +845,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 6 — Warehouse appearance event
   {
-    id: "vev2", type: "event", label: "Subject Presence at Logistics Site", sublabel: "09:06 · visual confirmation (low res) · movement consistent with prior subject",
+    id: "vev2", type: "event", label: "Subject at Site", sublabel: "09:06",
     x: 680, y: 460, confidence: 0.79, delay: 9100, step: 6, eventTime: "09:06",
     evidence: [
       { type: "metadata", title: "Spatio-temporal Event", detail: "Same individual appears near a logistics warehouse less than one hour after the Porta Susa event.", timestamp: "2026-05-04T09:06:42Z" },
@@ -857,7 +857,7 @@ export const vehicleDemoNodes: GraphNode[] = [
 
   // STEP 7 — AI inference
   {
-    id: "vinf", type: "person_candidate", label: "Hypothesis: Coordinated Logistics Operation", sublabel: "Multi-source correlation · vehicle + unknown individual + logistics + financial/telecom · confidence: medium",
+    id: "vinf", type: "person_candidate", label: "Coordinated Activity", sublabel: "Hypothesis",
     x: 460, y: 600, confidence: 0.74, delay: 10900, step: 7, eventTime: "09:10",
     evidence: [
       { type: "metadata", title: "AI-generated Hypothesis", detail: "Vehicle detection, owner records, recent calls, suspicious financial transaction, and a second visual match together suggest possible coordinated logistics activity.", timestamp: "2026-05-04T09:10:00Z" },
