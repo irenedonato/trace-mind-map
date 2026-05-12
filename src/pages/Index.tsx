@@ -1,4 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { Map as MapIcon } from "lucide-react";
 import { LeftPanel } from "@/components/investigation/LeftPanel";
 import { InvestigationGraph } from "@/components/investigation/InvestigationGraph";
 import { RightPanel } from "@/components/investigation/RightPanel";
