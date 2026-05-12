@@ -94,11 +94,11 @@ export function LeftPanel({ onLaunch, isRunning, seedMode, totalMs }: LeftPanelP
                   "Vector DB of voice embeddings from recorded calls and audio. Query by voice sample or semantic prompt; returns matching speakers, source recording, timestamp, segment id, embedding id, confidence.",
               },
               {
-                name: "Entity Extraction — Calls / Messages / Social",
+                name: "OSINT — Social Media Intelligence",
                 primary: true,
                 badge: "AI NLP",
                 tooltip:
-                  "AI-analyzed calls, messages and social media data. Extracts entities (persons, orgs, locations, phones, accounts), relations, sentiment and topics from transcripts and chat logs.",
+                  "Open-source intelligence gathered from social media platforms. Collects posts, profiles, locations, accounts and network activity across platforms.",
               },
               { name: "Vehicle Registry (MIT)", structured: seedMode === "vehicle" },
               { name: "ANPR Network", structured: seedMode === "vehicle" },
