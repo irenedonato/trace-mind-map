@@ -96,9 +96,9 @@ export function LeftPanel({ onLaunch, isRunning, seedMode, totalMs }: LeftPanelP
               {
                 name: "OSINT — Social Media Intelligence",
                 primary: true,
-                badge: "AI NLP",
+                badge: "Vector DB",
                 tooltip:
-                  "Open-source intelligence gathered from social media platforms. Collects posts, profiles, locations, accounts and network activity across platforms.",
+                  "Vector DB of social media content. Embeddings of posts, profiles, locations and network activity enabling semantic and similarity search across platforms.",
               },
               { name: "Vehicle Registry (MIT)", structured: seedMode === "vehicle" },
               { name: "ANPR Network", structured: seedMode === "vehicle" },
