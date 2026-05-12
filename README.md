@@ -97,61 +97,6 @@ Role in NOESIS:
 
 ---
 
-## Demo Scenario – Torino Porta Susa
-
-### Step 1 — Seed
-The investigation starts from a minimal trigger. For example:
-
-Vehicle: FIAT Tipo  
-Plate: AB123 (partial)  
-Time: 12 Apr 2026, 17:00–20:00  
-Location: Torino Porta Susa  
-
----
-
-### Step 2 — Structured Data
-
-Vehicle → Owner
-type: observed
-source: vehicle registry
-
-Owner expands to:
-- Devices (communication logs)
-- Transactions (financial activity)
-- Events (movement logs)
-
----
-
-### Step 3 — Video (Deckard)
-- Detect person exiting vehicle (potentially not the owner)
-type: observed
-source: Deckard
-
-- Identify a man with red sweatshirt
-- Track across cameras ( “Find all occurrences of a man with a red sweatshirt in this area/time window” for
-movement reconstruction)
-
-Vehicle → Person Candidate
-type: inferred
-source: video analysis
-
----
-
-### Step 4 — OSINT
-- Image similarity
-- Public social media matching
-- Contact network
-
----
-
-## Key Principles
-- Ephemeral graphs
-- Human-in-the-loop
-- Explainability
-- Data sovereignty
-
----
-
 ## Local Development
 
 ### Requirements
@@ -219,3 +164,81 @@ Examples of supported targets:
 ## Routing Note
 
 The app uses `BrowserRouter`. If you add real client-side routes beyond `/`, configure your hosting provider to rewrite unknown paths to `index.html` so deep links keep working.
+
+## Demo Scenario
+
+### Step 1 — Vehicle Identification
+
+The system performs a probabilistic match on a **black FIAT Tipo** using a partial license plate.  
+The vehicle is linked to a registered owner, **Andrea Ferraro**, with no prior records or flags.
+
+At this stage, the signal is weak and does not indicate suspicious activity on its own.
+
+---
+
+### Step 2 — Visual Anomaly Detection
+
+Shortly after, CCTV footage captures an **unknown female exiting the passenger side** of the vehicle (08:19).
+
+This introduces a mismatch:
+- The registered owner is male
+- The observed individual is female
+- No direct confirmation of the owner’s presence
+
+This event becomes the first pivot in the investigation.
+
+---
+
+### Step 3 — External Intelligence Correlation
+
+The system correlates the observed individual with an **external partner agency flag**.
+
+A similar subject had been previously reported in the United States, observed near:
+- transit hubs
+- logistics facilities
+
+This is not a confirmed identification, but a **probabilistic visual correlation**, increasing the relevance of the subject.
+
+---
+
+### Step 4 — Cross-Site Detection
+
+At 09:06, visual evidence places the **same subject at a logistics site** in the outskirts of Turin.
+
+The match is generated through cross-camera correlation and spatial-temporal alignment.
+
+This establishes:
+- movement continuity
+- proximity to logistics infrastructure
+
+---
+
+### Step 5 — Contextual Signals
+
+Additional data sources provide contextual signals:
+
+- **Telecom activity**:  
+  Elevated call frequency (14 calls in 72 hours) to a recurring unidentified number, with peak activity prior to the observed events.
+
+- **Financial activity**:  
+  A €2,850 transaction to a logistics service provider, executed the night before.
+
+Individually, these signals are not conclusive.  
+However, they align temporally and contextually with the observed behavior.
+
+---
+
+### Step 6 — Hypothesis Generation
+
+Rather than producing a deterministic conclusion, NOESIS generates a **hypothesis node**:
+
+> **Coordinated Activity**
+
+This hypothesis is supported only by signals that independently contribute meaningful evidence:
+- visual correlation of the subject across locations
+- presence at a logistics facility
+- pre-event financial transaction
+- anomalous telecom activity
+
+Each link contributing to the hypothesis is explicitly qualified and traceable.
+
