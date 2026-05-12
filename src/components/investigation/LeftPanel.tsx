@@ -104,7 +104,7 @@ export function LeftPanel({ onLaunch, isRunning, seedMode, totalMs }: LeftPanelP
               { name: "ANPR Network", structured: seedMode === "vehicle" },
               { name: "Communications Logs (CDR / IPDR)", structured: true },
               { name: "Financial / Transaction Records", structured: true },
-              { name: "CCTV Network (847 feeds)" },
+              { name: "CCTV Network" },
             ] as { name: string; primary?: boolean; badge?: string; tooltip?: string; structured?: boolean }[]).map((src) => (
               <div
                 key={src.name}
