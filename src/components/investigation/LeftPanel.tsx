@@ -87,7 +87,7 @@ export function LeftPanel({ onLaunch, isRunning, seedMode, totalMs }: LeftPanelP
                   "Bimodal embedding search: query by image or text (e.g. 'man with red shirt' or 'FIAT Tipo plate AB123'). Returns crops + video source, timestamp, frame id, crop id, embedding id, bbox, confidence.",
               },
               {
-                name: "Voice Intelligence — AudioRAG",
+                name: "Audio Intelligence\nSpeech / Speaker Recognition",
                 primary: true,
                 badge: "Vector DB",
                 tooltip:
