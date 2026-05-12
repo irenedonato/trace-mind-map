@@ -1,4 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { Map as MapIcon } from "lucide-react";
 import { LeftPanel } from "@/components/investigation/LeftPanel";
 import { InvestigationGraph } from "@/components/investigation/InvestigationGraph";
 import { RightPanel } from "@/components/investigation/RightPanel";
@@ -50,6 +52,14 @@ const Index = () => {
           <span className="font-display text-sm font-normal text-muted-foreground">Cognitive Investigation Platform</span>
         </div>
         <div className="flex items-center gap-4">
+          <Link
+            to="/map"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-primary/40 bg-primary/5 text-data text-primary hover:bg-primary/10 hover:border-primary/60 transition-colors"
+            title="View spatial movements on Torino map"
+          >
+            <MapIcon className="w-3.5 h-3.5" />
+            Spatial Map
+          </Link>
           <span className="text-data text-muted-foreground">v2.4.1</span>
           <div className="flex items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald" />
